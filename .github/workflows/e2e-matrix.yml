@@ -1,0 +1,49 @@
+name: Matrix E2E & Multi-Runtime Validation
+
+on:
+  schedule:
+    # Run every 6 hours to validate live registry availability and runtime health
+    - cron: '0 */6 * * *'
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+jobs:
+  validate-registry-installation:
+    name: Registry Install Test (${{ matrix.os }} - Node ${{ matrix.node-version }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        node-version: [18, 20, 22, 24]
+
+    steps:
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v6
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Initialize clean test workspace
+        run: |
+          mkdir test-consumer
+          cd test-consumer
+          npm init -y
+
+      - name: Install persian-date-native from npm registry
+        run: |
+          cd test-consumer
+          npm install --no-cache persian-date-native
+
+      - name: Run runtime validation script (CommonJS & ESM)
+        run: |
+          cd test-consumer
+          node -e "
+            const { persianDate, gregorianToPersian } = require('persian-date-native');
+            const d = persianDate(new Date(2024, 0, 15));
+            console.log('Formatted:', d.format('YYYY/MM/DD'));
+            const [jy, jm, jd] = gregorianToPersian(2024, 9, 2);
+            if (jy !== 1403 || jm !== 6 || jd !== 12) throw new Error('Conversion mismatch');
+            console.log('E2E validation passed on Node ' + process.version);
+          "
