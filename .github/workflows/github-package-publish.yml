@@ -14,24 +14,26 @@ jobs:
       packages: write
 
     steps:
-      - name: Checkout
+      - name: Checkout repository
         uses: actions/checkout@v6
 
-      - name: Setup Node
+      - name: Setup Node.js
         uses: actions/setup-node@v6
         with:
           node-version: '24'
           registry-url: 'https://npm.pkg.github.com'
 
-      - name: Configure package name
+      - name: Configure scoped package metadata
         run: |
-          node -e "const fs=require('fs');const p=require('./package.json');p.name='@muhamadzolfaghari/persian-date-native';fs.writeFileSync('package.github.json',JSON.stringify(p,null,2)+'\n')"
-          cp package.github.json package.json
+          node -e "const fs=require('fs');const p=require('./package.json');p.name='@muhamadzolfaghari/persian-date-native';fs.writeFileSync('package.json',JSON.stringify(p,null,2)+'\n')"
 
       - name: Install dependencies
         run: npm ci
 
-      - name: Build
+      - name: Run tests
+        run: npm test -- --runInBand
+
+      - name: Build package
         run: npm run build
 
       - name: Publish GitHub Package
