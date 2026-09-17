@@ -11,6 +11,7 @@ const translations = {
     'nav.calendar': '📅 Calendar',
     'nav.formatter': '🎨 Formatter',
     'nav.calculator': '⏱ Calculator',
+    'nav.examples': '💻 Examples',
     'nav.github': '⭐ GitHub',
     'nav.lang_switch': '🇮🇷 فارسی',
 
@@ -185,6 +186,7 @@ const translations = {
     'nav.calendar': '📅 تقویم شمسی',
     'nav.formatter': '🎨 فرمت‌ساز',
     'nav.calculator': '⏱ ماشین‌حساب تاریخ',
+    'nav.examples': '💻 نمونه کدها',
     'nav.github': '⭐ گیت‌هاب',
     'nav.lang_switch': '🇬🇧 English',
 
