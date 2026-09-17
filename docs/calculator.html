@@ -28,6 +28,7 @@
   </script>
 
   <link rel="stylesheet" href="shared.css" />
+  <script src="shared-engine.js"></script>
   <script src="i18n.js"></script>
   <style>
     .tabs { display:flex; gap:0.5rem; margin-bottom:1.5rem; flex-wrap:wrap; }
@@ -70,10 +71,10 @@
 
   <div style="max-width:700px;margin:0 auto;" class="fade-up">
     <div class="tabs">
-      <button class="tab-btn active" onclick="showTab('diff')" data-i18n="calculator.tab_diff">📏 Diff</button>
-      <button class="tab-btn" onclick="showTab('addsub')" data-i18n="calculator.tab_add">➕ Add / Subtract</button>
-      <button class="tab-btn" onclick="showTab('fromnow')" data-i18n="calculator.tab_fromnow">🕐 From Now</button>
-      <button class="tab-btn" onclick="showTab('leap')" data-i18n="calculator.tab_leap">🌀 Leap Year</button>
+      <button class="tab-btn active" onclick="showTab('diff', this)" data-i18n="calculator.tab_diff">📏 Diff</button>
+      <button class="tab-btn" onclick="showTab('addsub', this)" data-i18n="calculator.tab_add">➕ Add / Subtract</button>
+      <button class="tab-btn" onclick="showTab('fromnow', this)" data-i18n="calculator.tab_fromnow">🕐 From Now</button>
+      <button class="tab-btn" onclick="showTab('leap', this)" data-i18n="calculator.tab_leap">🌀 Leap Year</button>
     </div>
 
     <!-- DIFF -->
@@ -175,15 +176,17 @@
   <p data-i18n="common.footer_text">Built with <a href="https://github.com/muhamadzolfaghari/persian-date-native" target="_blank">persian-date-native</a> • Zero dependencies • 89M+ ops/sec</p>
 </footer>
 
-<script type="module">
-import { PersianDate, toGregorian, isLeapPersianYear } from 'https://cdn.jsdelivr.net/npm/persian-date-native/dist/bundle.min.esm.js';
-window._PD = { PersianDate, toGregorian, isLeapPersianYear };
-
-window.showTab = function(id) {
+<script>
+window.showTab = function(id, btn) {
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
   document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-  document.getElementById(`tab-${id}`).classList.add('active');
-  event.target.classList.add('active');
+  const panel = document.getElementById(`tab-${id}`);
+  if (panel) panel.classList.add('active');
+  if (btn) {
+    btn.classList.add('active');
+  } else if (window.event && window.event.target) {
+    window.event.target.classList.add('active');
+  }
 };
 
 window.calcDiff = function() {

@@ -29,6 +29,7 @@
 
   <link rel="stylesheet" href="shared.css" />
   <script src="i18n.js"></script>
+  <script src="shared-engine.js"></script>
   <style>
     .cal-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:1.5rem; }
     .cal-nav { display:flex; align-items:center; gap:0.75rem; }
@@ -135,10 +136,7 @@
   <p data-i18n="common.footer_text">Built with <a href="https://github.com/muhamadzolfaghari/persian-date-native" target="_blank">persian-date-native</a> • Zero dependencies • 89M+ ops/sec</p>
 </footer>
 
-<script type="module">
-  import { PersianDate, toGregorian, toPersian, isLeapPersianYear } from 'https://cdn.jsdelivr.net/npm/persian-date-native/dist/bundle.min.esm.js';
-  window._PD = { PersianDate, toGregorian, toPersian, isLeapPersianYear };
-
+<script>
   let curYear = 1403;
   let curMonth = 6;
   let selectedDay = 15;

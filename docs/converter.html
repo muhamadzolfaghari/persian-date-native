@@ -29,6 +29,7 @@
 
   <link rel="stylesheet" href="shared.css" />
   <script src="i18n.js"></script>
+  <script src="shared-engine.js"></script>
   <style>
     .swap-btn { font-size: 1.5rem; background: none; border: none; cursor: pointer; color: var(--accent); transition: var(--transition); padding: 0.5rem; border-radius: 50%; }
     .swap-btn:hover { transform: rotate(180deg); background: rgba(56,189,248,0.1); }
@@ -128,10 +129,7 @@
   <p data-i18n="common.footer_text">Built with <a href="https://github.com/muhamadzolfaghari/persian-date-native" target="_blank">persian-date-native</a> • Zero dependencies • 89M+ ops/sec</p>
 </footer>
 
-<script type="module">
-  import { PersianDate, toGregorian, toPersian, isLeapPersianYear } from 'https://cdn.jsdelivr.net/npm/persian-date-native/dist/bundle.min.esm.js';
-  window._PD = { PersianDate, toGregorian, toPersian, isLeapPersianYear };
-
+<script>
   let currentMode = 'jalali'; // 'jalali' or 'gregorian'
 
   window.setMode = function(mode) {

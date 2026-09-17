@@ -136,6 +136,13 @@ const translations = {
     'calculator.leap_check_year': 'Jalali Year to Test (e.g. 1403)',
     'calculator.leap_check_btn': 'Check Leap Year Status',
 
+    // Examples Page
+    'examples.title': '💻 Framework & CDN Interactive Examples',
+    'examples.subtitle': 'Run, test, and copy Persian date implementations for React, Next.js, Vue, Angular, Svelte, jQuery, Laravel, and vanilla HTML.',
+    'examples.live_badge': '● LIVE INTERACTIVE PREVIEW',
+    'examples.source_code': 'Source Code',
+    'examples.copy_code': '📋 Copy Code',
+
     // Home Page Specific
     'home.badge': '⚡ Zero Dependencies • 89M+ ops/sec • Native Date Inheritance',
     'home.hero_title': 'The Ultra-Fast Persian Date Engine for JS & TS',
@@ -308,8 +315,15 @@ const translations = {
     'calculator.fromnow_target': 'تاریخ شمسی مورد نظر',
     'calculator.fromnow_result_en': 'زمان نسبی انگلیسی',
     'calculator.fromnow_result_fa': 'زمان نسبی فارسی',
-    'calculator.leap_check_year': 'سال شمسی جهت بررسی (مثلاً ۱۴۰۳)',
+    'calculator.leap_check_year': 'سال شمسی برای تست (مثلاً ۱۴۰۳)',
     'calculator.leap_check_btn': 'بررسی وضعیت سال کبیسه',
+
+    // Examples Page
+    'examples.title': '💻 نمونه کدهای تعاملی فریم‌ورک‌ها و CDN',
+    'examples.subtitle': 'اجرا، آزمایش و کپی کدهای تاریخ شمسی برای React، Next.js، Vue، Angular، Svelte، jQuery، Laravel و HTML خام.',
+    'examples.live_badge': '● پیش‌نمایش زنده تعاملی',
+    'examples.source_code': 'سورس کد',
+    'examples.copy_code': '📋 کپی کد',
 
     // Home Page Specific
     'home.badge': '⚡ بدون وابستگی خارجی • بیش از ۸۹ میلیون عملیات در ثانیه • ارث‌بری بومی از Date',

@@ -28,6 +28,7 @@
   </script>
 
   <link rel="stylesheet" href="shared.css" />
+  <script src="shared-engine.js"></script>
   <script src="i18n.js"></script>
   <!-- Load Persian Date Native Production CDN -->
   <script src="https://unpkg.com/persian-date-native"></script>
@@ -147,8 +148,8 @@
 
 <div class="container">
   <div class="page-header fade-up">
-    <h1>💻 Framework & CDN Interactive Examples</h1>
-    <p>Run, test, and copy Persian date implementations for React, Next.js, Vue, Angular, Svelte, jQuery, Laravel, and plain HTML.</p>
+    <h1 data-i18n="examples.title">💻 Framework & CDN Interactive Examples</h1>
+    <p data-i18n="examples.subtitle">Run, test, and copy Persian date implementations for React, Next.js, Vue, Angular, Svelte, jQuery, Laravel, and plain HTML.</p>
   </div>
 
   <div class="examples-layout">
@@ -167,14 +168,14 @@
 
     <!-- Main Content Area -->
     <div class="card">
-      <div class="interactive-badge">● LIVE INTERACTIVE PREVIEW</div>
+      <div class="interactive-badge" data-i18n="examples.live_badge">● LIVE INTERACTIVE PREVIEW</div>
       <div id="example-preview" class="preview-box">
         <!-- Injected dynamically -->
       </div>
 
-      <h3 style="margin-bottom: 0.75rem;">Source Code</h3>
+      <h3 style="margin-bottom: 0.75rem;" data-i18n="examples.source_code">Source Code</h3>
       <div class="code-container">
-        <button class="copy-btn" onclick="copyExampleCode()">📋 Copy Code</button>
+        <button class="copy-btn" onclick="copyExampleCode()" data-i18n="examples.copy_code">📋 Copy Code</button>
         <pre class="code-block"><code id="example-code"></code></pre>
       </div>
     </div>
