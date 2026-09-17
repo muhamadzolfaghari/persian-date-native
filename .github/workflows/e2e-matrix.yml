@@ -47,3 +47,30 @@ jobs:
             if (jy !== 1403 || jm !== 6 || jd !== 12) throw new Error('Conversion mismatch');
             console.log('E2E validation passed on Node ' + process.version);
           "
+
+  validate-cdn-and-distribution:
+    name: Live CDN & Build Artifacts Validation
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Setup Node.js 22
+        uses: actions/setup-node@v6
+        with:
+          node-version: 22
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build and verify distribution artifacts
+        run: |
+          npm run build
+          npm run verify:build
+
+      - name: Verify Live CDN Endpoints (unpkg & jsdelivr)
+        run: |
+          echo "Checking unpkg CDN..."
+          curl -fsSL https://unpkg.com/persian-date-native | head -n 5
+          echo "Checking jsdelivr CDN..."
+          curl -fsSL https://cdn.jsdelivr.net/npm/persian-date-native | head -n 5
