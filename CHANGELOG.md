@@ -7,6 +7,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.3.0] - 2026-09-18
+
+### 🌟 Enterprise Documentation & Modular Asset Architecture
+- **Modular Static Assets**: Completely decoupled documentation HTML files into modular `docs/assets/css/` and `docs/assets/js/` bundles for Core Web Vitals performance, browser caching, and Google/Bing crawl optimization.
+- **Out-of-the-Box Syntax Highlighter**: Built an ultra-fast, zero-dependency token highlighter in `docs/assets/js/highlighter.js` with light & dark theme token styling in `docs/assets/css/syntax.css`.
+- **Framework Interactive Playground**: Overhauled `docs/examples.html` with real-time reactive date state controls for 9 ecosystems (React, Next.js App Router RSC, Vue 3, Angular, Svelte 5, jQuery, Laravel Blade, WordPress Theme, Vanilla HTML/CDN).
+- **Infinite Recursion Fix**: Fixed `PersianDate` method inheritance bug when converting `PersianDate` instances within `toPersianDate()`.
+
+### 🩺 Quality Gates & Automated Validation
+- **Documentation E2E Test Suite**: Added `npm run test:e2e` (`scripts/test-pages-e2e.ts`) verifying all 6 documentation pages (HTML structure, schema.org, syntax highlighter, and interactive DOM changes).
+- **Examples Health Check Suite**: Added `npm run check:examples` (`scripts/verify-examples-health.ts`) validating that all 9 example files exist, import correctly, and execute without runtime errors.
+- **Post-Publish CDN Pipeline**: Enhanced GitHub Actions release pipeline (`publish.yml`) with automated post-publish validation testing unpkg, jsDelivr, and browser globals.
+
+### 🔍 Dedicated SEO & AI Discovery Pages
+- Added 11 search-intent targeted markdown guides (`docs/react-persian-date.md`, `docs/nextjs-jalali-date.md`, `docs/vue-persian-date.md`, `docs/angular-persian-date.md`, `docs/svelte-persian-date.md`, `docs/jquery-persian-date.md`, `docs/wordpress-persian-date.md`, `docs/laravel-jalali-date.md`, `docs/vanilla-javascript-persian-date.md`, `docs/moment-jalaali-migration.md`, `docs/dayjs-jalali-migration.md`).
+- Added comprehensive audit deliverables: `docs/final-readiness-report.md`, `docs/examples-health-report.md`, `docs/seo-audit.md`, and `docs/ai-discovery-report.md`.
+
+---
+
 ## [1.2.3] - 2026-09-18
 
 ### 🚀 Performance & Packaging
