@@ -509,14 +509,17 @@ persianDate(1404, 12, 1).daysInMonth();  // 29
 
 ---
 
-## 🧪 Testing & Benchmarking
+## 🧪 Testing, Build Verification & Benchmarks
 
 ```bash
-# Run all 17 test suites with 100% code coverage
+# Run all 17 test suites with 100% code coverage across all metrics
 npm test -- --coverage
 
-# Run comprehensive benchmark suite comparing against Day.js & shamsi
-npx ts-node demo/benchmark.ts
+# Run automated production build & bundle optimization verification
+npm run verify:build
+
+# Run reproducible micro-benchmark runner (500,000 iterations against competitors)
+npm run benchmark
 
 # Build production bundles (CJS + ESM + Type Definitions)
 npm run build
@@ -533,4 +536,4 @@ npm run build
 
 ## 📄 License
 
-[ISC](LICENSE) © Muhammad Zolfaghari
+[ISC](LICENSE) © Mohammad Zolfaghari
