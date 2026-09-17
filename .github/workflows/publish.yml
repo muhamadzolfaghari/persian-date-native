@@ -18,14 +18,20 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
-          node-version: "20.x"
+          node-version: "24"
           registry-url: "https://registry.npmjs.org"
-          cache: npm
+          package-manager-cache: false
+
+      - name: Verify npm supports trusted publishing
+        run: |
+          node --version
+          npm --version
+          npm --version | awk -F. '{ if ($1 < 11 || ($1 == 11 && $2 < 5)) exit 1 }'
 
       - name: Install dependencies
         run: npm ci
@@ -49,7 +55,5 @@ jobs:
           fi
           echo "Publishing ${NAME}@${VERSION}"
 
-      - name: Publish to npm
+      - name: Publish to npm with OIDC trusted publishing
         run: npm publish --provenance --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
