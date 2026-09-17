@@ -66,6 +66,9 @@ jobs:
       - name: Install CI runtime tools
         run: npm install --no-save ts-node
 
+      - name: Generate TypeScript declarations
+        run: npx tsc --emitDeclarationOnly --declaration --outDir dist
+
       - name: Build and verify distribution artifacts
         run: |
           npm run build
