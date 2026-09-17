@@ -1,6 +1,6 @@
 {
   "name": "persian-date-native",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Ultra-fast, zero-dependency Persian (Jalali / Shamsi) date engine extending native JavaScript Date with Day.js plugin support.",
   "main": "dist/bundle.min.cjs.js",
   "module": "dist/bundle.min.esm.js",
