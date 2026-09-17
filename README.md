@@ -4,12 +4,12 @@
 [![npm downloads](https://img.shields.io/npm/dt/persian-date-native.svg?style=flat-square&color=6366f1)](https://www.npmjs.com/package/persian-date-native)
 [![coverage: 100%](https://img.shields.io/badge/coverage-100%25-brightgreen.svg?style=flat-square)](https://github.com/muhamadzolfaghari/persian-date-native)
 [![TypeScript](https://img.shields.io/badge/TypeScript-Strict%20100%25-blue.svg?style=flat-square)](https://www.typescriptlang.org/)
-[![Zero Dependencies](https://img.shields.io/badge/dependencies-0%20(zero)-success.svg?style=flat-square)](package.json)
+[![Zero Dependencies](https://img.shields.io/badge/dependencies-0%20required-success.svg?style=flat-square)](package.json)
 [![License: ISC](https://img.shields.io/badge/License-ISC-yellow.svg?style=flat-square)](LICENSE)
 [![GitHub Pages](https://img.shields.io/badge/Online%20Tools-Live%20Demo-38bdf8?style=flat-square&logo=github)](https://muhamadzolfaghari.github.io/persian-date-native/)
 
-> ⚡ **The fastest, zero-dependency Persian (Shamsi / Jalali) date engine for JavaScript & TypeScript.**  
-> Features sub-microsecond pure integer conversions (89M+ ops/sec), true native `Date` inheritance (`instanceof Date === true`), Day.js drop-in compatibility, and comprehensive formatting, relative time, and calendar UI helpers.
+> ⚡ **A high-performance Persian (Shamsi / Jalali) date engine for JavaScript & TypeScript.**  
+> Features sub-microsecond pure integer conversions (89M+ ops/sec benchmarked on Node.js/V8), true native `Date` inheritance (`instanceof Date === true`), Day.js-style API + Day.js plugin support, zero required runtime dependencies, and comprehensive formatting, relative time, and calendar UI helpers.
 
 ---
 
@@ -64,17 +64,17 @@ Experience all features directly in your browser with our **Multilingual (Englis
 
 ## ✨ Key Features
 
-- 🪶 **Zero Runtime Dependencies**: Ultra-lightweight core with 0 external dependencies.
-- ⚡ **89M+ Operations/Sec Pure Conversion**: Optimized bitwise integer arithmetic for sub-microsecond astronomical calculations.
+- 🪶 **Zero Required Runtime Dependencies**: Ultra-lightweight core with 0 external dependencies (Day.js is an optional peer dependency for the plugin).
+- ⚡ **Sub-Microsecond Pure Conversion (89M+ ops/sec)**: Optimized bitwise integer arithmetic for fast bidirectional date conversion (benchmarked on Node.js/V8).
 - 🎯 **100% Test Coverage Across All Metrics**: 100% Statements, 100% Branches, 100% Functions, and 100% Lines verified (17 test suites, 142 unit tests).
-- 🛡️ **Native JavaScript `Date` Inheritance**: `persianDate instanceof Date === true`. Works out-of-the-box with React, Vue, Ant Design, MUI, Shadcn, and HTML datepickers without needing `.toDate()` wrappers.
+- 🛡️ **Native JavaScript `Date` Inheritance**: `persianDate instanceof Date === true`. Works seamlessly with React, Vue, Ant Design, MUI, Shadcn, and HTML datepickers without needing `.toDate()` wrappers.
 - 📦 **Dual Ergonomic Unpacking**:
   - **Tuple Unpacking**: `const [jy, jm, jd] = gregorianToPersian(2024, 9, 2)` (100% drop-in parity with `shamsi`).
   - **Object Unpacking**: `const { year, month, date } = toPersianDate(new Date())`.
 - 🔢 **Native Persian Digits (`۰-۹`)**: Convert digits with `.formatFa()` or `{ digits: "fa" }` without regex hacks.
 - ⏱️ **Relative Time Humanizer (`fromNow`, `toNow`)**: Built-in Persian phrases ("۳ روز پیش", "یک ساعت بعد", "چند ثانیه پیش").
 - 📅 **Calendar Helpers for Real UI Development**: `getDayOfWeek()` (Saturday = 0 .. Friday = 6), `isWeekend()`, `quarter()`, `daysInMonth()`, `startOf("week")`, `endOf("week")`.
-- 🗓️ **Astronomically Accurate Leap Years**: Official Iranian 33-year solar cycle (correctly identifies **1403 as a 30-day leap year** and 1404 as 29 days).
+- 🗓️ **Accurate Leap Year Handling**: Birashk 33-year solar cycle algorithm (correctly identifies **1403 as a 30-day leap year** and 1404 as 29 days).
 
 ---
 
@@ -95,6 +95,8 @@ However, `shamsi` has critical architectural limitations:
 
 ### Comprehensive Benchmark Table
 
+> **Benchmark Environment**: Node.js v20.x, Apple Silicon (M-series) / V8 JIT, 10,000 warmup iterations, 500,000 measured sample cycles.
+
 | Feature / Metric | `persian-date-native` | `shamsi` | `dayjs + jalaliday` | `moment-jalaali` | `date-fns-jalali` |
 | :--- | :---: | :---: | :---: | :---: | :---: |
 | **Dependencies** | **0 (Zero)** 🏆 | **0 (Zero)** | 2 (Dayjs + Plugin) | `moment` (~70 KB) | Multiple packages |
@@ -111,11 +113,11 @@ However, `shamsi` has critical architectural limitations:
 | **Relative Time (`fromNow`)** | **✅ Built-in (fa)** 🏆 | ❌ No | ❌ Extra plugin | ⚠️ Legacy | ❌ Separate import |
 | **1403 Leap Year Accuracy** | **✅ Exact (30 Esfand)** 🏆 | ✅ Exact | ⚠️ Inconsistent | ⚠️ Inconsistent | ⚠️ Inconsistent |
 | **TypeScript Strictness** | **✅ 100% Strict** 🏆 | ⚠️ Minimal `.d.ts` | ⚠️ Augmentation | ⚠️ Deprecated | ✅ Typed |
-| **Test Coverage** | **🎯 100% Across All Metrics** 🏆 | 0% (No tests) | ~80% | ~85% | ~90% |
+| **Test Coverage** | **🎯 100% (142 unit tests)** 🏆 | No test suite | Test suite included | Test suite included | Test suite included |
 
 ### Architectural Advantages
 
-1. **Zero Runtime Dependencies vs Heavy Frameworks**:  
+1. **Zero Required Runtime Dependencies vs Heavy Frameworks**:  
    Eliminates Moment.js (70KB+ maintenance mode) and avoids Day.js plugin chaining boilerplate.
 2. **True Native JavaScript `Date` Integration**:  
    Because `PersianDate` inherits from native `Date`, it seamlessly passes `instanceof Date` validations in React, Vue, Ant Design, Material UI, Shadcn UI, and native `JSON.stringify()`.
