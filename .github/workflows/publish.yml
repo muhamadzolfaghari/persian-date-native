@@ -51,3 +51,23 @@ jobs:
 
       - name: Publish to npm with OIDC trusted publishing
         run: npm publish --provenance --access public
+
+      - name: Post-Publish Registry & CDN Validation Smoke Test
+        run: |
+          NAME=$(node -p "require('./package.json').name")
+          VERSION=$(node -p "require('./package.json').version")
+          echo "Verifying $NAME@$VERSION on npm registry..."
+          npm view "${NAME}@${VERSION}" version --registry=https://registry.npmjs.org
+          
+          echo "Waiting 15s for CDN edge synchronization..."
+          sleep 15
+          
+          echo "Verifying unpkg distribution..."
+          curl -sSfL "https://unpkg.com/${NAME}@${VERSION}/dist/index.global.min.js" > unpkg_test.js
+          node -e "require('./unpkg_test.js'); if (!global.PersianDateNative) throw new Error('unpkg bundle missing global'); console.log('✅ unpkg verified');"
+          
+          echo "Verifying jsDelivr distribution..."
+          curl -sSfL "https://cdn.jsdelivr.net/npm/${NAME}@${VERSION}/dist/index.global.min.js" > jsdelivr_test.js
+          node -e "require('./jsdelivr_test.js'); if (!global.PersianDateNative) throw new Error('jsdelivr bundle missing global'); console.log('✅ jsdelivr verified');"
+          
+          echo "🎉 Post-publish registry & CDN validation passed 100%!"

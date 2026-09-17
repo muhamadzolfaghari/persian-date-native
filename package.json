@@ -39,6 +39,7 @@
     "start:demo": "cd ./demo && npm run watch",
     "test": "jest",
     "test:e2e": "ts-node -O '{\"module\":\"commonjs\"}' ./scripts/test-pages-e2e.ts",
+    "check:examples": "ts-node -O '{\"module\":\"commonjs\"}' ./scripts/verify-examples-health.ts",
     "benchmark": "ts-node -O '{\"module\":\"commonjs\"}' ./scripts/benchmark.ts",
     "verify:build": "ts-node -O '{\"module\":\"commonjs\"}' ./scripts/verify-build.ts",
     "build": "rollup -c",
