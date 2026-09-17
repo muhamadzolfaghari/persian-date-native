@@ -22,12 +22,20 @@ const terserOptions = {
   },
 };
 
+const terserBrowserOptions = {
+  ...terserOptions,
+  mangle: {
+    toplevel: false,
+  },
+};
+
 export default {
   input: "src/index.ts",
   output: [
+    // Standard ESM & backward compatible bundle
     {
-      file: "dist/bundle.min.cjs.js",
-      format: "cjs",
+      file: "dist/index.js",
+      format: "esm",
       exports: "named",
       sourcemap: false,
       plugins: [terser(terserOptions)],
@@ -38,6 +46,46 @@ export default {
       exports: "named",
       sourcemap: false,
       plugins: [terser(terserOptions)],
+    },
+    // Standard CommonJS & backward compatible bundle
+    {
+      file: "dist/index.cjs",
+      format: "cjs",
+      exports: "named",
+      sourcemap: false,
+      plugins: [terser(terserOptions)],
+    },
+    {
+      file: "dist/bundle.min.cjs.js",
+      format: "cjs",
+      exports: "named",
+      sourcemap: false,
+      plugins: [terser(terserOptions)],
+    },
+    // Browser Global (IIFE) unminified & minified for CDN (unpkg / jsDelivr)
+    {
+      file: "dist/index.global.js",
+      format: "iife",
+      name: "PersianDateNative",
+      exports: "named",
+      sourcemap: false,
+    },
+    {
+      file: "dist/index.global.min.js",
+      format: "iife",
+      name: "PersianDateNative",
+      exports: "named",
+      sourcemap: false,
+      plugins: [terser(terserBrowserOptions)],
+    },
+    // Universal Module Definition (UMD)
+    {
+      file: "dist/index.umd.js",
+      format: "umd",
+      name: "PersianDateNative",
+      exports: "named",
+      sourcemap: false,
+      plugins: [terser(terserBrowserOptions)],
     },
   ],
   external: ["dayjs"],

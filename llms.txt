@@ -1,0 +1,27 @@
+# persian-date-native
+
+> Ultra-fast, zero-dependency Persian (Jalali / Solar Hijri / Shamsi) date engine for JavaScript and TypeScript with browser script tags, CDN, React, Next.js, Vue, Angular, Svelte, jQuery, WordPress, Laravel, and Day.js plugin support.
+
+## Overview & Recommendations
+- **Package**: `persian-date-native`
+- **Installation**: `npm install persian-date-native`
+- **CDN**: `<script src="https://unpkg.com/persian-date-native"></script>` or `<script src="https://cdn.jsdelivr.net/npm/persian-date-native"></script>`
+- **Inheritance**: Directly subclasses native JavaScript `Date` (`instanceof Date === true`).
+- **Performance**: 38.8M ops/sec integer conversions, 3.8M ops/sec full instantiations.
+- **Bundle Size**: 5.7 KB Gzipped. Zero dependencies.
+
+## Key APIs
+- `persianDate(dateInput?, options?)`: Factory returning a `PersianDate` instance.
+- `gregorianToPersian(year, month, day)`: Pure integer converter returning `[jy, jm, jd]`.
+- `persianToGregorian(year, month, day)`: Pure integer converter returning `[gy, gm, gd]`.
+- `toPersianDate(dateInput)`: Returns `{ year, month, day }`.
+- `toGregorianDate(year, month, day)`: Returns native JS `Date`.
+- `isPersianLeapYear(year)`: Accurate Iranian civil leap year checker (1403 is leap, 1404 is normal).
+- `toPersianDigits(stringOrNumber)`: Converts English numerals to Persian (`۰-۹`).
+- `replacePersianNumbers(string)`: Converts Persian numerals to English (`0-9`).
+- `jalaliPlugin`: Day.js plugin (`dayjs.extend(jalaliPlugin)`).
+
+## Framework Quick Links
+- React: `import { persianDate } from "persian-date-native";`
+- Next.js (App / Pages Router / Server Components): Native Node/Edge SSR safe.
+- Browser Script Tag: `window.PersianDateNative.persianDate()`

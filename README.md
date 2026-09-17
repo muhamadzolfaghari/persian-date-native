@@ -131,16 +131,55 @@ However, `shamsi` has critical architectural limitations:
 
 ## 📦 Installation
 
+### Package Managers (Node.js, React, Next.js, Vue, Vite)
+
 ```bash
 # npm
 npm install persian-date-native
 
+# pnpm
+pnpm add persian-date-native
+
 # yarn
 yarn add persian-date-native
 
-# pnpm
-pnpm add persian-date-native
+# bun
+bun add persian-date-native
 ```
+
+### CDN & Browser Script Tag (No Build Step / jQuery / WordPress / Laravel)
+
+```html
+<!-- unpkg (Latest minified bundle) -->
+<script src="https://unpkg.com/persian-date-native"></script>
+
+<!-- jsDelivr CDN -->
+<script src="https://cdn.jsdelivr.net/npm/persian-date-native"></script>
+
+<!-- esm.sh (Native ES Module) -->
+<script type="module">
+  import { persianDate } from "https://esm.sh/persian-date-native";
+  console.log(persianDate().formatFa("YYYY/MM/DD"));
+</script>
+```
+
+Loaded via `<script>` tag, the full engine is available globally at **`window.PersianDateNative`**.
+
+### 📚 Framework & Platform Guides
+
+| Platform / Framework | Guide | Runnable Example |
+|---|---|---|
+| ⚛️ **React** | [React Guide](docs/react.md) | [React Example](examples/react/App.jsx) |
+| ▲ **Next.js** (App & Pages) | [Next.js Guide](docs/nextjs.md) | [Next.js Example](examples/nextjs/page.tsx) |
+| 💚 **Vue 3 / Nuxt** | [Vue Guide](docs/vue.md) | [Vue Example](examples/vue/App.vue) |
+| 🅰️ **Angular** | [Angular Guide](docs/angular.md) | [Angular Example](examples/angular/persian-date.component.ts) |
+| 🧡 **Svelte / SvelteKit** | [Svelte Guide](docs/svelte.md) | [Svelte Example](examples/svelte/App.svelte) |
+| 🌐 **Vanilla HTML + CDN** | [CDN Guide](docs/browser-cdn.md) | [HTML Example](examples/vanilla/index.html) |
+| 🔷 **jQuery** | [jQuery Guide](docs/jquery.md) | [jQuery Example](examples/jquery/index.html) |
+| 🔴 **Laravel Blade** | [Laravel Guide](docs/laravel.md) | [Blade Example](examples/laravel-blade/calendar.blade.php) |
+| 🔌 **WordPress** | [WordPress Guide](docs/wordpress.md) | [WP Example](examples/wordpress/functions.php) |
+| 🐘 **PHP Websites** | [PHP Guide](docs/php.md) | [PHP Guide](docs/php.md) |
+| 🤖 **AI Coding Agents** | [AI Agents Guide](docs/ai-agents.md) | [llms.txt](llms.txt) |
 
 ---
 
@@ -162,14 +201,14 @@ const [gy, gm, gd] = persianToGregorian(1403, 6, 12);
 console.log(gy, gm, gd); // 2024, 9, 2
 ```
 
-### 2. Object Unpacking (`{ year, month, date }`)
+### 2. Object Unpacking (`{ year, month, day }`)
 
 ```typescript
 import { toPersianDate, toGregorianDate } from "persian-date-native";
 
 // Unpack named fields from any JS Date or timestamp
-const { year, month, date } = toPersianDate(new Date("2024-09-02T12:00:00Z"));
-console.log(`سال: ${year}، ماه: ${month}، روز: ${date}`); // سال: 1403، ماه: 6، روز: 12
+const { year, month, day } = toPersianDate(new Date("2024-09-02T12:00:00Z"));
+console.log(`سال: ${year}، ماه: ${month}، روز: ${day}`); // سال: 1403، ماه: 6، روز: 12
 
 // Convert back to native Date
 const nativeDate = toGregorianDate(1403, 6, 12);

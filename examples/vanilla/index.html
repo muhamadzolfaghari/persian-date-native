@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Persian Date Native — Vanilla HTML & CDN Example</title>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #f8fafc;
+      color: #0f172a;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+    }
+    .card {
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+      padding: 32px;
+      max-width: 480px;
+      width: 100%;
+      text-align: center;
+    }
+    .date-display {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #3b82f6;
+      margin: 16px 0;
+    }
+    .badge {
+      display: inline-block;
+      padding: 4px 12px;
+      background: #e0f2fe;
+      color: #0369a1;
+      border-radius: 9999px;
+      font-size: 0.875rem;
+      margin-bottom: 12px;
+    }
+  </style>
+  <!-- Load Local Distribution Build or CDN -->
+  <script src="../../dist/index.global.min.js"></script>
+</head>
+<body>
+
+  <div class="card">
+    <div class="badge">پکیج فوق‌العاده سریع تاریخ شمسی</div>
+    <h2>تاریخ و تقویم زنده</h2>
+    <div class="date-display" id="date-display">...</div>
+    <p id="relative-time"></p>
+    <p id="conversion-info" style="font-size: 0.9rem; color: #64748b;"></p>
+  </div>
+
+  <script>
+    const { persianDate, gregorianToPersian } = window.PersianDateNative;
+
+    function update() {
+      const now = persianDate();
+      document.getElementById('date-display').textContent = now.formatFa('dddd، D MMMM YYYY - ساعت HH:mm:ss');
+      document.getElementById('relative-time').textContent = 'محاسبه فاصله: ' + now.fromNow();
+      
+      const [jy, jm, jd] = gregorianToPersian(now.getFullYear(), now.getMonth(), now.getDate());
+      document.getElementById('conversion-info').textContent = `تبدیل مستقیم اعداد: ${jy}/${jm}/${jd}`;
+    }
+
+    update();
+    setInterval(update, 1000);
+  </script>
+</body>
+</html>

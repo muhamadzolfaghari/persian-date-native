@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>jQuery + Persian Date Native Example</title>
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script src="../../dist/index.global.min.js"></script>
+  <style>
+    body { font-family: sans-serif; padding: 40px; }
+    .box { background: #f1f5f9; padding: 20px; border-radius: 8px; max-width: 400px; }
+    button { padding: 8px 16px; margin: 4px; cursor: pointer; }
+  </style>
+</head>
+<body>
+
+  <div class="box">
+    <h3>نمونه جی‌کوئری (jQuery)</h3>
+    <p>تاریخ جاری: <strong id="date-text"></strong></p>
+    <div>
+      <button id="prev-day">روز قبل</button>
+      <button id="today">امروز</button>
+      <button id="next-day">روز بعد</button>
+    </div>
+  </div>
+
+  <script>
+    $(document).ready(function() {
+      const { persianDate } = window.PersianDateNative;
+      let cur = persianDate();
+
+      function refresh() {
+        $("#date-text").text(cur.formatFa("dddd D MMMM YYYY"));
+      }
+
+      $("#prev-day").on("click", function() {
+        cur = persianDate(cur).subtract(1, "day");
+        refresh();
+      });
+
+      $("#next-day").on("click", function() {
+        cur = persianDate(cur).add(1, "day");
+        refresh();
+      });
+
+      $("#today").on("click", function() {
+        cur = persianDate();
+        refresh();
+      });
+
+      refresh();
+    });
+  </script>
+</body>
+</html>
