@@ -4,6 +4,10 @@ on:
   release:
     types: [published]
   workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - ".github/npm-publish-trigger"
 
 jobs:
   test-build-publish:
@@ -34,6 +38,16 @@ jobs:
 
       - name: Verify package contents
         run: npm pack --dry-run
+
+      - name: Ensure version is not already published
+        run: |
+          NAME=$(node -p "require('./package.json').name")
+          VERSION=$(node -p "require('./package.json').version")
+          if npm view "${NAME}@${VERSION}" version --registry=https://registry.npmjs.org >/dev/null 2>&1; then
+            echo "::error::${NAME}@${VERSION} already exists on npm"
+            exit 1
+          fi
+          echo "Publishing ${NAME}@${VERSION}"
 
       - name: Publish to npm
         run: npm publish --provenance --access public
