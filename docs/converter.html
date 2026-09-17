@@ -92,7 +92,7 @@
 
     <div style="display:flex;gap:0.75rem;margin-top:1.25rem;">
       <button class="btn btn-primary" style="flex:1;" onclick="convert()" data-i18n="common.calculate">Convert ↵</button>
-      <button class="btn btn-secondary" onclick="clearAll()">✕ Clear</button>
+      <button class="btn btn-secondary" onclick="clearAll()" data-i18n="common.clear">✕ Clear</button>
     </div>
 
     <div id="error-msg" style="color:#f87171;font-size:0.85rem;margin-top:0.75rem;text-align:center;display:none;"></div>
@@ -102,7 +102,7 @@
 </div>
 
 <footer>
-  <p>Built with <a href="https://github.com/muhamadzolfaghari/persian-date-native" target="_blank">persian-date-native</a> • Zero dependencies • 89M+ ops/sec</p>
+  <p data-i18n="common.footer_text">Built with <a href="https://github.com/muhamadzolfaghari/persian-date-native" target="_blank">persian-date-native</a> • Zero dependencies • 89M+ ops/sec</p>
 </footer>
 
 <script type="module">
