@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: 💬 Community Discussions & Questions
+    url: https://github.com/muhamadzolfaghari/persian-date-native/discussions
+    about: Ask questions, share ideas, and connect with other developers using persian-date-native.
+  - name: 🌐 Live Documentation & Online Tools
+    url: https://muhamadzolfaghari.github.io/persian-date-native/
+    about: Try the interactive calendar, converter, playground, and calculator directly in your browser.

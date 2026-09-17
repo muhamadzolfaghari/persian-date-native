@@ -1,0 +1,38 @@
+name: 💡 Feature Request
+description: Suggest a new idea, helper function, or enhancement
+title: "[Feature]: "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Have an idea to make `persian-date-native` even better? Let us know below!
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem or Motivation
+      description: Is your feature request related to a problem or missing utility?
+      placeholder: I am always needing to calculate Persian season or solar quarters...
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: Proposed Solution / API Design
+      description: Describe the solution you'd like and how the API would look.
+      render: typescript
+      placeholder: |
+        import { PersianDate } from 'persian-date-native';
+
+        const p = new PersianDate();
+        p.quarter(); // Returns 1..4
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives Considered
+      description: Any alternative solutions or workarounds you've considered.

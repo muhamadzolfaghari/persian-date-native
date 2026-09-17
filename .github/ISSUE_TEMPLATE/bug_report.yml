@@ -1,0 +1,62 @@
+name: 🐛 Bug Report
+description: Report a bug or incorrect date calculation in persian-date-native
+title: "[Bug]: "
+labels: ["bug", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report a bug! Please fill in the details below.
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Describe the Bug
+      description: A clear and concise description of what the bug is.
+      placeholder: e.g. Converting Jalali date 1403/12/30 returns an unexpected Gregorian date...
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Code to Reproduce
+      description: A minimal code example reproducing the issue.
+      render: typescript
+      placeholder: |
+        import { toGregorian } from 'persian-date-native';
+
+        const [gy, gm, gd] = toGregorian(1403, 12, 30);
+        console.log({ gy, gm, gd });
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected Behavior
+      description: What did you expect to happen?
+      placeholder: Expected Gregorian date to be 2025-03-20...
+    validations:
+      required: true
+
+  - type: dropdown
+    id: environment
+    attributes:
+      label: Runtime Environment
+      options:
+        - Node.js (ESM)
+        - Node.js (CJS)
+        - Browser (Vite / Webpack / Next.js)
+        - TypeScript
+        - Day.js Plugin
+    validations:
+      required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: Library Version
+      placeholder: e.g. 1.0.0
+    validations:
+      required: true
