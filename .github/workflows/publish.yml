@@ -1,8 +1,9 @@
 name: Publish to npm
 
 on:
-  release:
-    types: [published]
+  push:
+    tags:
+      - 'v*.*.*'
   workflow_dispatch:
 
 jobs:
@@ -22,12 +23,6 @@ jobs:
           node-version: "24"
           registry-url: "https://registry.npmjs.org"
           package-manager-cache: false
-
-      - name: Verify npm supports trusted publishing
-        run: |
-          node --version
-          npm --version
-          npm --version | awk -F. '{ if ($1 < 11 || ($1 == 11 && $2 < 5)) exit 1 }'
 
       - name: Install dependencies
         run: npm ci
