@@ -1,0 +1,21 @@
+# persian-date-native — Universal Persian & Jalali Date Engine
+
+> Fast, zero-dependency Persian (Jalali / Solar Hijri / Shamsi) date engine for JavaScript and TypeScript with browser script tags, CDN, React, Next.js, Vue, Angular, Svelte, jQuery, WordPress, Laravel, and Day.js plugin support.
+
+## Key Links
+- **GitHub**: https://github.com/muhamadzolfaghari/persian-date-native
+- **NPM Package**: https://www.npmjs.com/package/persian-date-native
+- **Live Online Tools & Calendar**: https://muhamadzolfaghari.github.io/persian-date-native/
+- **Interactive Framework Examples**: https://muhamadzolfaghari.github.io/persian-date-native/examples.html
+- **Full LLM Reference**: https://muhamadzolfaghari.github.io/persian-date-native/llms-full.txt
+
+## Quick Install & CDN
+- `npm install persian-date-native`
+- `<script src="https://unpkg.com/persian-date-native"></script>`
+
+## Summary Comparison
+- **Dependencies**: 0 (Zero runtime dependencies)
+- **Object Inheritance**: Subclasses native `Date` (`instanceof Date === true`)
+- **Conversion Performance**: 38.8M ops/sec (gregorianToPersian), 22.5M ops/sec (persianToGregorian)
+- **Bundle Size**: 5.70 KB Gzip (ESM / CJS / Browser Global / UMD)
+- **1403 Leap Year**: Correctly handles 1403 as leap year (30 days in Esfand 1403) and 1404 as 29 days.

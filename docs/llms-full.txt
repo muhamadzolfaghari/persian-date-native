@@ -1,0 +1,160 @@
+# persian-date-native — Full Technical & API Documentation
+
+## Table of Contents
+1. Core Concepts & Architecture
+2. Installation & CDN
+3. Function Signatures & Types
+4. PersianDate Class API
+5. Day.js Plugin
+6. Framework Integration Guides
+7. 1403 Leap Year Astronomical Proof
+
+---
+
+## 1. Core Concepts & Architecture
+
+`persian-date-native` is built directly on top of JavaScript's native `Date` object without intermediate wrapper overhead.
+- Inherits all standard Date methods (`getTime()`, `toISOString()`, `getTimezoneOffset()`, `toJSON()`).
+- Immutable date arithmetic methods: `add()`, `subtract()`, `startOf()`, `endOf()`.
+- Zero external runtime dependencies.
+- Sub-microsecond pure integer conversions.
+
+---
+
+## 2. Installation & CDN
+
+```bash
+npm install persian-date-native
+# or
+pnpm add persian-date-native
+# or
+yarn add persian-date-native
+# or
+bun add persian-date-native
+```
+
+Browser CDN:
+```html
+<script src="https://unpkg.com/persian-date-native"></script>
+<!-- Available globally as window.PersianDateNative -->
+```
+
+ESM CDN:
+```javascript
+import { persianDate } from "https://esm.sh/persian-date-native";
+```
+
+---
+
+## 3. Function Signatures & Types
+
+### Factory Function
+```typescript
+function persianDate(
+  ...args: [Date | string | number | undefined, Options?] |
+           [number, number, number, number?, number?, number?, number?, Options?]
+): PersianDate;
+```
+
+### Pure Integer Converters
+```typescript
+function gregorianToPersian(gy: number, gm: number, gd: number): [jy: number, jm: number, jd: number];
+function persianToGregorian(jy: number, jm: number, jd: number): [gy: number, gm: number, gd: number];
+```
+
+### Date Conversion Helpers
+```typescript
+function toPersianDate(date?: Date | string | number): { year: number; month: number; day: number };
+function toGregorianDate(jy: number, jm: number, jd: number): Date;
+```
+
+### Digits & Relative Time
+```typescript
+function toPersianDigits(input: string | number): string;
+function replacePersianNumbers(input: string): string;
+function isPersianLeapYear(year: number): boolean;
+function relativeTime(fromTime: number, toTime: number, options?: { withoutSuffix?: boolean; digits?: "en" | "fa" }): string;
+```
+
+---
+
+## 4. PersianDate Class API
+
+```typescript
+class PersianDate extends Date {
+  format(template?: string, options?: { digits?: "en" | "fa" }): string;
+  formatFa(template?: string): string;
+  toArray(): [year: number, month: number, day: number, hour: number, min: number, sec: number, ms: number];
+  clone(): PersianDate;
+  
+  getDayOfWeek(): number; // 0=Sat, 1=Sun, ..., 6=Fri
+  isWeekend(): boolean;   // true if Friday
+  quarter(): number;      // 1..4
+  isLeapYear(): boolean;
+  daysInMonth(): number;  // 31, 30, or 29 (30 on leap years)
+
+  fromNow(withoutSuffix?: boolean, options?: { digits?: "en" | "fa" }): string;
+  toNow(withoutSuffix?: boolean, options?: { digits?: "en" | "fa" }): string;
+  from(target: Date | PersianDate | string | number, withoutSuffix?: boolean, options?: { digits?: "en" | "fa" }): string;
+  to(target: Date | PersianDate | string | number, withoutSuffix?: boolean, options?: { digits?: "en" | "fa" }): string;
+
+  add(value: number, unit: "year" | "month" | "week" | "day" | "hour" | "minute" | "second"): this;
+  subtract(value: number, unit: "year" | "month" | "week" | "day" | "hour" | "minute" | "second"): this;
+  startOf(unit: "year" | "month" | "week" | "day" | "hour" | "minute" | "second"): this;
+  endOf(unit: "year" | "month" | "week" | "day" | "hour" | "minute" | "second"): this;
+
+  isBefore(target: Date | PersianDate | string | number): boolean;
+  isAfter(target: Date | PersianDate | string | number): boolean;
+  isSame(target: Date | PersianDate | string | number, unit?: "year" | "month" | "day"): boolean;
+  diff(target: Date | PersianDate | string | number, unit?: "years" | "months" | "weeks" | "days" | "hours" | "minutes" | "seconds"): number;
+}
+```
+
+---
+
+## 5. Day.js Plugin
+
+```typescript
+import dayjs from "dayjs";
+import { jalaliPlugin } from "persian-date-native";
+
+dayjs.extend(jalaliPlugin);
+
+const d = dayjs().calendar("jalali");
+console.log(d.format("YYYY/MM/DD"));
+```
+
+---
+
+## 6. Framework Integrations
+
+### React
+```tsx
+import { useState } from "react";
+import { persianDate } from "persian-date-native";
+
+export function Clock() {
+  const [d, setD] = useState(() => persianDate());
+  return <div>{d.formatFa("dddd D MMMM YYYY")}</div>;
+}
+```
+
+### Next.js (App Router)
+```tsx
+import { persianDate } from "persian-date-native";
+
+export default function Page() {
+  const serverDate = persianDate();
+  return <div>تاریخ سرور: {serverDate.formatFa("YYYY/MM/DD")}</div>;
+}
+```
+
+### Vue 3
+```vue
+<script setup>
+import { ref } from "vue";
+import { persianDate } from "persian-date-native";
+const date = ref(persianDate());
+</script>
+<template><div>{{ date.formatFa("dddd D MMMM YYYY") }}</div></template>
+```
