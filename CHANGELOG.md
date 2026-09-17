@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.3.1] - 2026-09-18
+
+### 📚 Documentation & Ecosystem Guides
+- **Framework Integration Matrix**: Embedded dedicated direct guides into README for React, Next.js App Router (RSC), Vue 3, Angular, Svelte 5, jQuery, WordPress, Laravel Blade, and vanilla HTML/CDN.
+- **Production Readiness Deliverables**: Added full suite of release reports (`docs/final-readiness-report.md`, `docs/examples-health-report.md`, `docs/seo-audit.md`, `docs/ai-discovery-report.md`).
+
+---
+
 ## [1.3.0] - 2026-09-18
 
 ### 🌟 Enterprise Documentation & Modular Asset Architecture

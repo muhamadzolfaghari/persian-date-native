@@ -566,10 +566,31 @@ npm run build
 
 ---
 
+## 🚀 Framework Integration Guides & Tutorials
+
+Dedicated, comprehensive guides with runnable examples and copy-paste recipes for every major ecosystem:
+
+| Framework / Ecosystem | Guide & Tutorial | Key Features |
+|---|---|---|
+| ⚛️ **React** | [React Persian Date Guide](docs/react-persian-date.md) | Component state, custom hooks, Datepicker interop. |
+| ▲ **Next.js** | [Next.js Jalali Date Guide](docs/nextjs-jalali-date.md) | App Router, React Server Components (RSC), SSR safe. |
+| 💚 **Vue 3** | [Vue 3 Persian Date Guide](docs/vue-persian-date.md) | Composition API, `ref()`, `computed()` reactive arithmetic. |
+| 🅰️ **Angular** | [Angular Persian Date Guide](docs/angular-persian-date.md) | Standalone components, custom Pipes, strict TypeScript types. |
+| 🧡 **Svelte 5** | [Svelte 5 Persian Date Guide](docs/svelte-persian-date.md) | Modern `$state` runes, zero overhead compiler integration. |
+| 💙 **jQuery** | [jQuery Persian Date Guide](docs/jquery-persian-date.md) | Global `window.PersianDateNative`, direct DOM manipulation. |
+| 🔷 **WordPress** | [WordPress Persian Date Guide](docs/wordpress-persian-date.md) | `wp_enqueue_script`, theme functions, zero impact on Core Web Vitals. |
+| 🔴 **Laravel Blade** | [Laravel Blade Persian Date Guide](docs/laravel-jalali-date.md) | Blade templates, ISO 8601 parsing, Alpine.js / Livewire ready. |
+| 🌐 **Vanilla HTML & CDN** | [Vanilla JS & CDN Guide](docs/vanilla-javascript-persian-date.md) | Drop-in `<script>` tag, zero build step required. |
+| 🔄 **Moment.js Migration** | [Migrate from `moment-jalaali`](docs/moment-jalaali-migration.md) | 92% smaller bundle, zero dependencies, immutable API. |
+| ⚡ **Day.js Migration** | [Migrate from Day.js Plugins](docs/dayjs-jalali-migration.md) | Standalone engine mode or optional `dayjsJalaliPlugin`. |
+
+---
+
 ## 📜 Changelog
 
 See [CHANGELOG.md](CHANGELOG.md) for full historical release notes.
 
+- **[v1.3.0]**: Enterprise modular static documentation assets (`docs/assets/`), zero-dependency single-pass syntax highlighter (`highlighter.js`), interactive framework playground (`docs/examples.html`), automated E2E testing (`npm run test:e2e`), examples health check suite (`npm run check:examples`), and post-publish CI/CD CDN smoke tests.
 - **[v1.2.3]**: Universal runtime architecture (`Symbol.for('nodejs.util.inspect.custom')`), 3-pass Terser bundle optimization (< 5.7 KB Gzip), `sideEffects: false` tree-shaking, automated `verify:build` suite, and OIDC CI/CD publish automation.
 - **[v1.2.2]**: Pure integer conversion micro-benchmarks (38.8M ops/sec), bidirectional conversion guides, ISO serialization patterns.
 - **[v1.2.1]**: Added `hh` format token (01–12), detailed migration guides (from `moment-jalaali`, `dayjs+jalaliday`, `date-fns-jalali`), ecosystem benchmark matrix.
