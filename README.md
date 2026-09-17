@@ -527,6 +527,19 @@ npm run build
 
 ---
 
+## 📜 Changelog
+
+See [CHANGELOG.md](CHANGELOG.md) for full historical release notes.
+
+- **[v1.2.3]**: Universal runtime architecture (`Symbol.for('nodejs.util.inspect.custom')`), 3-pass Terser bundle optimization (< 5.7 KB Gzip), `sideEffects: false` tree-shaking, automated `verify:build` suite, and OIDC CI/CD publish automation.
+- **[v1.2.2]**: Pure integer conversion micro-benchmarks (38.8M ops/sec), bidirectional conversion guides, ISO serialization patterns.
+- **[v1.2.1]**: Added `hh` format token (01–12), detailed migration guides (from `moment-jalaali`, `dayjs+jalaliday`, `date-fns-jalali`), ecosystem benchmark matrix.
+- **[v1.2.0]**: Zero-dependency pure integer math converters, Persian/English numeral converters, relative time (`fromNow`), and calendar boundary methods (`startOf`, `endOf`, `daysInMonth`).
+- **[v1.1.0]**: Day.js plugin architecture (`jalaliPlugin`), Iranian 33-year solar cycle leap year accuracy (1403 leap fix), and 100% test coverage suite.
+- **[v1.0.0]**: Initial release of zero-dependency native `Date`-extending Persian date engine.
+
+---
+
 ## 🔍 SEO & Search Keywords
 
 - **Persian**: تاریخ شمسی، تقویم شمسی، تبدیل تاریخ شمسی به میلادی، تبدیل تاریخ میلادی به شمسی، تاریخ جلالی، تبدیل تاریخ خورشیدی، پکیج تاریخ شمسی npm، اعداد فارسی، سال کبیسه ۱۴۰۳، تقویم فارسی جاوااسکریپت.
