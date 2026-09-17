@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Format Playground — persian-date-native</title>
+  <meta name="description" content="Live Persian date format playground. Try format tokens like YYYY/MM/DD HH:mm:ss and see results instantly." />
+  <link rel="stylesheet" href="shared.css" />
+  <style>
+    .live-output { font-family:'JetBrains Mono',monospace; font-size:2rem; font-weight:700; color:var(--accent); text-align:center; padding:2rem; background:var(--code-bg); border-radius:var(--radius); border:1px solid var(--card-border); margin-bottom:1.5rem; letter-spacing:0.02em; min-height:90px; display:flex; align-items:center; justify-content:center; }
+    .token-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:0.5rem; }
+    .token-row { display:flex; align-items:center; justify-content:space-between; padding:0.55rem 0.9rem; background:rgba(255,255,255,0.03); border:1px solid var(--card-border); border-radius:var(--radius-sm); cursor:pointer; transition:var(--transition); }
+    .token-row:hover { background:rgba(56,189,248,0.06); border-color:rgba(56,189,248,0.3); }
+    .token-code { font-family:'JetBrains Mono',monospace; font-size:0.85rem; color:var(--amber); font-weight:600; }
+    .token-desc { font-size:0.8rem; color:var(--muted2); }
+    .token-example { font-family:'JetBrains Mono',monospace; font-size:0.8rem; color:var(--emerald); }
+    .preset-btn { padding:0.4rem 0.85rem; border-radius:9999px; border:1px solid var(--card-border); background:transparent; color:var(--muted2); font-size:0.8rem; font-weight:600; cursor:pointer; transition:var(--transition); font-family:'JetBrains Mono',monospace; }
+    .preset-btn:hover { border-color:var(--accent); color:var(--accent); background:rgba(56,189,248,0.06); }
+    .format-input { font-family:'JetBrains Mono',monospace; font-size:1.1rem; letter-spacing:0.04em; }
+  </style>
+</head>
+<body>
+<nav>
+  <a href="index.html" class="nav-logo">🗓 <span>persian-date-native</span></a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="converter.html">🔄 Converter</a></li>
+    <li><a href="calendar.html">📅 Calendar</a></li>
+    <li><a href="formatter.html" class="active">🎨 Formatter</a></li>
+    <li><a href="calculator.html">⏱ Calculator</a></li>
+  </ul>
+  <a href="https://github.com/muhamadzolfaghari/persian-date-native" class="nav-github" target="_blank">⭐ GitHub</a>
+</nav>
+
+<div class="container">
+  <div class="page-header fade-up">
+    <h1>🎨 Format Playground</h1>
+    <p>Type a format string and see it rendered in real time with Persian date tokens</p>
+  </div>
+
+  <div style="max-width:760px;margin:0 auto;">
+    <!-- Live preview -->
+    <div class="live-output fade-up" id="live-output">YYYY/MM/DD</div>
+
+    <!-- Controls -->
+    <div class="card fade-up" style="margin-bottom:1.5rem;">
+      <div style="display:flex;gap:0.75rem;align-items:flex-end;flex-wrap:wrap;">
+        <div class="form-group" style="flex:1;min-width:200px;">
+          <label>Format String</label>
+          <input type="text" id="fmt-input" class="format-input" value="YYYY/MM/DD" placeholder="YYYY/MM/DD HH:mm:ss" oninput="updatePreview()" />
+        </div>
+        <div class="form-group" style="min-width:180px;">
+          <label>Date</label>
+          <input type="date" id="date-input" onchange="updatePreview()" />
+        </div>
+        <button class="btn btn-secondary" onclick="copyFormat()">📋 Copy</button>
+      </div>
+
+      <div style="margin-top:1rem;">
+        <div style="font-size:0.75rem;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.6rem;">Presets</div>
+        <div style="display:flex;gap:0.5rem;flex-wrap:wrap;" id="presets"></div>
+      </div>
+    </div>
+
+    <!-- Token reference -->
+    <div class="card fade-up">
+      <div class="card-title"><span class="icon">📖</span> Token Reference — click to insert</div>
+      <div class="token-grid" id="token-grid"></div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  Powered by <a href="https://www.npmjs.com/package/persian-date-native">persian-date-native</a> —
+  <a href="https://github.com/muhamadzolfaghari/persian-date-native">GitHub</a>
+</footer>
+<div class="toast" id="toast">✓ Copied!</div>
+
+<script type="module">
+import { PersianDate } from 'https://cdn.jsdelivr.net/npm/persian-date-native/dist/bundle.min.esm.js';
+
+const TOKENS = [
+  { token:'YYYY', desc:'Full year (4 digits)', example:'1403' },
+  { token:'YY',   desc:'Short year (2 digits)', example:'03' },
+  { token:'MM',   desc:'Month (padded)', example:'06' },
+  { token:'M',    desc:'Month (no pad)', example:'6' },
+  { token:'MMMM', desc:'Month name (Persian)', example:'شهریور' },
+  { token:'MMM',  desc:'Month name short', example:'Shahrivar' },
+  { token:'DD',   desc:'Day (padded)', example:'05' },
+  { token:'D',    desc:'Day (no pad)', example:'5' },
+  { token:'dddd', desc:'Weekday full name', example:'یکشنبه' },
+  { token:'ddd',  desc:'Weekday short', example:'یک' },
+  { token:'HH',   desc:'Hours 24h (padded)', example:'09' },
+  { token:'H',    desc:'Hours 24h', example:'9' },
+  { token:'hh',   desc:'Hours 12h (padded)', example:'09' },
+  { token:'mm',   desc:'Minutes (padded)', example:'05' },
+  { token:'ss',   desc:'Seconds (padded)', example:'03' },
+  { token:'A',    desc:'AM / PM', example:'AM' },
+  { token:'a',    desc:'am / pm', example:'am' },
+  { token:'x',    desc:'Unix ms timestamp', example:'1700000000000' },
+  { token:'X',    desc:'Unix timestamp (s)', example:'1700000000' },
+];
+
+const PRESETS = [
+  'YYYY/MM/DD',
+  'YYYY-MM-DD',
+  'DD/MM/YYYY',
+  'YYYY/MM/DD HH:mm',
+  'YYYY/MM/DD HH:mm:ss',
+  'MMMM DD, YYYY',
+  'dddd، DD MMMM YYYY',
+  'HH:mm:ss',
+];
+
+// Build token grid
+const grid = document.getElementById('token-grid');
+TOKENS.forEach(t => {
+  const el = document.createElement('div');
+  el.className = 'token-row';
+  el.innerHTML = `<div><span class="token-code">${t.token}</span> <span class="token-desc">— ${t.desc}</span></div><span class="token-example">${t.example}</span>`;
+  el.addEventListener('click', () => insertToken(t.token));
+  grid.appendChild(el);
+});
+
+// Build presets
+const presetsEl = document.getElementById('presets');
+PRESETS.forEach(p => {
+  const el = document.createElement('button');
+  el.className = 'preset-btn';
+  el.textContent = p;
+  el.addEventListener('click', () => { document.getElementById('fmt-input').value = p; updatePreview(); });
+  presetsEl.appendChild(el);
+});
+
+function insertToken(token) {
+  const inp = document.getElementById('fmt-input');
+  const start = inp.selectionStart;
+  const end = inp.selectionEnd;
+  const val = inp.value;
+  inp.value = val.slice(0, start) + token + val.slice(end);
+  inp.setSelectionRange(start + token.length, start + token.length);
+  inp.focus();
+  updatePreview();
+}
+
+window.updatePreview = function() {
+  const fmt = document.getElementById('fmt-input').value || 'YYYY/MM/DD';
+  const dateVal = document.getElementById('date-input').value;
+  try {
+    let d;
+    if (dateVal) {
+      const [y,m,dy] = dateVal.split('-').map(Number);
+      d = new PersianDate(new Date(y, m-1, dy));
+    } else {
+      d = new PersianDate();
+    }
+    document.getElementById('live-output').textContent = d.format(fmt);
+    document.getElementById('live-output').style.color = 'var(--accent)';
+  } catch(e) {
+    document.getElementById('live-output').textContent = 'Invalid format';
+    document.getElementById('live-output').style.color = 'var(--red)';
+  }
+};
+
+window.copyFormat = function() {
+  const val = document.getElementById('live-output').textContent;
+  navigator.clipboard.writeText(val);
+  const t = document.getElementById('toast');
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2000);
+};
+
+// Init date to today
+const now = new Date();
+document.getElementById('date-input').value = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`;
+updatePreview();
+
+// Live update on format input
+document.getElementById('fmt-input').addEventListener('input', updatePreview);
+</script>
+</body>
+</html>
