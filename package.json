@@ -9,6 +9,16 @@
   "bugs": {
     "url": "https://github.com/muhamadzolfaghari/persian-date-native/issues"
   },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/bundle.min.esm.js",
+      "require": "./dist/bundle.min.cjs.js",
+      "default": "./dist/bundle.min.esm.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "sideEffects": false,
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org/"
@@ -22,6 +32,7 @@
     "start:demo": "cd ./demo && npm run watch",
     "test": "jest",
     "benchmark": "ts-node -O '{\"module\":\"commonjs\"}' ./scripts/benchmark.ts",
+    "verify:build": "ts-node -O '{\"module\":\"commonjs\"}' ./scripts/verify-build.ts",
     "build": "rollup -c",
     "watch": "rollup -c -w",
     "demo": "ts-node demo/index.ts",

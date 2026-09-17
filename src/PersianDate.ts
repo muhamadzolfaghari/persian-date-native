@@ -20,7 +20,6 @@ import formatTime, { FormatOptionsConfig } from "./utils/formatters/formatTime";
 import overrideDisplayDateInstance from "./utils/formatters/overrideDisplayDateInstance";
 import relativeTime, { RelativeTimeOptions } from "./utils/common/fromNow";
 import { toPersianDate } from "./utils/persian/toPersianDate";
-import util from "util";
 
 /**
  * Represents a Persian date and time, extending the native JavaScript Date object.
@@ -661,9 +660,9 @@ export default class PersianDate extends Date {
   }
 
   /**
-   * Formats the PersianDate instance for console inspection.
+   * Formats the PersianDate instance for console inspection in Node.js and browsers.
    */
-  [util.inspect.custom](): string {
+  [Symbol.for("nodejs.util.inspect.custom")](): string {
     return overrideDisplayDateInstance(this.getTime());
   }
 }
