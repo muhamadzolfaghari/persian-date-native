@@ -1,78 +1,47 @@
 # Migrating from `moment-jalaali` to `persian-date-native`
 
-> Lightweight, zero-dependency, modern ES Modules & TypeScript migration guide.
+## 1. Problem
+`moment-jalaali` is built on top of `moment.js` (now declared a legacy, maintenance-only project by its authors). It weighs ~72 KB, lacks modern tree-shaking, uses mutable date objects, and causes significant bundle bloat in modern web applications.
 
-## Why Migrate?
-
-| Feature | `moment-jalaali` | `persian-date-native` |
-| :--- | :--- | :--- |
-| **Gzip Bundle Size** | ~72 KB (Moment + Jalaali) | **5.7 KB** (92% smaller) |
-| **Dependencies** | Requires heavy `moment` runtime | **Zero dependencies** |
-| **Native Date Inheritance** | Custom wrapper object | Subclasses native JavaScript `Date` |
-| **Tree-Shaking** | ❌ No | ✅ Full ESM tree-shaking |
-| **Performance** | ~450K ops/sec | **89M+ ops/sec** |
-
----
-
-## Migration Cheatsheet
-
-### 1. Installation
+## 2. Installation
 ```bash
-# Remove heavy legacy moment
+# Uninstall heavy legacy moment
 npm uninstall moment moment-jalaali
 
 # Install zero-dependency native engine
 npm install persian-date-native
 ```
 
-### 2. Creation & Instantiation
+## 3. Example
 ```javascript
-// BEFORE (moment-jalaali)
-import moment from "moment-jalaali";
-moment.loadPersian({ dialect: "persian-modern" });
-const m = moment("1403/06/12", "jYYYY/jMM/jDD");
+import { persianDate, PersianDate, gregorianToPersian } from "persian-date-native";
 
-// AFTER (persian-date-native)
-import { persianDate, PersianDate } from "persian-date-native";
-const p = new PersianDate(1403, 6, 12);
-// or factory:
-const p2 = persianDate(1403, 6, 12);
+// 1. Current Persian date
+const now = persianDate();
+console.log(now.formatFa("dddd D MMMM YYYY"));
+
+// 2. Specific date
+const specific = new PersianDate(1403, 6, 12);
+console.log(specific.format("YYYY/MM/DD")); // "1403/06/12"
+
+// 3. Zero-allocation integer conversion
+const [jy, jm, jd] = gregorianToPersian(2024, 9, 2);
+console.log(jy, jm, jd); // 1403, 6, 12
 ```
 
-### 3. Formatting
-```javascript
-// BEFORE
-m.format("jYYYY/jMM/jDD"); // "1403/06/12"
-m.format("jD jMMMM jYYYY"); // "12 شهریور 1403"
+## 4. Why Use `persian-date-native`?
+- **92% Smaller**: 5.7 KB Gzipped vs 72 KB for Moment + Jalaali.
+- **Zero Dependencies**: 0 runtime dependencies.
+- **Subclasses Native `Date`**: Inherits standard JavaScript `Date` methods.
+- **Immutable Arithmetic**: `.add()` and `.subtract()` return fresh instances, eliminating mutation bugs.
 
-// AFTER
-p.format("YYYY/MM/DD");     // "1403/06/12" (English digits)
-p.formatFa("YYYY/MM/DD");   // "۱۴۰۳/۰۶/۱۲" (Persian digits)
-p.formatFa("D MMMM YYYY");  // "۱۲ شهریور ۱۴۰۳"
-```
+## 5. Migration Guide
 
-### 4. Date Arithmetic
-```javascript
-// BEFORE (Mutable)
-m.add(7, "days");
-m.subtract(1, "months");
-
-// AFTER (Immutable)
-const nextWeek = p.add(7, "days");
-const prevMonth = p.subtract(1, "months");
-```
-
-### 5. Conversion (Pure Integers)
-```javascript
-// BEFORE
-const m = moment("2024-09-02");
-const jy = m.jYear();
-const jm = m.jMonth() + 1;
-const jd = m.jDate();
-
-// AFTER (0-allocation pure array destructuring)
-import { gregorianToPersian, persianToGregorian } from "persian-date-native";
-
-const [jy, jm, jd] = gregorianToPersian(2024, 9, 2); // [1403, 6, 12]
-const [gy, gm, gd] = persianToGregorian(1403, 6, 12); // [2024, 9, 2]
-```
+| Action | Before (`moment-jalaali`) | After (`persian-date-native`) |
+| :--- | :--- | :--- |
+| **Instantiate Now** | `moment()` | `persianDate()` |
+| **Specific Date** | `moment('1403/06/12', 'jYYYY/jMM/jDD')` | `new PersianDate(1403, 6, 12)` |
+| **Persian Format** | `m.format('jYYYY/jMM/jDD')` | `p.formatFa('YYYY/MM/DD')` |
+| **Add Time** | `m.add(7, 'days')` (mutates) | `p.add(7, 'days')` (immutable) |
+| **From Now** | `m.fromNow()` | `p.fromNow()` |
+| **Leap Year** | `m.isLeapYear()` | `p.isLeapYear()` |

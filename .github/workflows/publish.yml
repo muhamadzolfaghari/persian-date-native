@@ -27,8 +27,11 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Run tests
-        run: npm test -- --runInBand
+      - name: Run unit and E2E tests
+        run: |
+          npm test -- --runInBand
+          npm run test:e2e
+          npm run check:examples
 
       - name: Build package
         run: npm run build

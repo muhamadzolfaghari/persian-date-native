@@ -1,52 +1,65 @@
-# Laravel Blade Persian (Jalali) Date Guide
+# Laravel Blade Persian (Jalali) Date Integration Guide
 
-> Display Persian dates in Laravel Blade views and Vue/Inertia/Livewire frontends with `persian-date-native`.
+## 1. Problem
+How do you cleanly format server-rendered UTC timestamps into localized Persian dates in Laravel Blade templates and Alpine.js / Livewire components?
 
-## 1. CDN Approach in `app.blade.php`
-```blade
-<!DOCTYPE html>
-<html lang="fa" dir="rtl">
-<head>
-    <meta charset="utf-8">
-    <title>{{ config('app.name') }}</title>
-    <script src="https://unpkg.com/persian-date-native"></script>
-</head>
-<body>
-    <div id="app">
-        <h1>{{ $post->title }}</h1>
-        <p>تاریخ انتشار: <span id="post-date"></span></p>
-    </div>
-
-    <script>
-        const { persianDate } = window.PersianDateNative;
-        const serverIso = "{{ $post->created_at->toISOString() }}";
-        document.getElementById('post-date').textContent = 
-            persianDate(new Date(serverIso)).formatFa("dddd D MMMM YYYY");
-    </script>
-</body>
-</html>
-```
-
-## 2. Inertia.js (Vue 3 / React) Approach
-Install via npm:
+## 2. Installation / CDN
+Add via Vite / npm:
 ```bash
 npm install persian-date-native
 ```
+or via CDN in your Blade layout (`resources/views/layouts/app.blade.php`):
+```html
+<script src="https://unpkg.com/persian-date-native"></script>
+```
 
-In your Vue / React Inertia component:
-```vue
-<script setup>
-import { computed } from 'vue';
-import { persianDate } from 'persian-date-native';
+## 3. Example
+```html
+<!-- resources/views/posts/show.blade.php -->
+@extends('layouts.app')
 
-const props = defineProps({ post: Object });
+@section('content')
+<div dir="rtl" class="container mx-auto p-6 font-sans">
+    <h1 class="text-2xl font-bold">{{ $post->title }}</h1>
+    
+    <div class="text-sm text-gray-500 mt-2">
+        <span>تاریخ انتشار: </span>
+        <span id="post-published-date"></span>
+        <span class="text-xs text-blue-600" id="post-relative-time"></span>
+    </div>
+</div>
 
-const jalaliCreatedAt = computed(() => {
-  return persianDate(new Date(props.post.created_at)).formatFa('D MMMM YYYY');
-});
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const { persianDate } = window.PersianDateNative;
+        const serverIso = "{{ $post->created_at->toISOString() }}";
+        const pDate = persianDate(new Date(serverIso));
+
+        document.getElementById("post-published-date").textContent = 
+            pDate.formatFa("dddd D MMMM YYYY - ساعت HH:mm");
+        document.getElementById("post-relative-time").textContent = 
+            `(${pDate.fromNow()})`;
+    });
 </script>
+@endsection
+```
 
-<template>
-  <time :datetime="post.created_at">{{ jalaliCreatedAt }}</time>
-</template>
+## 4. Why Use `persian-date-native`?
+- **Zero Frontend Dependencies**: Works seamlessly with Laravel 10/11 Vite asset pipelines, Livewire, and Alpine.js.
+- **Accurate UTC to Jalali Conversion**: Direct ISO 8601 string parsing with native JavaScript `Date` timezone awareness.
+- **Microsecond Rendering**: Format hundreds of table rows instantly.
+- **Dual Mode**: Use via `npm` imports in `app.js` or via simple script tags.
+
+## 5. Migration Guide
+
+### Before (`moment-jalaali` in Laravel Vite):
+```javascript
+import moment from "moment-jalaali";
+const dateStr = moment(isoString).format("jYYYY/jMM/jDD");
+```
+
+### After (`persian-date-native` in Laravel Vite):
+```javascript
+import { persianDate } from "persian-date-native";
+const dateStr = persianDate(new Date(isoString)).formatFa("YYYY/MM/DD");
 ```

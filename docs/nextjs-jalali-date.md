@@ -1,19 +1,16 @@
 # Next.js Jalali (Persian) Date Guide — App Router & RSC
 
-> High-performance Persian (Jalali / Shamsi) date handling for Next.js 13+, 14+, and 15+ with React Server Components (RSC) and Client Components.
+## 1. Problem
+How do you render Persian (Shamsi / Jalali) dates across React Server Components (RSC), SSR pages, and client components in Next.js without hydration mismatches or heavy client bundle sizes?
 
-## Why `persian-date-native` for Next.js?
-- **RSC & SSR Safe**: Pure zero-dependency algorithm executes deterministically on Node.js/Edge servers and in the browser.
-- **Zero Hydration Mismatches**: Matches date calculations identically on server and client.
-- **Tree-Shakeable**: Exports individual functions for optimal bundle sizes.
-
-## Installation
+## 2. Installation
 ```bash
 npm install persian-date-native
 ```
 
-## Next.js App Router Server Component (`app/page.tsx`)
+## 3. Example
 ```tsx
+// app/page.tsx (Next.js App Router Server Component)
 import { persianDate, gregorianToPersian } from "persian-date-native";
 
 export default function Page() {
@@ -22,37 +19,35 @@ export default function Page() {
 
   return (
     <main dir="rtl" className="p-8 font-sans">
-      <h1 className="text-2xl font-bold">
+      <h1 className="text-2xl font-bold text-gray-900">
         تاریخ سرور: {serverTime.formatFa("dddd D MMMM YYYY - HH:mm")}
       </h1>
       <p className="text-gray-600 mt-2">
-        تبدیل بدون وابستگی: {jy}/{jm}/{jd}
+        تبدیل بدون تخصیص حافظه: {jy}/{jm}/{jd}
       </p>
     </main>
   );
 }
 ```
 
-## Next.js Client Component (`app/components/PersianPicker.tsx`)
+## 4. Why Use `persian-date-native`?
+- **Server & RSC Safe**: Pure deterministic mathematical algorithms with zero Node.js or browser environment bindings.
+- **Zero Hydration Mismatches**: Calculates exact dates identically on both server and client.
+- **Full Tree-Shaking**: Dual ESM/CJS exports with `"sideEffects": false`.
+- **Zero Runtime Dependencies**: No hidden transitive packages in your deployment artifact.
+
+## 5. Migration Guide
+
+### Before (`moment-jalaali`):
 ```tsx
-"use client";
-
-import { useState } from "react";
-import { persianDate } from "persian-date-native";
-
-export function PersianPicker() {
-  const [date, setDate] = useState(() => persianDate());
-
-  return (
-    <div dir="rtl" className="flex items-center gap-4">
-      <span>{date.formatFa("YYYY/MM/DD")}</span>
-      <button onClick={() => setDate(persianDate(date).add(1, "day"))}>
-        روز بعد
-      </button>
-    </div>
-  );
-}
+import moment from "moment-jalaali";
+// Moment is not optimal for Server Components (large footprint, mutable state)
+const serverDate = moment().format("jYYYY/jMM/jDD");
 ```
 
-## Live Examples
-Explore live runnable code in the [Framework Playground](https://muhamadzolfaghari.github.io/persian-date-native/examples.html).
+### After (`persian-date-native`):
+```tsx
+import { persianDate } from "persian-date-native";
+
+const serverDate = persianDate().formatFa("YYYY/MM/DD");
+```

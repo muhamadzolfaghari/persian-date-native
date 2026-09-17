@@ -1,57 +1,75 @@
 # React Persian (Jalali / Shamsi) Date Guide
 
-> Complete guide to formatting, calculating, and managing Persian dates in React applications using `persian-date-native`.
+## 1. Problem
+How do you reliably handle, format, and manipulate Persian (Solar Hijri / Jalali / Shamsi) dates in modern React (Vite, CRA, Next.js client components) without bloating your bundle with legacy libraries like `moment`?
 
-## Why `persian-date-native` for React?
-- **Subclasses native `Date`**: Seamlessly compatible with React state, props, date pickers, and chart libraries.
-- **Zero Dependencies**: Keeps React production bundle lightweight (~5.7 KB Gzipped).
-- **Ultra-Fast Re-renders**: Sub-microsecond execution prevents UI lag during frequent state updates.
-
-## Installation
+## 2. Installation
 ```bash
 npm install persian-date-native
 ```
 
-## Basic React Component
+## 3. Example
 ```tsx
 import React, { useState } from "react";
-import { persianDate } from "persian-date-native";
+import { persianDate, PersianDate } from "persian-date-native";
 
 export function PersianCalendarCard() {
-  const [date, setDate] = useState(() => persianDate());
+  const [current, setCurrent] = useState<PersianDate>(() => persianDate());
 
   return (
-    <div dir="rtl" className="p-4 border rounded-xl shadow-lg">
-      <h2 className="text-xl font-bold">{date.formatFa("dddd D MMMM YYYY")}</h2>
-      <p className="text-gray-500">روزهای این ماه: {date.daysInMonth()} روز</p>
+    <div dir="rtl" className="p-4 border rounded-xl shadow-lg font-sans">
+      <h2 className="text-xl font-bold text-blue-600">
+        {current.formatFa("dddd D MMMM YYYY")}
+      </h2>
+      <p className="text-gray-500 mt-1">
+        روزهای این ماه: {current.daysInMonth()} روز | سال کبیسه: {current.isLeapYear() ? "بله" : "خیر"}
+      </p>
       <div className="flex gap-2 mt-4">
-        <button onClick={() => setDate(persianDate(date).subtract(1, "month"))}>ماه قبل</button>
-        <button onClick={() => setDate(persianDate(date).add(1, "month"))}>ماه بعد</button>
+        <button 
+          onClick={() => setCurrent(persianDate(current).subtract(1, "month"))}
+          className="px-3 py-1 bg-gray-100 rounded hover:bg-gray-200"
+        >
+          ماه قبل
+        </button>
+        <button 
+          onClick={() => setCurrent(persianDate())}
+          className="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
+        >
+          امروز
+        </button>
+        <button 
+          onClick={() => setCurrent(persianDate(current).add(1, "month"))}
+          className="px-3 py-1 bg-gray-100 rounded hover:bg-gray-200"
+        >
+          ماه بعد
+        </button>
       </div>
     </div>
   );
 }
 ```
 
-## Custom React Hook for Live Persian Clock
+## 4. Why Use `persian-date-native`?
+- **Zero Dependencies**: Zero external dependencies — pure, self-contained algorithms.
+- **Native `Date` Compatibility**: Subclasses JavaScript's native `Date`, so it integrates seamlessly with state, date pickers, and chart libraries.
+- **First-Class TypeScript**: Comprehensive types built-in with zero configuration.
+- **Ultra-Fast & Lightweight**: 89M+ ops/sec throughput and only 5.7 KB Gzipped.
+
+## 5. Migration Guide
+
+### Before (`moment-jalaali`):
 ```tsx
-import { useState, useEffect } from "react";
-import { persianDate, PersianDate } from "persian-date-native";
+import moment from "moment-jalaali";
+moment.loadPersian({ dialect: "persian-modern" });
 
-export function useLivePersianDate(intervalMs = 1000): PersianDate {
-  const [currentDate, setCurrentDate] = useState<PersianDate>(() => persianDate());
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentDate(persianDate());
-    }, intervalMs);
-
-    return () => clearInterval(timer);
-  }, [intervalMs]);
-
-  return currentDate;
-}
+const formatted = moment(date).format("jYYYY/jMM/jDD");
+const nextMonth = moment(date).add(1, "jMonth");
 ```
 
-## Interactive Playground
-Try and test live React code in the [Interactive Framework Playground](https://muhamadzolfaghari.github.io/persian-date-native/examples.html).
+### After (`persian-date-native`):
+```tsx
+import { persianDate } from "persian-date-native";
+
+const formatted = persianDate(date).formatFa("YYYY/MM/DD");
+const nextMonth = persianDate(date).add(1, "month");
+```

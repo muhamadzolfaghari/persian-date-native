@@ -1,49 +1,85 @@
-# jQuery Persian & Jalali Date Integration Guide
+# jQuery Persian (Jalali) Date Integration Guide
 
-> Lightweight Persian date formatting and calculation for jQuery applications and legacy web platforms without bundlers.
+## 1. Problem
+How do you format, convert, and manipulate Persian dates in legacy or modern jQuery web applications using a simple `<script>` tag or bundler?
 
-## CDN Script Tag Setup
-Add jQuery and `persian-date-native` via CDN:
-
+## 2. Installation / CDN
 ```html
-<!-- jQuery -->
+<!-- Load via CDN -->
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-
-<!-- Persian Date Native CDN Bundle -->
 <script src="https://unpkg.com/persian-date-native"></script>
 ```
-
-## Usage in jQuery
-The library registers `window.PersianDateNative`:
-
-```javascript
-$(document).ready(function() {
-  const { persianDate, gregorianToPersian } = window.PersianDateNative;
-
-  // Format today's date
-  const now = persianDate();
-  $('#persian-clock').text(now.formatFa('dddd D MMMM YYYY'));
-
-  // Live calculation on button click
-  $('#add-week-btn').on('click', function() {
-    const nextWeek = now.add(7, 'day');
-    $('#result').text('۷ روز بعد: ' + nextWeek.formatFa('YYYY/MM/DD'));
-  });
-});
+or via npm:
+```bash
+npm install persian-date-native
 ```
 
-## jQuery Plugin Helper
-```javascript
-$.fn.toPersianDate = function(format = 'YYYY/MM/DD') {
-  return this.each(function() {
-    const raw = $(this).text() || $(this).data('date');
-    if (raw) {
-      const p = window.PersianDateNative.persianDate(new Date(raw));
-      $(this).text(p.formatFa(format));
-    }
-  });
-};
+## 3. Example
+```html
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>jQuery Persian Date</title>
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script src="https://unpkg.com/persian-date-native"></script>
+</head>
+<body>
+  <div class="date-widget">
+    <h3>تاریخ جاری: <span id="persian-label"></span></h3>
+    <button id="btn-prev">◀ روز قبل</button>
+    <button id="btn-today">امروز</button>
+    <button id="btn-next">روز بعد ▶</button>
+  </div>
 
-// Usage:
-// $('.post-time').toPersianDate('dddd D MMMM');
+  <script>
+    $(document).ready(function() {
+      const { persianDate } = window.PersianDateNative;
+      let current = persianDate();
+
+      function render() {
+        $("#persian-label").text(current.formatFa("dddd D MMMM YYYY"));
+      }
+
+      $("#btn-prev").on("click", function() {
+        current = persianDate(current).subtract(1, "day");
+        render();
+      });
+
+      $("#btn-next").on("click", function() {
+        current = persianDate(current).add(1, "day");
+        render();
+      });
+
+      $("#btn-today").on("click", function() {
+        current = persianDate();
+        render();
+      });
+
+      render();
+    });
+  </script>
+</body>
+</html>
+```
+
+## 4. Why Use `persian-date-native`?
+- **Zero Dependencies**: Drop it into any HTML page alongside jQuery without Babel or build steps.
+- **Global `window.PersianDateNative`**: Direct access in any global script block.
+- **Ultra-Fast**: Sub-microsecond execution handles large tabular data rows without lag.
+- **Native Date Inheritance**: Works with native JavaScript `Date` pickers.
+
+## 5. Migration Guide
+
+### Before (`babakhani/persian-date`):
+```javascript
+// Legacy persian-date required separate configuration and heavy moment-like wrapper
+var p = new persianDate();
+var text = p.format("YYYY/MM/DD");
+```
+
+### After (`persian-date-native`):
+```javascript
+var p = window.PersianDateNative.persianDate();
+var text = p.formatFa("YYYY/MM/DD");
 ```
