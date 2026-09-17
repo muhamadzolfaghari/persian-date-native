@@ -83,7 +83,10 @@
   function toPersianDate(input) {
     const d = input instanceof Date ? input : new Date(input || Date.now());
     if (isNaN(d.getTime())) return { year: NaN, month: NaN, day: NaN };
-    const [year, month, day] = gregorianToPersian(d.getFullYear(), d.getMonth() + 1, d.getDate());
+    const gy = Date.prototype.getFullYear.call(d);
+    const gm = Date.prototype.getMonth.call(d) + 1;
+    const gd = Date.prototype.getDate.call(d);
+    const [year, month, day] = gregorianToPersian(gy, gm, gd);
     return { year, month, day };
   }
 
