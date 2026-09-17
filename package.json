@@ -64,6 +64,10 @@
     "format"
   ],
 
+  "author": {
+    "name": "Mohammad Zolfaghari",
+    "url": "https://github.com/muhamadzolfaghari"
+  },
   "license": "ISC",
   "peerDependencies": {
     "dayjs": ">=1.10.0"
