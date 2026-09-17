@@ -1,0 +1,87 @@
+/* ==========================================================================
+   Syntax Highlighting Theme (Minimalist Enterprise Code Block)
+   ========================================================================== */
+
+.code-container {
+  position: relative;
+  margin-top: 1rem;
+}
+
+.code-block {
+  background: #060913;
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-sm);
+  padding: 1.25rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.88rem;
+  line-height: 1.65;
+  color: #e2e8f0;
+  overflow-x: auto;
+  white-space: pre;
+  tab-size: 2;
+}
+
+[data-theme="light"] .code-block {
+  background: #f8fafc;
+  color: #0f172a;
+  border-color: rgba(15, 23, 42, 0.1);
+}
+
+/* Syntax Token Colors - Dark Mode */
+.token-keyword { color: #f43f5e; font-weight: 600; }
+.token-string { color: #34d399; }
+.token-comment { color: #64748b; font-style: italic; }
+.token-function { color: #38bdf8; }
+.token-number { color: #fbbf24; }
+.token-tag { color: #818cf8; font-weight: 600; }
+.token-attr { color: #38bdf8; }
+.token-operator { color: #f472b6; }
+.token-punctuation { color: #94a3b8; }
+.token-boolean { color: #c084fc; font-weight: 600; }
+
+/* Syntax Token Colors - Light Mode */
+[data-theme="light"] .token-keyword { color: #e11d48; font-weight: 600; }
+[data-theme="light"] .token-string { color: #059669; }
+[data-theme="light"] .token-comment { color: #94a3b8; }
+[data-theme="light"] .token-function { color: #0284c7; }
+[data-theme="light"] .token-number { color: #d97706; }
+[data-theme="light"] .token-tag { color: #4f46e5; }
+[data-theme="light"] .token-attr { color: #0284c7; }
+[data-theme="light"] .token-operator { color: #db2777; }
+[data-theme="light"] .token-punctuation { color: #64748b; }
+[data-theme="light"] .token-boolean { color: #7c3aed; }
+
+/* Copy Code Button */
+.copy-btn {
+  position: absolute;
+  top: 0.6rem;
+  right: 0.6rem;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--card-border);
+  border-radius: 6px;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 0.35rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  transition: var(--transition);
+  font-family: inherit;
+  z-index: 10;
+}
+
+[dir="rtl"] .copy-btn {
+  right: auto;
+  left: 0.6rem;
+}
+
+[data-theme="light"] .copy-btn {
+  background: #ffffff;
+  color: #334155;
+  border-color: rgba(15, 23, 42, 0.12);
+}
+
+.copy-btn:hover {
+  background: rgba(var(--accent-rgb), 0.15);
+  border-color: var(--accent);
+  color: var(--accent);
+}

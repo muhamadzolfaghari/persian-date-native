@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" dir="ltr">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Persian Date Format Playground — Tokens & Formatters | persian-date-native</title>
+  <title>Persian Date Format Playground — Tokens & formatFa() | persian-date-native</title>
   <meta name="description" content="Live interactive Persian (Jalali) date format string builder. Test tokens like YYYY, MMMM, dddd, HH:mm:ss, and formatFa() with live preview." />
   <meta name="keywords" content="persian date format, jalali date formatter, فرمت تاریخ شمسی, الگوهای تاریخ جلالی, formatFa" />
   <link rel="canonical" href="https://muhamadzolfaghari.github.io/persian-date-native/formatter.html" />
@@ -22,30 +22,20 @@
   {
     "@context": "https://schema.org",
     "@type": "WebApplication",
-    "name": "Persian Date Format Playground",
+    "name": "Persian Date Formatter",
     "url": "https://muhamadzolfaghari.github.io/persian-date-native/formatter.html",
-    "description": "Live Persian date format builder powered by persian-date-native.",
+    "description": "Interactive Persian date formatting playground powered by persian-date-native.",
     "applicationCategory": "DeveloperApplication",
     "operatingSystem": "All"
   }
   </script>
 
-  <link rel="stylesheet" href="shared.css" />
-  <script src="i18n.js"></script>
-  <script src="shared-engine.js"></script>
-  <style>
-    .live-output { font-family:'JetBrains Mono',monospace; font-size:1.8rem; font-weight:700; color:var(--accent); text-align:center; padding:1.8rem; background:var(--code-bg); border-radius:var(--radius); border:1px solid var(--card-border); margin-bottom:1.5rem; letter-spacing:0.02em; min-height:90px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:0.5rem; }
-    .live-sub { font-size:1.1rem; color:var(--emerald); font-weight:600; font-family:'Vazirmatn','JetBrains Mono',sans-serif; }
-    .token-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:0.5rem; }
-    .token-row { display:flex; align-items:center; justify-content:space-between; padding:0.55rem 0.9rem; background:rgba(255,255,255,0.03); border:1px solid var(--card-border); border-radius:var(--radius-sm); cursor:pointer; transition:var(--transition); }
-    .token-row:hover { background:rgba(56,189,248,0.06); border-color:rgba(56,189,248,0.3); }
-    .token-code { font-family:'JetBrains Mono',monospace; font-size:0.85rem; color:var(--amber); font-weight:600; }
-    .token-desc { font-size:0.8rem; color:var(--muted2); }
-    .token-example { font-family:'JetBrains Mono',monospace; font-size:0.8rem; color:var(--emerald); }
-    .preset-btn { padding:0.4rem 0.85rem; border-radius:9999px; border:1px solid var(--card-border); background:transparent; color:var(--muted2); font-size:0.8rem; font-weight:600; cursor:pointer; transition:var(--transition); font-family:'JetBrains Mono',monospace; }
-    .preset-btn:hover { border-color:var(--accent); color:var(--accent); background:rgba(56,189,248,0.06); }
-    .format-input { font-family:'JetBrains Mono',monospace; font-size:1.1rem; letter-spacing:0.04em; }
-  </style>
+  <!-- Modular Static Assets -->
+  <link rel="stylesheet" href="assets/css/main.css" />
+  <link rel="stylesheet" href="assets/css/syntax.css" />
+  <script src="assets/js/shared-engine.js"></script>
+  <script src="assets/js/i18n.js"></script>
+  <script src="assets/js/pages/formatter.js" defer></script>
 </head>
 <body>
 <nav>
@@ -66,42 +56,70 @@
 </nav>
 
 <div class="container">
-  <div class="page-header fade-up">
+  <div class="page-header">
     <h1 data-i18n="formatter.title">🎨 Format Playground</h1>
     <p data-i18n="formatter.subtitle">Type a format string and see it rendered in real time with Persian date tokens</p>
   </div>
 
-  <div style="max-width:760px;margin:0 auto;">
+  <div style="max-width:760px; margin:0 auto;">
     <!-- Live preview -->
-    <div class="live-output fade-up" id="live-output">
+    <div class="live-output" id="live-output">
       <div id="out-en">YYYY/MM/DD</div>
       <div class="live-sub" id="out-fa">۱۴۰۳/۰۶/۱۵</div>
     </div>
 
-    <!-- Controls -->
-    <div class="card fade-up" style="margin-bottom:1.5rem;">
-      <div style="display:flex;gap:0.75rem;align-items:flex-end;flex-wrap:wrap;">
-        <div class="form-group" style="flex:1;min-width:200px;">
+    <!-- Controls Card -->
+    <div class="card" style="margin-bottom:1.5rem;">
+      <div style="display:flex; gap:0.75rem; align-items:flex-end; flex-wrap:wrap;">
+        <div class="form-group" style="flex:1; min-width:200px;">
           <label data-i18n="formatter.format_pattern">Format Pattern String</label>
-          <input type="text" id="fmt-input" class="format-input" value="dddd, D MMMM YYYY HH:mm:ss" placeholder="YYYY/MM/DD HH:mm:ss" oninput="updatePreview()" />
+          <input type="text" id="fmt-input" value="dddd, D MMMM YYYY HH:mm:ss" placeholder="YYYY/MM/DD HH:mm:ss" />
         </div>
         <div class="form-group" style="min-width:180px;">
           <label data-i18n="formatter.input_label">Target Date</label>
-          <input type="date" id="date-input" onchange="updatePreview()" />
+          <input type="date" id="fmt-date" />
         </div>
-        <button class="btn btn-secondary" onclick="copyFormat()" data-i18n="common.copy">📋 Copy</button>
       </div>
 
-      <div style="margin-top:1rem;">
-        <div style="font-size:0.75rem;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.6rem;" data-i18n="formatter.presets">Presets</div>
-        <div style="display:flex;gap:0.5rem;flex-wrap:wrap;" id="presets"></div>
+      <!-- Presets -->
+      <div style="margin-top:0.75rem;">
+        <div style="font-size:0.78rem; color:var(--text-dim); margin-bottom:0.4rem; font-weight:600;" data-i18n="formatter.presets">Quick Presets:</div>
+        <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
+          <button class="quick-btn" onclick="setPreset('YYYY/MM/DD')">YYYY/MM/DD</button>
+          <button class="quick-btn" onclick="setPreset('dddd, D MMMM YYYY')">dddd, D MMMM YYYY</button>
+          <button class="quick-btn" onclick="setPreset('YYYY-MM-DD HH:mm:ss')">ISO Full</button>
+          <button class="quick-btn" onclick="setPreset('D MMMM')">Short Date</button>
+          <button class="quick-btn" onclick="setPreset('hh:mm A')">Time 12h</button>
+        </div>
       </div>
     </div>
 
-    <!-- Token reference -->
-    <div class="card fade-up">
-      <div class="card-title"><span class="icon">📖</span> <span data-i18n="formatter.tokens_title">Token Reference — click to insert</span></div>
-      <div class="token-grid" id="token-grid"></div>
+    <!-- Token Reference Table Card -->
+    <div class="card">
+      <div class="card-title" data-i18n="formatter.tokens_title">Supported Token Reference — Click to Insert</div>
+      <div class="table-container">
+        <table class="token-table">
+          <thead>
+            <tr>
+              <th data-i18n="formatter.token_header_token">Token</th>
+              <th data-i18n="formatter.token_header_desc">Description</th>
+              <th data-i18n="formatter.token_header_example">Example</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><span class="token-badge" onclick="insertToken('YYYY')">YYYY</span></td><td class="token-desc">4-digit year</td><td class="token-example">1403 / ۱۴۰۳</td></tr>
+            <tr><td><span class="token-badge" onclick="insertToken('YY')">YY</span></td><td class="token-desc">2-digit year</td><td class="token-example">03 / ۰۳</td></tr>
+            <tr><td><span class="token-badge" onclick="insertToken('MMMM')">MMMM</span></td><td class="token-desc">Full month name</td><td class="token-example">Shahrivar / شهریور</td></tr>
+            <tr><td><span class="token-badge" onclick="insertToken('MM')">MM</span></td><td class="token-desc">2-digit month</td><td class="token-example">06 / ۰۶</td></tr>
+            <tr><td><span class="token-badge" onclick="insertToken('DD')">DD</span></td><td class="token-desc">2-digit day</td><td class="token-example">15 / ۱۵</td></tr>
+            <tr><td><span class="token-badge" onclick="insertToken('D')">D</span></td><td class="token-desc">Day of month</td><td class="token-example">15 / ۱۵</td></tr>
+            <tr><td><span class="token-badge" onclick="insertToken('dddd')">dddd</span></td><td class="token-desc">Full day of week</td><td class="token-example">Thursday / پنج‌شنبه</td></tr>
+            <tr><td><span class="token-badge" onclick="insertToken('HH')">HH</span></td><td class="token-desc">2-digit hour (24h)</td><td class="token-example">14 / ۱۴</td></tr>
+            <tr><td><span class="token-badge" onclick="insertToken('mm')">mm</span></td><td class="token-desc">2-digit minute</td><td class="token-example">30 / ۳۰</td></tr>
+            <tr><td><span class="token-badge" onclick="insertToken('ss')">ss</span></td><td class="token-desc">2-digit second</td><td class="token-example">00 / ۰۰</td></tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 </div>
@@ -109,106 +127,5 @@
 <footer>
   <p data-i18n="common.footer_text">Built with <a href="https://github.com/muhamadzolfaghari/persian-date-native" target="_blank">persian-date-native</a> • Zero dependencies • 89M+ ops/sec</p>
 </footer>
-<div class="toast" id="toast" data-i18n="common.copied">✓ Copied!</div>
-
-<script>
-const PRESETS = [
-  'YYYY/MM/DD',
-  'YYYY-MM-DD',
-  'dddd, D MMMM YYYY',
-  'D MMMM YYYY',
-  'YYYY/MM/DD HH:mm:ss',
-  'dddd HH:mm',
-  'MMMM YYYY',
-];
-
-const TOKENS = [
-  { token:'YYYY', desc_en:'Full year (4 digits)', desc_fa:'سال چهار رقمی', example:'1403' },
-  { token:'YY',   desc_en:'Short year (2 digits)', desc_fa:'سال دو رقمی', example:'03' },
-  { token:'MM',   desc_en:'Month (padded 01-12)', desc_fa:'ماه با صفر پرکننده', example:'06' },
-  { token:'M',    desc_en:'Month (1-12)', desc_fa:'شماره ماه', example:'6' },
-  { token:'MMMM', desc_en:'Month full name', desc_fa:'نام کامل ماه', example:'شهریور' },
-  { token:'MMM',  desc_en:'Month name short', desc_fa:'نام کوتاه ماه', example:'شهریور' },
-  { token:'DD',   desc_en:'Day (padded 01-31)', desc_fa:'روز ماه با صفر پرکننده', example:'05' },
-  { token:'D',    desc_en:'Day (1-31)', desc_fa:'شماره روز ماه', example:'5' },
-  { token:'dddd', desc_en:'Weekday full name', desc_fa:'نام کامل روز هفته', example:'یک‌شنبه' },
-  { token:'ddd',  desc_en:'Weekday short', desc_fa:'نام خلاصه روز هفته', example:'یک' },
-  { token:'HH',   desc_en:'Hours 24h (padded)', desc_fa:'ساعت ۲۴ ساعته با صفر', example:'09' },
-  { token:'H',    desc_en:'Hours 24h (0-23)', desc_fa:'ساعت ۲۴ ساعته', example:'9' },
-  { token:'hh',   desc_en:'Hours 12h (padded)', desc_fa:'ساعت ۱۲ ساعته با صفر', example:'09' },
-  { token:'mm',   desc_en:'Minutes (00-59)', desc_fa:'دقیقه با صفر', example:'05' },
-  { token:'ss',   desc_en:'Seconds (00-59)', desc_fa:'ثانیه با صفر', example:'03' },
-  { token:'A',    desc_en:'AM / PM', desc_fa:'ق.ظ / ب.ظ', example:'AM' },
-  { token:'x',    desc_en:'Unix ms timestamp', desc_fa:'تایم‌استمپ میلی‌ثانیه', example:'1700000000000' }
-];
-
-function renderPresets() {
-  const container = document.getElementById('presets');
-  container.innerHTML = PRESETS.map(p =>
-    `<button class="preset-btn" onclick="setPreset('${p}')">${p}</button>`
-  ).join('');
-}
-
-function renderTokens() {
-  const isFa = getLang() === 'fa';
-  const grid = document.getElementById('token-grid');
-  grid.innerHTML = TOKENS.map(tItem => `
-    <div class="token-row" onclick="insertToken('${tItem.token}')" title="Click to insert">
-      <span class="token-code">${tItem.token}</span>
-      <span class="token-desc">${isFa ? tItem.desc_fa : tItem.desc_en}</span>
-      <span class="token-example">${tItem.example}</span>
-    </div>
-  `).join('');
-}
-
-window.setPreset = function(p) {
-  document.getElementById('fmt-input').value = p;
-  updatePreview();
-};
-
-window.insertToken = function(tok) {
-  const input = document.getElementById('fmt-input');
-  input.value += (input.value ? ' ' : '') + tok;
-  updatePreview();
-  input.focus();
-};
-
-window.updatePreview = function() {
-  const fmt = document.getElementById('fmt-input').value || 'YYYY/MM/DD';
-  const dateVal = document.getElementById('date-input').value;
-  const d = dateVal ? new Date(dateVal) : new Date();
-
-  try {
-    const pd = new PersianDate(d);
-    const resultEn = pd.format(fmt);
-    const resultFa = pd.formatFa ? pd.formatFa(fmt) : resultEn;
-
-    document.getElementById('out-en').textContent = resultEn;
-    document.getElementById('out-fa').textContent = resultFa;
-  } catch(e) {
-    document.getElementById('out-en').textContent = 'Invalid format pattern';
-    document.getElementById('out-fa').textContent = '';
-  }
-};
-
-window.copyFormat = function() {
-  const text = document.getElementById('out-en').textContent;
-  navigator.clipboard.writeText(text);
-  const tEl = document.getElementById('toast');
-  tEl.classList.add('show');
-  setTimeout(() => tEl.classList.remove('show'), 2000);
-};
-
-window.addEventListener('pdate:langchange', () => {
-  renderTokens();
-  updatePreview();
-});
-
-// Set today
-document.getElementById('date-input').value = new Date().toISOString().slice(0, 10);
-renderPresets();
-renderTokens();
-updatePreview();
-</script>
 </body>
 </html>

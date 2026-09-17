@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" dir="ltr">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Framework & CDN Interactive Examples — React, Next.js, Vue, jQuery, Laravel | persian-date-native</title>
+  <title>Framework & CDN Interactive Examples — React, Next.js, Vue, Angular, Svelte, jQuery | persian-date-native</title>
   <meta name="description" content="Live runnable Persian (Jalali) date code examples for React, Next.js, Vue, Angular, Svelte, jQuery, WordPress, Laravel Blade, and vanilla HTML/CDN with 1-click copy." />
   <meta name="keywords" content="react persian date, nextjs jalali date, vue persian calendar, angular jalali pipe, svelte persian date, jquery persian date, laravel blade jalali, wordpress persian date" />
   <link rel="canonical" href="https://muhamadzolfaghari.github.io/persian-date-native/examples.html" />
@@ -30,125 +30,13 @@
   }
   </script>
 
-  <link rel="stylesheet" href="shared.css" />
-  <script src="shared-engine.js"></script>
-  <script src="i18n.js"></script>
-
-  <style>
-    .examples-layout {
-      display: grid;
-      grid-template-columns: 240px 1fr;
-      gap: 1.5rem;
-      margin-top: 1.5rem;
-    }
-    @media(max-width: 800px) {
-      .examples-layout { grid-template-columns: 1fr; }
-    }
-    .framework-nav {
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-    }
-    .framework-tab {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      padding: 0.75rem 1rem;
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: var(--radius-sm);
-      color: var(--muted2);
-      font-weight: 600;
-      font-size: 0.9rem;
-      cursor: pointer;
-      transition: var(--transition);
-      text-align: left;
-    }
-    html[dir="rtl"] .framework-tab {
-      text-align: right;
-    }
-    .framework-tab:hover {
-      background: rgba(56, 189, 248, 0.08);
-      color: var(--text);
-    }
-    .framework-tab.active {
-      background: rgba(56, 189, 248, 0.15);
-      border-color: rgba(56, 189, 248, 0.4);
-      color: var(--accent);
-    }
-    .preview-box {
-      background: rgba(15, 23, 42, 0.6);
-      border: 1px solid var(--card-border);
-      border-radius: var(--radius-sm);
-      padding: 1.5rem;
-      margin-bottom: 1.5rem;
-    }
-    [data-theme="light"] .preview-box {
-      background: #ffffff;
-      border-color: rgba(15, 23, 42, 0.1);
-      color: #0f172a;
-    }
-    [data-theme="light"] .framework-tab {
-      background: #ffffff;
-      border-color: rgba(15, 23, 42, 0.1);
-      color: #334155;
-    }
-    [data-theme="light"] .framework-tab.active {
-      background: rgba(2, 132, 199, 0.1);
-      border-color: #0284c7;
-      color: #0284c7;
-    }
-    .code-container {
-      position: relative;
-    }
-    .code-block {
-      background: #050811;
-      border: 1px solid var(--card-border);
-      border-radius: var(--radius-sm);
-      padding: 1.25rem;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.85rem;
-      line-height: 1.6;
-      color: #e2e8f0;
-      overflow-x: auto;
-    }
-    [data-theme="light"] .code-block {
-      background: #f8fafc;
-      color: #0f172a;
-      border-color: rgba(15, 23, 42, 0.1);
-    }
-    .interactive-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
-      padding: 0.25rem 0.6rem;
-      background: rgba(16, 185, 129, 0.15);
-      color: var(--emerald);
-      border-radius: 9999px;
-      font-size: 0.75rem;
-      font-weight: 700;
-      margin-bottom: 0.75rem;
-    }
-    .live-demo-controls {
-      display: flex;
-      gap: 0.5rem;
-      flex-wrap: wrap;
-      margin-top: 1rem;
-    }
-    .live-btn {
-      background: rgba(56, 189, 248, 0.15);
-      border: 1px solid rgba(56, 189, 248, 0.3);
-      color: var(--accent);
-      padding: 0.4rem 0.8rem;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 0.82rem;
-      font-weight: 600;
-    }
-    .live-btn:hover {
-      background: rgba(56, 189, 248, 0.25);
-    }
-  </style>
+  <!-- Modular Static Assets -->
+  <link rel="stylesheet" href="assets/css/main.css" />
+  <link rel="stylesheet" href="assets/css/syntax.css" />
+  <script src="assets/js/shared-engine.js"></script>
+  <script src="assets/js/i18n.js"></script>
+  <script src="assets/js/highlighter.js"></script>
+  <script src="assets/js/pages/examples.js" defer></script>
 </head>
 <body>
 <nav>
@@ -169,7 +57,7 @@
 </nav>
 
 <div class="container">
-  <div class="page-header fade-up">
+  <div class="page-header">
     <h1 data-i18n="examples.title">💻 Framework & CDN Interactive Examples</h1>
     <p data-i18n="examples.subtitle">Run, test, and copy Persian date implementations for React, Next.js, Vue, Angular, Svelte, jQuery, Laravel, and plain HTML.</p>
   </div>
@@ -177,25 +65,25 @@
   <div class="examples-layout">
     <!-- Framework Selection Sidebar -->
     <div class="framework-nav">
-      <button class="framework-tab active" onclick="showFramework('vanilla')">🌐 Vanilla HTML / CDN</button>
-      <button class="framework-tab" onclick="showFramework('react')">⚛️ React</button>
-      <button class="framework-tab" onclick="showFramework('nextjs')">▲ Next.js (SSR)</button>
-      <button class="framework-tab" onclick="showFramework('vue')">💚 Vue 3 / Nuxt</button>
-      <button class="framework-tab" onclick="showFramework('angular')">🅰️ Angular</button>
-      <button class="framework-tab" onclick="showFramework('svelte')">🧡 Svelte 5</button>
-      <button class="framework-tab" onclick="showFramework('jquery')">🔷 jQuery</button>
-      <button class="framework-tab" onclick="showFramework('laravel')">🔴 Laravel Blade</button>
-      <button class="framework-tab" onclick="showFramework('wordpress')">🔌 WordPress</button>
+      <button class="framework-tab active" data-framework="vanilla">🌐 Vanilla HTML / CDN</button>
+      <button class="framework-tab" data-framework="react">⚛️ React</button>
+      <button class="framework-tab" data-framework="nextjs">▲ Next.js (SSR)</button>
+      <button class="framework-tab" data-framework="vue">💚 Vue 3 / Nuxt</button>
+      <button class="framework-tab" data-framework="angular">🅰️ Angular</button>
+      <button class="framework-tab" data-framework="svelte">🧡 Svelte 5</button>
+      <button class="framework-tab" data-framework="jquery">🔷 jQuery</button>
+      <button class="framework-tab" data-framework="laravel">🔴 Laravel Blade</button>
+      <button class="framework-tab" data-framework="wordpress">🔌 WordPress</button>
     </div>
 
     <!-- Main Content Area -->
     <div class="card">
       <div class="interactive-badge" data-i18n="examples.live_badge">● LIVE INTERACTIVE PREVIEW</div>
       <div id="example-preview" class="preview-box">
-        <!-- Injected dynamically -->
+        <!-- Injected dynamically by examples.js -->
       </div>
 
-      <h3 style="margin-bottom: 0.75rem;" data-i18n="examples.source_code">Source Code</h3>
+      <h3 style="margin-bottom: 0.5rem;" data-i18n="examples.source_code">Source Code</h3>
       <div class="code-container">
         <button class="copy-btn" onclick="copyExampleCode()" data-i18n="examples.copy_code">📋 Copy Code</button>
         <pre class="code-block"><code id="example-code"></code></pre>
@@ -204,272 +92,8 @@
   </div>
 </div>
 
-<script>
-  let activePersianDate = window.PersianDateNative ? window.PersianDateNative.persianDate() : new Date();
-
-  const frameworkData = {
-    vanilla: {
-      title: "Vanilla JavaScript & CDN",
-      render: function() {
-        const d = window.PersianDateNative ? window.PersianDateNative.persianDate(activePersianDate) : new Date();
-        const formatted = d.formatFa ? d.formatFa('dddd D MMMM YYYY - ساعت HH:mm:ss') : d.toString();
-        const [jy, jm, jd] = window.PersianDateNative ? window.PersianDateNative.gregorianToPersian(d.getFullYear(), d.getMonth(), d.getDate()) : [0,0,0];
-        return `
-          <div dir="rtl" style="font-family: 'Vazirmatn', sans-serif;">
-            <h2 style="color: var(--accent); margin-bottom: 8px;">${formatted}</h2>
-            <p style="color: #94a3b8; font-size: 0.9rem;">فاصله زمانی: <strong>${d.fromNow ? d.fromNow() : ''}</strong> | اعداد شمسی: ${jy}/${jm}/${jd}</p>
-            <div class="live-demo-controls">
-              <button class="live-btn" onclick="changeDate(-1, 'day')">روز قبل</button>
-              <button class="live-btn" onclick="resetDate()">امروز</button>
-              <button class="live-btn" onclick="changeDate(1, 'day')">روز بعد</button>
-            </div>
-          </div>
-        `;
-      },
-      code: `<!-- Load from CDN -->
-<script src="https://unpkg.com/persian-date-native"><\/script>
-
-<script>
-  const { persianDate, gregorianToPersian } = window.PersianDateNative;
-
-  // Format with Persian numerals
-  const now = persianDate();
-  console.log(now.formatFa("dddd D MMMM YYYY - HH:mm"));
-
-  // Zero-allocation pure integer conversion
-  const [jy, jm, jd] = gregorianToPersian(2024, 9, 2);
-  console.log(jy, jm, jd); // 1403, 6, 12
-<\/script>`
-    },
-    react: {
-      title: "React Component",
-      render: function() {
-        const d = window.PersianDateNative ? window.PersianDateNative.persianDate(activePersianDate) : new Date();
-        return `
-          <div dir="rtl" style="font-family: 'Vazirmatn', sans-serif;">
-            <h3 style="color: #38bdf8;">React State: ${d.formatFa ? d.formatFa('YYYY/MM/DD') : ''}</h3>
-            <p style="color: #94a3b8;">ماه جاری: ${d.formatFa ? d.formatFa('MMMM YYYY') : ''} (${d.daysInMonth ? d.daysInMonth() : 30} روز)</p>
-            <div class="live-demo-controls">
-              <button class="live-btn" onclick="changeDate(-1, 'month')">ماه قبل</button>
-              <button class="live-btn" onclick="changeDate(1, 'month')">ماه بعد</button>
-            </div>
-          </div>
-        `;
-      },
-      code: `import React, { useState } from "react";
-import { persianDate } from "persian-date-native";
-
-export function PersianCalendarCard() {
-  const [date, setDate] = useState(() => persianDate());
-
-  return (
-    <div dir="rtl" className="p-4 border rounded-xl shadow-lg">
-      <h2 className="text-xl font-bold">{date.formatFa("dddd D MMMM YYYY")}</h2>
-      <p className="text-gray-500">روزهای این ماه: {date.daysInMonth()} روز</p>
-      <div className="flex gap-2 mt-4">
-        <button onClick={() => setDate(persianDate(date).subtract(1, "month"))}>ماه قبل</button>
-        <button onClick={() => setDate(persianDate(date).add(1, "month"))}>ماه بعد</button>
-      </div>
-    </div>
-  );
-}`
-    },
-    nextjs: {
-      title: "Next.js (App Router & RSC)",
-      render: function() {
-        const d = window.PersianDateNative ? window.PersianDateNative.persianDate(activePersianDate) : new Date();
-        return `
-          <div dir="rtl" style="font-family: 'Vazirmatn', sans-serif;">
-            <p style="color: var(--emerald); font-weight: 700;">✓ React Server Component (RSC) Safe</p>
-            <h3 style="margin-top: 8px;">تاریخ سرور: ${d.formatFa ? d.formatFa('dddd D MMMM YYYY') : ''}</h3>
-            <p style="color: #94a3b8; font-size: 0.85rem;">خروجی بهینه شده بدون نیاز به بارگذاری اضافه در کلاینت</p>
-          </div>
-        `;
-      },
-      code: `// app/page.tsx (Next.js App Router Server Component)
-import { persianDate, gregorianToPersian } from "persian-date-native";
-
-export default function Page() {
-  const serverTime = persianDate();
-  const [jy, jm, jd] = gregorianToPersian(2024, 9, 2);
-
-  return (
-    <main dir="rtl" className="p-8">
-      <h1>تاریخ امروز: {serverTime.formatFa("dddd D MMMM YYYY")}</h1>
-      <p>محاسبه سمت سرور: {jy}/{jm}/{jd}</p>
-    </main>
-  );
-}`
-    },
-    vue: {
-      title: "Vue 3 Composition API",
-      render: function() {
-        const d = window.PersianDateNative ? window.PersianDateNative.persianDate(activePersianDate) : new Date();
-        return `
-          <div dir="rtl" style="font-family: 'Vazirmatn', sans-serif;">
-            <h3 style="color: #10b981;">Vue 3 ref(): ${d.formatFa ? d.formatFa('dddd D MMMM YYYY') : ''}</h3>
-            <div class="live-demo-controls">
-              <button class="live-btn" onclick="changeDate(-1, 'week')">هفته قبل</button>
-              <button class="live-btn" onclick="changeDate(1, 'week')">هفته بعد</button>
-            </div>
-          </div>
-        `;
-      },
-      code: `<script setup lang="ts">
-import { ref, computed } from "vue";
-import { persianDate } from "persian-date-native";
-
-const date = ref(persianDate());
-const formatted = computed(() => date.value.formatFa("dddd D MMMM YYYY"));
-
-function nextWeek() {
-  date.value = persianDate(date.value).add(1, "week");
-}
-</script>
-
-<template>
-  <div dir="rtl">
-    <h2>{{ formatted }}</h2>
-    <button @click="nextWeek">هفته بعد</button>
-  </div>
-</template>`
-    },
-    angular: {
-      title: "Angular Component & Pipe",
-      render: function() {
-        const d = window.PersianDateNative ? window.PersianDateNative.persianDate(activePersianDate) : new Date();
-        return `
-          <div dir="rtl" style="font-family: 'Vazirmatn', sans-serif;">
-            <h3>Angular Pipe Output: ${d.formatFa ? d.formatFa('YYYY/MM/DD') : ''}</h3>
-            <p style="color: #94a3b8;">سال کبیسه: ${d.isLeapYear && d.isLeapYear() ? 'بله' : 'خیر'}</p>
-          </div>
-        `;
-      },
-      code: `import { Pipe, PipeTransform } from "@angular/core";
-import { persianDate } from "persian-date-native";
-
-@Pipe({ name: "persianDate", standalone: true })
-export class PersianDatePipe implements PipeTransform {
-  transform(val: Date | string, format: string = "YYYY/MM/DD"): string {
-    return persianDate(val).formatFa(format);
-  }
-}`
-    },
-    svelte: {
-      title: "Svelte 5",
-      render: function() {
-        const d = window.PersianDateNative ? window.PersianDateNative.persianDate(activePersianDate) : new Date();
-        return `
-          <div dir="rtl" style="font-family: 'Vazirmatn', sans-serif;">
-            <h3 style="color: #f97316;">Svelte 5 $state: ${d.formatFa ? d.formatFa('dddd D MMMM YYYY') : ''}</h3>
-          </div>
-        `;
-      },
-      code: `<script>
-  import { persianDate } from "persian-date-native";
-  let date = $state(persianDate());
-</script>
-
-<div dir="rtl">
-  <h2>{date.formatFa("dddd D MMMM YYYY")}</h2>
-  <button onclick={() => date = persianDate(date).add(1, "day")}>روز بعد</button>
-</div>`
-    },
-    jquery: {
-      title: "jQuery Integration",
-      render: function() {
-        const d = window.PersianDateNative ? window.PersianDateNative.persianDate(activePersianDate) : new Date();
-        return `
-          <div dir="rtl" style="font-family: 'Vazirmatn', sans-serif;">
-            <h3>jQuery Selector: <span style="color: #38bdf8;">${d.formatFa ? d.formatFa('YYYY/MM/DD') : ''}</span></h3>
-          </div>
-        `;
-      },
-      code: `$(document).ready(function() {
-  const { persianDate } = window.PersianDateNative;
-  const now = persianDate();
-  $("#date-label").text(now.formatFa("dddd D MMMM YYYY"));
-});`
-    },
-    laravel: {
-      title: "Laravel Blade Template",
-      render: function() {
-        const d = window.PersianDateNative ? window.PersianDateNative.persianDate(activePersianDate) : new Date();
-        return `
-          <div dir="rtl" style="font-family: 'Vazirmatn', sans-serif;">
-            <p>تاریخ فرمت شده در Blade:</p>
-            <h3 style="color: #ef4444;">${d.formatFa ? d.formatFa('D MMMM YYYY ساعت HH:mm') : ''}</h3>
-          </div>
-        `;
-      },
-      code: `<!-- resources/views/post.blade.php -->
-<script src="https://unpkg.com/persian-date-native"><\/script>
-
-<span id="post-date"></span>
-
-<script>
-  const { persianDate } = window.PersianDateNative;
-  const serverIso = "{{ $post->created_at->toISOString() }}";
-  document.getElementById('post-date').textContent = 
-    persianDate(new Date(serverIso)).formatFa("dddd D MMMM YYYY");
-<\/script>`
-    },
-    wordpress: {
-      title: "WordPress Theme Integration",
-      render: function() {
-        const d = window.PersianDateNative ? window.PersianDateNative.persianDate(activePersianDate) : new Date();
-        return `
-          <div dir="rtl" style="font-family: 'Vazirmatn', sans-serif;">
-            <p>تاریخ نوشته در وردپرس:</p>
-            <h3 style="color: #3b82f6;">${d.formatFa ? d.formatFa('D MMMM YYYY') : ''}</h3>
-          </div>
-        `;
-      },
-      code: `// In functions.php
-function enqueue_persian_date() {
-    wp_enqueue_script('persian-date-native', 'https://unpkg.com/persian-date-native', [], '1.2.3', true);
-}
-add_action('wp_enqueue_scripts', 'enqueue_persian_date');`
-    }
-  };
-
-  let currentFramework = 'vanilla';
-
-  function showFramework(fw) {
-    currentFramework = fw;
-    document.querySelectorAll('.framework-tab').forEach(b => b.classList.remove('active'));
-    const btn = Array.from(document.querySelectorAll('.framework-tab')).find(b => b.getAttribute('onclick').includes(fw));
-    if (btn) btn.classList.add('active');
-
-    const data = frameworkData[fw];
-    document.getElementById('example-preview').innerHTML = data.render();
-    document.getElementById('example-code').textContent = data.code;
-  }
-
-  function changeDate(amount, unit) {
-    if (window.PersianDateNative) {
-      activePersianDate = window.PersianDateNative.persianDate(activePersianDate).add(amount, unit);
-    }
-    showFramework(currentFramework);
-  }
-
-  function resetDate() {
-    if (window.PersianDateNative) {
-      activePersianDate = window.PersianDateNative.persianDate();
-    }
-    showFramework(currentFramework);
-  }
-
-  function copyExampleCode() {
-    const code = document.getElementById('example-code').textContent;
-    navigator.clipboard.writeText(code).then(() => {
-      const btn = document.querySelector('.copy-btn');
-      btn.textContent = '✓ Copied!';
-      setTimeout(() => btn.textContent = '📋 Copy Code', 2000);
-    });
-  }
-
-  showFramework('vanilla');
-</script>
+<footer>
+  <p data-i18n="common.footer_text">Built with <a href="https://github.com/muhamadzolfaghari/persian-date-native" target="_blank">persian-date-native</a> • Zero dependencies • 89M+ ops/sec</p>
+</footer>
 </body>
 </html>

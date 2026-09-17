@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" dir="ltr">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Date Converter — Persian / Jalali ↔ Gregorian | persian-date-native</title>
   <meta name="description" content="Free online bidirectional Jalali (Shamsi) to Gregorian and Gregorian to Jalali date converter with Persian digits and code copying, powered by persian-date-native." />
   <meta name="keywords" content="persian date converter, shamsi to gregorian, jalali to gregorian converter, تبدیل تاریخ شمسی به میلادی, تبدیل تاریخ میلادی به شمسی" />
-  <link rel="canonical" href="https://muhamadzolfaghari.github.io/persian-date-native/converter.html" />
+  <link rel="canonical" href="https://muhamadzolfaghari/persian-date-native/converter.html" />
   <link rel="alternate" hreflang="en" href="https://muhamadzolfaghari.github.io/persian-date-native/converter.html" />
   <link rel="alternate" hreflang="fa" href="https://muhamadzolfaghari.github.io/persian-date-native/converter.html" />
   <link rel="alternate" hreflang="x-default" href="https://muhamadzolfaghari.github.io/persian-date-native/converter.html" />
@@ -30,28 +30,12 @@
   }
   </script>
 
-  <link rel="stylesheet" href="shared.css" />
-  <script src="i18n.js"></script>
-  <script src="shared-engine.js"></script>
-  <style>
-    .swap-btn { font-size: 1.5rem; background: none; border: none; cursor: pointer; color: var(--accent); transition: var(--transition); padding: 0.5rem; border-radius: 50%; }
-    .swap-btn:hover { transform: rotate(180deg); background: rgba(56,189,248,0.1); }
-    .result-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1.25rem; }
-    .result-item { background: var(--code-bg); border: 1px solid var(--card-border); border-radius: var(--radius-sm); padding: 1rem 1.1rem; }
-    .result-item .label { font-size: 0.72rem; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.35rem; }
-    .result-item .value { font-family: 'JetBrains Mono', monospace; font-size: 1rem; color: var(--accent); font-weight: 600; }
-    .result-item .value.green { color: var(--emerald); }
-    .mode-toggle { display: flex; gap: 0.5rem; margin-bottom: 1.5rem; }
-    .mode-btn { flex: 1; padding: 0.6rem; border-radius: var(--radius-sm); border: 1px solid var(--card-border); background: transparent; color: var(--muted2); font-family: inherit; font-size: 0.88rem; font-weight: 600; cursor: pointer; transition: var(--transition); }
-    .mode-btn.active { background: rgba(56,189,248,0.12); border-color: rgba(56,189,248,0.4); color: var(--accent); }
-    .fields-row { display: grid; grid-template-columns: 2fr 1.2fr 1.2fr; gap: 0.75rem; }
-    .copy-btn { position: absolute; top: 0.6rem; right: 0.6rem; background: rgba(255,255,255,0.06); border: none; border-radius: 6px; color: var(--muted2); cursor: pointer; padding: 0.3rem 0.6rem; font-size: 0.75rem; transition: var(--transition); }
-    .copy-btn:hover { color: var(--accent); background: rgba(56,189,248,0.1); }
-    .quick-dates { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1rem; }
-    .quick-btn { padding: 0.35rem 0.8rem; border-radius: 9999px; border: 1px solid var(--card-border); background: transparent; color: var(--muted2); font-size: 0.78rem; font-weight: 600; cursor: pointer; transition: var(--transition); font-family: inherit; }
-    .quick-btn:hover { border-color: var(--accent); color: var(--accent); background: rgba(56,189,248,0.06); }
-    @media(max-width:600px){ .fields-row{grid-template-columns:1fr;} .result-grid{grid-template-columns:1fr;} }
-  </style>
+  <!-- Modular Static Assets -->
+  <link rel="stylesheet" href="assets/css/main.css" />
+  <link rel="stylesheet" href="assets/css/syntax.css" />
+  <script src="assets/js/shared-engine.js"></script>
+  <script src="assets/js/i18n.js"></script>
+  <script src="assets/js/pages/converter.js" defer></script>
 </head>
 <body>
 <nav>
@@ -72,206 +56,87 @@
 </nav>
 
 <div class="container">
-  <div class="page-header fade-up">
+  <div class="page-header">
     <h1 data-i18n="converter.title">🔄 Date Converter</h1>
     <p data-i18n="converter.subtitle">Convert between Jalali (Shamsi / Persian) and Gregorian dates instantly</p>
   </div>
 
-  <div class="card fade-up" style="max-width:680px;margin:0 auto;">
+  <div style="max-width:680px; margin:0 auto;">
+    <!-- Mode toggle -->
     <div class="mode-toggle">
-      <button class="mode-btn active" id="btn-jalali-to-greg" onclick="setMode('jalali')" data-i18n="converter.tab_jalali_to_greg">Jalali → Gregorian</button>
-      <button class="mode-btn" id="btn-greg-to-jalali" onclick="setMode('gregorian')" data-i18n="converter.tab_greg_to_jalali">Gregorian → Jalali</button>
+      <button class="mode-btn active" id="btn-j2g" onclick="setMode('j2g')" data-i18n="converter.tab_jalali_to_greg">Jalali → Gregorian</button>
+      <button class="mode-btn" id="btn-g2j" onclick="setMode('g2j')" data-i18n="converter.tab_greg_to_jalali">Gregorian → Jalali</button>
     </div>
 
+    <!-- Presets -->
     <div class="quick-dates">
-      <span style="font-size:0.78rem;color:var(--muted);align-self:center;" data-i18n="converter.quick">Quick:</span>
-      <button class="quick-btn" onclick="setToday()" data-i18n="common.today">Today</button>
-      <button class="quick-btn" onclick="setNowruz()" data-i18n="common.nowruz">Nowruz 1404</button>
-      <button class="quick-btn" onclick="setCustom(1400,1,1)">1400/1/1</button>
-      <button class="quick-btn" onclick="setCustom(1402,6,31)">1402/6/31</button>
+      <span style="font-size:0.78rem; color:var(--text-dim); align-self:center;" data-i18n="common.quick">Quick:</span>
+      <button class="quick-btn" onclick="setToday()" data-i18n="common.today">📍 Today</button>
+      <button class="quick-btn" onclick="setPreset(1404,1,1)" data-i18n="common.nowruz">🌸 Nowruz 1404</button>
+      <button class="quick-btn" onclick="setPreset(1403,12,30)">Leap 1403/12/30</button>
+      <button class="quick-btn" onclick="setPreset(1400,1,1)">1400/01/01</button>
     </div>
 
-    <div class="fields-row" id="input-fields">
-      <div class="form-group">
-        <label id="label-year" data-i18n="common.year">Year</label>
-        <input type="number" id="inp-year" placeholder="1403" min="1" />
+    <!-- Input Card -->
+    <div class="card" style="margin-bottom:1.5rem;">
+      <!-- Jalali Inputs -->
+      <div id="sec-jalali-input">
+        <label style="font-size:0.83rem; font-weight:600; color:var(--text-muted); display:block; margin-bottom:0.5rem;" data-i18n="converter.lbl_jalali_year">Jalali Date (Year / Month / Day)</label>
+        <div class="fields-row">
+          <div class="form-group"><input type="number" id="jy" placeholder="1403" value="1403" /></div>
+          <div class="form-group"><input type="number" id="jm" placeholder="6" min="1" max="12" value="12" /></div>
+          <div class="form-group"><input type="number" id="jd" placeholder="12" min="1" max="31" value="12" /></div>
+        </div>
       </div>
-      <div class="form-group">
-        <label id="label-month" data-i18n="common.month">Month</label>
-        <input type="number" id="inp-month" placeholder="6" min="1" max="12" />
-      </div>
-      <div class="form-group">
-        <label id="label-day" data-i18n="common.day">Day</label>
-        <input type="number" id="inp-day" placeholder="15" min="1" max="31" />
-      </div>
-    </div>
 
-    <div style="display:flex;justify-content:center;margin:1.25rem 0;">
-      <button class="swap-btn" onclick="swapMode()" title="Swap direction">⇄</button>
-    </div>
+      <!-- Gregorian Input -->
+      <div id="sec-greg-input" style="display:none;">
+        <div class="form-group">
+          <label data-i18n="converter.lbl_greg_year">Gregorian Date</label>
+          <input type="date" id="gdate" style="font-size:1.05rem;" />
+        </div>
+      </div>
 
-    <div id="result-area" style="display:none;">
-      <div class="result-grid" id="result-grid"></div>
-      <div style="display:flex;gap:0.75rem;margin-top:1rem;justify-content:flex-end;">
-        <button class="btn btn-secondary btn-sm" onclick="copyResult()" data-i18n="common.copy">📋 Copy</button>
-        <button class="btn btn-emerald btn-sm" onclick="convert()" data-i18n="common.calculate">↻ Calculate</button>
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-top:0.75rem;">
+        <button class="swap-btn" onclick="swap()" title="Swap mode">⇄</button>
+        <button class="btn btn-primary" onclick="convert()" data-i18n="common.calculate">Convert ↵</button>
       </div>
     </div>
 
-    <div style="display:flex;gap:0.75rem;margin-top:1.25rem;">
-      <button class="btn btn-primary" style="flex:1;" onclick="convert()" data-i18n="common.calculate">Convert ↵</button>
-      <button class="btn btn-secondary" onclick="clearAll()" data-i18n="common.clear">✕ Clear</button>
+    <!-- Results Grid -->
+    <div class="result-grid">
+      <div class="result-item">
+        <div class="label" data-i18n="converter.greg_result">Gregorian Date</div>
+        <div class="value" id="res-greg">—</div>
+      </div>
+      <div class="result-item">
+        <div class="label" data-i18n="converter.jalali_result">Jalali Date</div>
+        <div class="value green" id="res-jalali">—</div>
+      </div>
+      <div class="result-item">
+        <div class="label" data-i18n="converter.persian_digits">Full Formatted</div>
+        <div class="value" id="res-fa-full">—</div>
+      </div>
+      <div class="result-item">
+        <div class="label" data-i18n="converter.day_of_week">Day of Week</div>
+        <div class="value" id="res-dow">—</div>
+      </div>
+      <div class="result-item" style="grid-column:1 / -1;">
+        <div class="label" data-i18n="converter.leap_status">Leap Year Status</div>
+        <div class="value" id="res-leap">—</div>
+      </div>
     </div>
 
-    <div id="error-msg" style="color:#f87171;font-size:0.85rem;margin-top:0.75rem;text-align:center;display:none;"></div>
+    <!-- Code Snippet -->
+    <div class="code-container" style="margin-top:1.5rem;">
+      <button class="copy-btn" onclick="copyCode()" data-i18n="common.copy">Copy</button>
+      <pre class="code-block"><code id="code-js">// Code output</code></pre>
+    </div>
   </div>
-
-  <div id="toast" class="toast" data-i18n="common.copied">✓ Copied to clipboard!</div>
 </div>
 
 <footer>
   <p data-i18n="common.footer_text">Built with <a href="https://github.com/muhamadzolfaghari/persian-date-native" target="_blank">persian-date-native</a> • Zero dependencies • 89M+ ops/sec</p>
 </footer>
-
-<script>
-  let currentMode = 'jalali'; // 'jalali' or 'gregorian'
-
-  window.setMode = function(mode) {
-    currentMode = mode;
-    document.getElementById('btn-jalali-to-greg').classList.toggle('active', mode === 'jalali');
-    document.getElementById('btn-greg-to-jalali').classList.toggle('active', mode === 'gregorian');
-    clearResult();
-  };
-
-  window.swapMode = function() {
-    setMode(currentMode === 'jalali' ? 'gregorian' : 'jalali');
-  };
-
-  window.setToday = function() {
-    const now = new Date();
-    if (currentMode === 'jalali') {
-      const p = window._PD.toPersian ? window._PD.toPersian(now.getFullYear(), now.getMonth() + 1, now.getDate()) : { year: 1403, month: 6, day: 27 };
-      const [y, m, d] = Array.isArray(p) ? p : [p.year, p.month, p.day];
-      document.getElementById('inp-year').value = y;
-      document.getElementById('inp-month').value = m;
-      document.getElementById('inp-day').value = d;
-    } else {
-      document.getElementById('inp-year').value = now.getFullYear();
-      document.getElementById('inp-month').value = now.getMonth() + 1;
-      document.getElementById('inp-day').value = now.getDate();
-    }
-    convert();
-  };
-
-  window.setNowruz = function() {
-    setMode('jalali');
-    document.getElementById('inp-year').value = 1404;
-    document.getElementById('inp-month').value = 1;
-    document.getElementById('inp-day').value = 1;
-    convert();
-  };
-
-  window.setCustom = function(y, m, d) {
-    setMode('jalali');
-    document.getElementById('inp-year').value = y;
-    document.getElementById('inp-month').value = m;
-    document.getElementById('inp-day').value = d;
-    convert();
-  };
-
-  window.convert = function() {
-    clearResult();
-    const y = parseInt(document.getElementById('inp-year').value, 10);
-    const m = parseInt(document.getElementById('inp-month').value, 10);
-    const d = parseInt(document.getElementById('inp-day').value, 10);
-
-    if (isNaN(y) || isNaN(m) || isNaN(d)) {
-      showError('Please enter valid numeric values for year, month, and day.');
-      return;
-    }
-
-    try {
-      let results = [];
-      const isFa = getLang() === 'fa';
-      if (currentMode === 'jalali') {
-        const greg = window._PD.toGregorian(y, m, d);
-        const [gy, gm, gd] = Array.isArray(greg) ? greg : [greg.year, greg.month, greg.day];
-        const gDate = new Date(gy, gm - 1, gd);
-        const isLeap = window._PD.isLeapPersianYear(y);
-
-        const pDate = new window._PD.PersianDate(gDate);
-        const formattedFa = pDate.formatFa ? pDate.formatFa('dddd D MMMM YYYY') : `${y}/${m}/${d}`;
-
-        results = [
-          { label: t('converter.greg_result'), value: `${gy}-${String(gm).padStart(2,'0')}-${String(gd).padStart(2,'0')}`, color: 'green' },
-          { label: t('converter.persian_digits'), value: isFa ? formattedFa : pDate.format('dddd, D MMMM YYYY') },
-          { label: t('converter.day_of_week'), value: isFa ? pDate.formatFa('dddd') : gDate.toLocaleDateString('en-US', { weekday: 'long' }) },
-          { label: t('converter.leap_status'), value: isLeap ? t('converter.is_leap') : t('converter.not_leap') }
-        ];
-      } else {
-        const persian = window._PD.toPersian(y, m, d);
-        const [py, pm, pd] = Array.isArray(persian) ? persian : [persian.year, persian.month, persian.day];
-        const gDate = new Date(y, m - 1, d);
-        const pDate = new window._PD.PersianDate(gDate);
-
-        results = [
-          { label: t('converter.jalali_result'), value: `${py}/${String(pm).padStart(2,'0')}/${String(pd).padStart(2,'0')}`, color: 'green' },
-          { label: t('converter.persian_digits'), value: isFa ? pDate.formatFa('dddd D MMMM YYYY') : pDate.format('dddd, D MMMM YYYY') },
-          { label: t('converter.day_of_week'), value: isFa ? pDate.formatFa('dddd') : gDate.toLocaleDateString('en-US', { weekday: 'long' }) },
-          { label: t('converter.leap_status'), value: window._PD.isLeapPersianYear(py) ? t('converter.is_leap') : t('converter.not_leap') }
-        ];
-      }
-
-      const grid = document.getElementById('result-grid');
-      grid.innerHTML = results.map(r => `
-        <div class="result-item">
-          <div class="label">${r.label}</div>
-          <div class="value ${r.color||''}">${r.value}</div>
-        </div>`).join('');
-      document.getElementById('result-area').style.display = 'block';
-      window._lastResult = results[0].value;
-    } catch(e) {
-      showError('Invalid date. Please check your input.');
-    }
-  };
-
-  window.clearAll = function() {
-    ['inp-year','inp-month','inp-day'].forEach(id => document.getElementById(id).value = '');
-    clearResult();
-  };
-
-  function clearResult() {
-    document.getElementById('result-area').style.display = 'none';
-    document.getElementById('error-msg').style.display = 'none';
-  }
-
-  function showError(msg) {
-    const el = document.getElementById('error-msg');
-    el.textContent = msg;
-    el.style.display = 'block';
-    document.getElementById('result-area').style.display = 'none';
-  }
-
-  window.copyResult = function() {
-    if (window._lastResult) {
-      navigator.clipboard.writeText(window._lastResult);
-      const tEl = document.getElementById('toast');
-      tEl.classList.add('show');
-      setTimeout(() => tEl.classList.remove('show'), 2000);
-    }
-  };
-
-  window.addEventListener('pdate:langchange', () => {
-    if (document.getElementById('inp-year').value) convert();
-  });
-
-  // Enter key support
-  ['inp-year','inp-month','inp-day'].forEach(id => {
-    document.getElementById(id).addEventListener('keydown', e => { if(e.key==='Enter') convert(); });
-  });
-
-  // Init with today
-  setTimeout(() => { if (window._PD) setToday(); }, 100);
-</script>
 </body>
 </html>
