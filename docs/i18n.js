@@ -369,11 +369,12 @@ const translations = {
   }
 };
 
-let currentLang = localStorage.getItem('pdate_lang') || 'fa';
+let currentLang = localStorage.getItem('pdate_lang') || 'en';
+let currentTheme = localStorage.getItem('pdate_theme') || (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
 
 function t(key) {
-  const dict = translations[currentLang] || translations.fa;
-  return dict[key] || translations.fa[key] || translations.en[key] || key;
+  const dict = translations[currentLang] || translations.en;
+  return dict[key] || translations.en[key] || translations.fa[key] || key;
 }
 
 function getLang() {
@@ -381,7 +382,7 @@ function getLang() {
 }
 
 function setLanguage(lang) {
-  if (lang !== 'en' && lang !== 'fa') lang = 'fa';
+  if (lang !== 'en' && lang !== 'fa') lang = 'en';
   currentLang = lang;
   localStorage.setItem('pdate_lang', lang);
 
@@ -417,6 +418,29 @@ function toggleLanguage() {
   setLanguage(currentLang === 'en' ? 'fa' : 'en');
 }
 
+// Theme Management
+function getTheme() {
+  return currentTheme;
+}
+
+function setTheme(theme) {
+  if (theme !== 'light' && theme !== 'dark') theme = 'dark';
+  currentTheme = theme;
+  localStorage.setItem('pdate_theme', theme);
+  document.documentElement.setAttribute('data-theme', theme);
+
+  document.querySelectorAll('.theme-switcher-btn').forEach(btn => {
+    btn.textContent = theme === 'light' ? '🌙' : '☀️';
+    btn.title = theme === 'light' ? 'Switch to Dark Mode' : 'Switch to Light Mode';
+  });
+
+  window.dispatchEvent(new CustomEvent('pdate:themechange', { detail: { theme } }));
+}
+
+function toggleTheme() {
+  setTheme(currentTheme === 'light' ? 'dark' : 'light');
+}
+
 // Persian digit conversion helper
 function toPersianDigits(str) {
   if (str === null || str === undefined) return '';
@@ -424,7 +448,13 @@ function toPersianDigits(str) {
   return String(str).replace(/[0-9]/g, w => faDigits[+w]);
 }
 
+// Immediate Theme Apply to prevent FOUC
+(function() {
+  document.documentElement.setAttribute('data-theme', currentTheme);
+})();
+
 // Initial auto-apply on load
 document.addEventListener('DOMContentLoaded', () => {
+  setTheme(currentTheme);
   setLanguage(currentLang);
 });
