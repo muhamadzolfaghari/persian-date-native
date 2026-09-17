@@ -2,10 +2,11 @@
 
 [![npm version](https://img.shields.io/npm/v/persian-date-native.svg?style=flat-square&color=38bdf8)](https://www.npmjs.com/package/persian-date-native)
 [![npm downloads](https://img.shields.io/npm/dt/persian-date-native.svg?style=flat-square&color=6366f1)](https://www.npmjs.com/package/persian-date-native)
-[![coverage: 100%](https://img.shields.io/badge/coverage-100%25-brightgreen.svg?style=flat-square)](https://github.com/mu-utils/persian-date)
+[![coverage: 100%](https://img.shields.io/badge/coverage-100%25-brightgreen.svg?style=flat-square)](https://github.com/muhamadzolfaghari/persian-date-native)
 [![TypeScript](https://img.shields.io/badge/TypeScript-Strict%20100%25-blue.svg?style=flat-square)](https://www.typescriptlang.org/)
 [![Zero Dependencies](https://img.shields.io/badge/dependencies-0%20(zero)-success.svg?style=flat-square)](package.json)
 [![License: ISC](https://img.shields.io/badge/License-ISC-yellow.svg?style=flat-square)](LICENSE)
+[![GitHub Pages](https://img.shields.io/badge/Online%20Tools-Live%20Demo-38bdf8?style=flat-square&logo=github)](https://muhamadzolfaghari.github.io/persian-date-native/)
 
 > ⚡ **The fastest, zero-dependency Persian (Shamsi / Jalali) date engine for JavaScript & TypeScript.**  
 > Features sub-microsecond pure integer conversions (89M+ ops/sec), true native `Date` inheritance (`instanceof Date === true`), Day.js drop-in compatibility, and comprehensive formatting, relative time, and calendar UI helpers.
@@ -14,7 +15,7 @@
 
 ## 📑 Table of Contents
 
-- [🌟 Live Interactive Demo](#-live-interactive-demo)
+- [🌟 Live Interactive Demo & Online Tools Suite](#-live-interactive-demo--online-tools-suite)
 - [✨ Key Features](#-key-features)
 - [⚔️ Ecosystem Benchmark & Comparison](#️-ecosystem-benchmark--comparison)
   - [Why is `shamsi` Popular & How We Compare?](#why-is-shamsi-popular--how-we-compare)
@@ -46,16 +47,18 @@
 
 ---
 
-## 🌟 Live Interactive Demo
+## 🌟 Live Interactive Demo & Online Tools Suite
 
-Try the interactive demo directly in your browser:  
-👉 **[Live Demo & Shamsi Calendar Playground](https://mu-utils.github.io/persian-date/)**
+Experience all features directly in your browser with our **Multilingual (English / فارسی)** online tools:
 
-Includes:
-- 📅 **Interactive Shamsi Monthly Calendar Widget** (Saturday to Friday navigation, leap year indicator, today highlighter).
-- 🔄 **Bidirectional Shamsi ↔ Gregorian Live Converter** with instant code generation.
-- ✨ **Formatting & Arithmetic Playground** (`formatFa()`, `fromNow()`, `add()`, `startOf()`).
-- ⚡ **In-Browser Benchmark Runner** measuring operations per second live on your machine.
+👉 **[🌐 Open Live Documentation & Web Apps](https://muhamadzolfaghari.github.io/persian-date-native/)**
+
+| Tool | Link | Description |
+|---|---|---|
+| 🔄 **Date Converter** | [Open Tool](https://muhamadzolfaghari.github.io/persian-date-native/converter.html) | Instant bidirectional Shamsi ↔ Gregorian conversion with Persian digits and 1-click code copying. |
+| 📅 **Persian Calendar** | [Open Tool](https://muhamadzolfaghari.github.io/persian-date-native/calendar.html) | Interactive monthly calendar view with leap year indicator, today button, and Gregorian equivalents. |
+| 🎨 **Format Playground** | [Open Tool](https://muhamadzolfaghari.github.io/persian-date-native/formatter.html) | Live Persian date format token previewer with `format()` and `formatFa()` support. |
+| ⏱ **Date Calculator** | [Open Tool](https://muhamadzolfaghari.github.io/persian-date-native/calculator.html) | Calculate exact duration between dates, add/subtract intervals, Persian relative time (`fromNow`), and leap-year validation. |
 
 ---
 

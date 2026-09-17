@@ -6,6 +6,7 @@
   <title>Persian Calendar — persian-date-native</title>
   <meta name="description" content="Interactive Jalali (Shamsi) calendar. Click any date to convert between Persian and Gregorian." />
   <link rel="stylesheet" href="shared.css" />
+  <script src="i18n.js"></script>
   <style>
     .cal-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:1.5rem; }
     .cal-nav { display:flex; align-items:center; gap:0.75rem; }
@@ -43,49 +44,52 @@
 <nav>
   <a href="index.html" class="nav-logo">🗓 <span>persian-date-native</span></a>
   <ul class="nav-links">
-    <li><a href="index.html">Home</a></li>
-    <li><a href="converter.html">🔄 Converter</a></li>
-    <li><a href="calendar.html" class="active">📅 Calendar</a></li>
-    <li><a href="formatter.html">🎨 Formatter</a></li>
-    <li><a href="calculator.html">⏱ Calculator</a></li>
+    <li><a href="index.html" data-i18n="nav.home">Home</a></li>
+    <li><a href="converter.html" data-i18n="nav.converter">🔄 Converter</a></li>
+    <li><a href="calendar.html" class="active" data-i18n="nav.calendar">📅 Calendar</a></li>
+    <li><a href="formatter.html" data-i18n="nav.formatter">🎨 Formatter</a></li>
+    <li><a href="calculator.html" data-i18n="nav.calculator">⏱ Calculator</a></li>
   </ul>
-  <a href="https://github.com/muhamadzolfaghari/persian-date-native" class="nav-github" target="_blank">⭐ GitHub</a>
+  <div class="nav-actions">
+    <button class="lang-switcher-btn" onclick="toggleLanguage()">🇮🇷 فارسی</button>
+    <a href="https://github.com/muhamadzolfaghari/persian-date-native" class="nav-github" target="_blank" data-i18n="nav.github">⭐ GitHub</a>
+  </div>
 </nav>
 
 <div class="container">
   <div class="page-header fade-up">
-    <h1>📅 Persian Calendar</h1>
-    <p>Interactive Jalali calendar — click any day to see both date representations</p>
+    <h1 data-i18n="calendar.title">📅 Persian Calendar</h1>
+    <p data-i18n="calendar.subtitle">Interactive Jalali calendar — click any day to see both date representations</p>
   </div>
 
   <div class="layout fade-up">
     <div class="card">
       <div class="cal-header">
         <div class="cal-nav">
-          <button onclick="prevMonth()">‹</button>
-          <button onclick="prevYear()">«</button>
+          <button onclick="prevYear()" title="Previous Year">«</button>
+          <button onclick="prevMonth()" title="Previous Month">‹</button>
         </div>
         <div class="cal-title" id="cal-title">—</div>
         <div class="cal-nav">
-          <button onclick="nextYear()">»</button>
-          <button onclick="nextMonth()">›</button>
+          <button onclick="nextMonth()" title="Next Month">›</button>
+          <button onclick="nextYear()" title="Next Year">»</button>
         </div>
       </div>
       <div style="display:flex;gap:0.5rem;margin-bottom:1rem;justify-content:center;">
-        <button class="btn btn-secondary btn-sm" onclick="goToday()">📍 Today</button>
+        <button class="btn btn-secondary btn-sm" onclick="goToday()" data-i18n="calendar.today_btn">📍 Today</button>
         <select class="month-select" id="month-jump" onchange="jumpMonth()">
-          <option value="1">Farvardin فروردین</option>
-          <option value="2">Ordibehesht اردیبهشت</option>
-          <option value="3">Khordad خرداد</option>
-          <option value="4">Tir تیر</option>
-          <option value="5">Mordad مرداد</option>
-          <option value="6">Shahrivar شهریور</option>
-          <option value="7">Mehr مهر</option>
-          <option value="8">Aban آبان</option>
-          <option value="9">Azar آذر</option>
-          <option value="10">Dey دی</option>
-          <option value="11">Bahman بهمن</option>
-          <option value="12">Esfand اسفند</option>
+          <option value="1">فروردین / Farvardin</option>
+          <option value="2">اردیبهشت / Ordibehesht</option>
+          <option value="3">خرداد / Khordad</option>
+          <option value="4">تیر / Tir</option>
+          <option value="5">مرداد / Mordad</option>
+          <option value="6">شهریور / Shahrivar</option>
+          <option value="7">مهر / Mehr</option>
+          <option value="8">آبان / Aban</option>
+          <option value="9">آذر / Azar</option>
+          <option value="10">دی / Dey</option>
+          <option value="11">بهمن / Bahman</option>
+          <option value="12">اسفند / Esfand</option>
         </select>
       </div>
       <div class="cal-grid" id="cal-grid"></div>
@@ -93,131 +97,156 @@
 
     <div style="display:flex;flex-direction:column;gap:1rem;">
       <div class="card" id="detail-panel">
-        <div class="card-title"><span class="icon">📌</span> Selected Date</div>
+        <div class="card-title"><span class="icon">📌</span> <span data-i18n="calendar.selected_details">Selected Date Details</span></div>
         <div id="detail-content" style="color:var(--muted);font-size:0.9rem;">Click a day to see details</div>
       </div>
       <div class="card">
-        <div class="card-title"><span class="icon">📊</span> Month Info</div>
-        <div id="month-info"></div>
+        <div class="card-title"><span class="icon">📊</span> <span data-i18n="calendar.year_type">Month Info</span></div>
+        <div id="month-info" style="font-size:0.88rem;color:var(--muted2);display:flex;flex-direction:column;gap:0.5rem;"></div>
       </div>
     </div>
   </div>
 </div>
 
 <footer>
-  Powered by <a href="https://www.npmjs.com/package/persian-date-native">persian-date-native</a> —
-  <a href="https://github.com/muhamadzolfaghari/persian-date-native">GitHub</a>
+  <p>Built with <a href="https://github.com/muhamadzolfaghari/persian-date-native" target="_blank">persian-date-native</a> • Zero dependencies • 89M+ ops/sec</p>
 </footer>
 
 <script type="module">
-import { PersianDate, persianToGregorian, gregorianToPersian } from 'https://cdn.jsdelivr.net/npm/persian-date-native/dist/bundle.min.esm.js';
+  import { PersianDate, toGregorian, toPersian, isLeapPersianYear } from 'https://cdn.jsdelivr.net/npm/persian-date-native/dist/bundle.min.esm.js';
+  window._PD = { PersianDate, toGregorian, toPersian, isLeapPersianYear };
 
-const MONTHS = ['Farvardin','Ordibehesht','Khordad','Tir','Mordad','Shahrivar','Mehr','Aban','Azar','Dey','Bahman','Esfand'];
-const MONTHS_FA = ['فروردین','اردیبهشت','خرداد','تیر','مرداد','شهریور','مهر','آبان','آذر','دی','بهمن','اسفند'];
-const DAYS = ['Sh','Ye','Do','Se','Ch','Pa','Jo'];
-const DAYS_FULL = ['Shanbe','Yekshanbe','Doshanbe','Seshanbe','Chaharshanbe','Panjshanbe','Jomeh'];
+  let curYear = 1403;
+  let curMonth = 6;
+  let selectedDay = 15;
 
-const today = new PersianDate();
-let curYear = today.getFullYear();
-let curMonth = today.getMonth() + 1;
-let selectedDay = null;
+  const monthNamesEn = ['','Farvardin','Ordibehesht','Khordad','Tir','Mordad','Shahrivar','Mehr','Aban','Azar','Dey','Bahman','Esfand'];
+  const monthNamesFa = ['','فروردین','اردیبهشت','خرداد','تیر','مرداد','شهریور','مهر','آبان','آذر','دی','بهمن','اسفند'];
 
-function daysInPersianMonth(y, m) {
-  if (m <= 6) return 31;
-  if (m <= 11) return 30;
-  // Esfand — check leap
-  const d = persianToGregorian(y, m, 29);
-  try { const d30 = persianToGregorian(y, m, 30); return 30; } catch(e) { return 29; }
-}
+  function daysInMonth(y, m) {
+    if (m <= 6) return 31;
+    if (m <= 11) return 30;
+    return window._PD.isLeapPersianYear(y) ? 30 : 29;
+  }
 
-function persianDayOfWeek(y, m, d) {
-  const g = persianToGregorian(y, m, d);
-  const jsDate = new Date(g.year, g.month - 1, g.day);
-  return (jsDate.getDay() + 1) % 7; // 0=Shanbe
-}
+  function getFirstDayWeekday(y, m) {
+    const greg = window._PD.toGregorian(y, m, 1);
+    const [gy, gm, gd] = Array.isArray(greg) ? greg : [greg.year, greg.month, greg.day];
+    const gDay = new Date(gy, gm - 1, gd).getDay(); // 0=Sun..6=Sat
+    return (gDay + 1) % 7; // 0=Sat..6=Fri
+  }
 
-function render() {
-  const title = document.getElementById('cal-title');
-  title.textContent = `${MONTHS[curMonth-1]} / ${MONTHS_FA[curMonth-1]} — ${curYear}`;
-  document.getElementById('month-jump').value = curMonth;
+  function renderCalendar() {
+    const isFa = getLang() === 'fa';
+    const monthName = isFa ? monthNamesFa[curMonth] : monthNamesEn[curMonth];
+    const yearDisp = isFa ? toPersianDigits(curYear) : curYear;
+    document.getElementById('cal-title').textContent = `${monthName} ${yearDisp}`;
+    document.getElementById('month-jump').value = curMonth;
 
-  const grid = document.getElementById('cal-grid');
-  grid.innerHTML = '';
+    const weekdayKeys = ['weekday.sat','weekday.sun','weekday.mon','weekday.tue','weekday.wed','weekday.thu','weekday.fri'];
+    let html = weekdayKeys.map((k, i) => `<div class="cal-weekday ${i===6?'weekend':''}">${t(k)}</div>`).join('');
 
-  // Weekday headers
-  DAYS.forEach((d,i) => {
-    const el = document.createElement('div');
-    el.className = 'cal-weekday' + (i === 6 ? ' weekend' : '');
-    el.textContent = d;
-    grid.appendChild(el);
+    const startOffset = getFirstDayWeekday(curYear, curMonth);
+    const totalDays = daysInMonth(curYear, curMonth);
+
+    for (let i = 0; i < startOffset; i++) {
+      html += `<div class="cal-day empty"></div>`;
+    }
+
+    const todayDate = new Date();
+    const todayP = window._PD.toPersian(todayDate.getFullYear(), todayDate.getMonth() + 1, todayDate.getDate());
+    const [ty, tm, td] = Array.isArray(todayP) ? todayP : [todayP.year, todayP.month, todayP.day];
+
+    for (let d = 1; d <= totalDays; d++) {
+      const isToday = (curYear === ty && curMonth === tm && d === td);
+      const isSelected = (d === selectedDay);
+      const colIdx = (startOffset + d - 1) % 7;
+      const isWeekend = (colIdx === 6);
+
+      const greg = window._PD.toGregorian(curYear, curMonth, d);
+      const [gy, gm, gd] = Array.isArray(greg) ? greg : [greg.year, greg.month, greg.day];
+      const dNum = isFa ? toPersianDigits(d) : d;
+
+      html += `
+        <div class="cal-day ${isToday?'today':''} ${isSelected?'selected':''} ${isWeekend?'weekend':''}"
+             onclick="selectDay(${d})">
+          <span>${dNum}</span>
+          <span class="greg-sub">${gd}</span>
+        </div>`;
+    }
+
+    document.getElementById('cal-grid').innerHTML = html;
+
+    // Month info
+    const isLeap = window._PD.isLeapPersianYear(curYear);
+    document.getElementById('month-info').innerHTML = `
+      <div class="detail-row"><span class="detail-label">${t('calendar.days_in_month')}</span><span class="detail-value">${isFa ? toPersianDigits(totalDays) : totalDays}</span></div>
+      <div class="detail-row"><span class="detail-label">${t('calendar.year_type')}</span><span class="detail-value ${isLeap?'green':''}">${isLeap ? t('converter.is_leap') : t('converter.not_leap')}</span></div>
+    `;
+
+    updateDetail(selectedDay);
+  }
+
+  function updateDetail(d) {
+    if (!d) return;
+    const isFa = getLang() === 'fa';
+    const greg = window._PD.toGregorian(curYear, curMonth, d);
+    const [gy, gm, gd] = Array.isArray(greg) ? greg : [greg.year, greg.month, greg.day];
+    const gDate = new Date(gy, gm - 1, gd);
+    const pDate = new window._PD.PersianDate(gDate);
+
+    document.getElementById('detail-content').innerHTML = `
+      <div class="detail-card">
+        <div class="detail-row"><span class="detail-label">${t('calendar.jalali_full')}</span><span class="detail-value" style="color:var(--emerald);">${isFa ? pDate.formatFa('dddd D MMMM YYYY') : pDate.format('dddd, D MMMM YYYY')}</span></div>
+        <div class="detail-row"><span class="detail-label">${t('calendar.greg_equiv')}</span><span class="detail-value">${gy}-${String(gm).padStart(2,'0')}-${String(gd).padStart(2,'0')}</span></div>
+        <div class="detail-row"><span class="detail-label">${t('calendar.weekday_label')}</span><span class="detail-value">${isFa ? pDate.formatFa('dddd') : gDate.toLocaleDateString('en-US',{weekday:'long'})}</span></div>
+        <div class="detail-row"><span class="detail-label">ISO String</span><span class="detail-value" style="font-size:0.8rem;">${gDate.toISOString()}</span></div>
+      </div>`;
+  }
+
+  window.selectDay = function(d) {
+    selectedDay = d;
+    renderCalendar();
+  };
+
+  window.prevMonth = function() {
+    if (curMonth === 1) { curMonth = 12; curYear--; } else { curMonth--; }
+    selectedDay = Math.min(selectedDay, daysInMonth(curYear, curMonth));
+    renderCalendar();
+  };
+
+  window.nextMonth = function() {
+    if (curMonth === 12) { curMonth = 1; curYear++; } else { curMonth++; }
+    selectedDay = Math.min(selectedDay, daysInMonth(curYear, curMonth));
+    renderCalendar();
+  };
+
+  window.prevYear = function() { curYear--; renderCalendar(); };
+  window.nextYear = function() { curYear++; renderCalendar(); };
+  window.jumpMonth = function() {
+    curMonth = parseInt(document.getElementById('month-jump').value, 10);
+    selectedDay = Math.min(selectedDay, daysInMonth(curYear, curMonth));
+    renderCalendar();
+  };
+
+  window.goToday = function() {
+    const now = new Date();
+    const p = window._PD.toPersian(now.getFullYear(), now.getMonth() + 1, now.getDate());
+    const [y, m, d] = Array.isArray(p) ? p : [p.year, p.month, p.day];
+    curYear = y; curMonth = m; selectedDay = d;
+    renderCalendar();
+  };
+
+  window.addEventListener('pdate:langchange', () => {
+    renderCalendar();
   });
 
-  const totalDays = daysInPersianMonth(curYear, curMonth);
-  const startDow = persianDayOfWeek(curYear, curMonth, 1);
-
-  // Empty cells
-  for (let i = 0; i < startDow; i++) {
-    const el = document.createElement('div');
-    el.className = 'cal-day empty';
-    grid.appendChild(el);
-  }
-
-  // Days
-  for (let d = 1; d <= totalDays; d++) {
-    const el = document.createElement('div');
-    const dow = (startDow + d - 1) % 7;
-    let cls = 'cal-day';
-    if (dow === 6) cls += ' weekend';
-    if (curYear === today.getFullYear() && curMonth === today.getMonth()+1 && d === today.getDate()) cls += ' today';
-    if (selectedDay === d) cls += ' selected';
-    el.className = cls;
-
-    const greg = persianToGregorian(curYear, curMonth, d);
-    el.innerHTML = `${d}<span class="greg-sub">${greg.day}</span>`;
-    el.addEventListener('click', () => selectDay(d));
-    grid.appendChild(el);
-  }
-
-  renderMonthInfo(totalDays, startDow);
-}
-
-function selectDay(d) {
-  selectedDay = d;
-  render();
-
-  const greg = persianToGregorian(curYear, curMonth, d);
-  const jsDate = new Date(greg.year, greg.month - 1, greg.day);
-  const dow = (jsDate.getDay() + 1) % 7;
-
-  document.getElementById('detail-content').innerHTML = `
-    <div class="detail-row"><span class="detail-label">Jalali</span><span class="detail-value">${curYear}/${String(curMonth).padStart(2,'0')}/${String(d).padStart(2,'0')}</span></div>
-    <div class="detail-row"><span class="detail-label">Gregorian</span><span class="detail-value">${greg.year}/${String(greg.month).padStart(2,'0')}/${String(greg.day).padStart(2,'0')}</span></div>
-    <div class="detail-row"><span class="detail-label">Month</span><span class="detail-value">${MONTHS[curMonth-1]} / ${MONTHS_FA[curMonth-1]}</span></div>
-    <div class="detail-row"><span class="detail-label">Day of Week</span><span class="detail-value">${DAYS_FULL[dow]}</span></div>
-    <div class="detail-row"><span class="detail-label">ISO 8601</span><span class="detail-value">${jsDate.toISOString().slice(0,10)}</span></div>
-    <div class="detail-row"><span class="detail-label">Unix</span><span class="detail-value">${Math.floor(jsDate.getTime()/1000)}</span></div>
-  `;
-}
-
-function renderMonthInfo(totalDays, startDow) {
-  const isLeap = totalDays === 30 && curMonth === 12 ? false : (curMonth === 12 ? totalDays === 30 : false);
-  document.getElementById('month-info').innerHTML = `
-    <div class="detail-row"><span class="detail-label">Month</span><span class="detail-value">${MONTHS[curMonth-1]}</span></div>
-    <div class="detail-row"><span class="detail-label">Total Days</span><span class="detail-value">${totalDays}</span></div>
-    <div class="detail-row"><span class="detail-label">Starts On</span><span class="detail-value">${DAYS_FULL[startDow]}</span></div>
-    <div class="detail-row"><span class="detail-label">Year</span><span class="detail-value">${curYear}</span></div>
-  `;
-}
-
-window.prevMonth = () => { if(--curMonth<1){curMonth=12;curYear--;} selectedDay=null; render(); };
-window.nextMonth = () => { if(++curMonth>12){curMonth=1;curYear++;} selectedDay=null; render(); };
-window.prevYear = () => { curYear--; selectedDay=null; render(); };
-window.nextYear = () => { curYear++; selectedDay=null; render(); };
-window.goToday = () => { curYear=today.getFullYear(); curMonth=today.getMonth()+1; selectedDay=today.getDate(); render(); selectDay(selectedDay); };
-window.jumpMonth = () => { curMonth=parseInt(document.getElementById('month-jump').value); selectedDay=null; render(); };
-
-render();
-selectDay(today.getDate());
+  // Init
+  setTimeout(() => {
+    if (window._PD) {
+      window.goToday();
+    }
+  }, 100);
 </script>
 </body>
 </html>

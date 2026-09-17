@@ -6,6 +6,7 @@
   <title>Date Converter — persian-date-native</title>
   <meta name="description" content="Free online Jalali (Shamsi) to Gregorian and Gregorian to Jalali date converter powered by persian-date-native." />
   <link rel="stylesheet" href="shared.css" />
+  <script src="i18n.js"></script>
   <style>
     .swap-btn { font-size: 1.5rem; background: none; border: none; cursor: pointer; color: var(--accent); transition: var(--transition); padding: 0.5rem; border-radius: 50%; }
     .swap-btn:hover { transform: rotate(180deg); background: rgba(56,189,248,0.1); }
@@ -30,46 +31,49 @@
 <nav>
   <a href="index.html" class="nav-logo">🗓 <span>persian-date-native</span></a>
   <ul class="nav-links">
-    <li><a href="index.html">Home</a></li>
-    <li><a href="converter.html" class="active">🔄 Converter</a></li>
-    <li><a href="calendar.html">📅 Calendar</a></li>
-    <li><a href="formatter.html">🎨 Formatter</a></li>
-    <li><a href="calculator.html">⏱ Calculator</a></li>
+    <li><a href="index.html" data-i18n="nav.home">Home</a></li>
+    <li><a href="converter.html" class="active" data-i18n="nav.converter">🔄 Converter</a></li>
+    <li><a href="calendar.html" data-i18n="nav.calendar">📅 Calendar</a></li>
+    <li><a href="formatter.html" data-i18n="nav.formatter">🎨 Formatter</a></li>
+    <li><a href="calculator.html" data-i18n="nav.calculator">⏱ Calculator</a></li>
   </ul>
-  <a href="https://github.com/muhamadzolfaghari/persian-date-native" class="nav-github" target="_blank">⭐ GitHub</a>
+  <div class="nav-actions">
+    <button class="lang-switcher-btn" onclick="toggleLanguage()">🇮🇷 فارسی</button>
+    <a href="https://github.com/muhamadzolfaghari/persian-date-native" class="nav-github" target="_blank" data-i18n="nav.github">⭐ GitHub</a>
+  </div>
 </nav>
 
 <div class="container">
   <div class="page-header fade-up">
-    <h1>🔄 Date Converter</h1>
-    <p>Convert between Jalali (Shamsi / Persian) and Gregorian dates instantly</p>
+    <h1 data-i18n="converter.title">🔄 Date Converter</h1>
+    <p data-i18n="converter.subtitle">Convert between Jalali (Shamsi / Persian) and Gregorian dates instantly</p>
   </div>
 
   <div class="card fade-up" style="max-width:680px;margin:0 auto;">
     <div class="mode-toggle">
-      <button class="mode-btn active" id="btn-jalali-to-greg" onclick="setMode('jalali')">Jalali → Gregorian</button>
-      <button class="mode-btn" id="btn-greg-to-jalali" onclick="setMode('gregorian')">Gregorian → Jalali</button>
+      <button class="mode-btn active" id="btn-jalali-to-greg" onclick="setMode('jalali')" data-i18n="converter.tab_jalali_to_greg">Jalali → Gregorian</button>
+      <button class="mode-btn" id="btn-greg-to-jalali" onclick="setMode('gregorian')" data-i18n="converter.tab_greg_to_jalali">Gregorian → Jalali</button>
     </div>
 
     <div class="quick-dates">
-      <span style="font-size:0.78rem;color:var(--muted);align-self:center;">Quick:</span>
-      <button class="quick-btn" onclick="setToday()">Today</button>
-      <button class="quick-btn" onclick="setNowruz()">Nowruz 1404</button>
+      <span style="font-size:0.78rem;color:var(--muted);align-self:center;" data-i18n="converter.quick">Quick:</span>
+      <button class="quick-btn" onclick="setToday()" data-i18n="common.today">Today</button>
+      <button class="quick-btn" onclick="setNowruz()" data-i18n="common.nowruz">Nowruz 1404</button>
       <button class="quick-btn" onclick="setCustom(1400,1,1)">1400/1/1</button>
       <button class="quick-btn" onclick="setCustom(1402,6,31)">1402/6/31</button>
     </div>
 
     <div class="fields-row" id="input-fields">
       <div class="form-group">
-        <label id="label-year">Year / سال</label>
+        <label id="label-year" data-i18n="common.year">Year</label>
         <input type="number" id="inp-year" placeholder="1403" min="1" />
       </div>
       <div class="form-group">
-        <label id="label-month">Month / ماه</label>
+        <label id="label-month" data-i18n="common.month">Month</label>
         <input type="number" id="inp-month" placeholder="6" min="1" max="12" />
       </div>
       <div class="form-group">
-        <label id="label-day">Day / روز</label>
+        <label id="label-day" data-i18n="common.day">Day</label>
         <input type="number" id="inp-day" placeholder="15" min="1" max="31" />
       </div>
     </div>
@@ -81,74 +85,52 @@
     <div id="result-area" style="display:none;">
       <div class="result-grid" id="result-grid"></div>
       <div style="display:flex;gap:0.75rem;margin-top:1rem;justify-content:flex-end;">
-        <button class="btn btn-secondary btn-sm" onclick="copyResult()">📋 Copy</button>
-        <button class="btn btn-emerald btn-sm" onclick="convert()">↻ Convert Again</button>
+        <button class="btn btn-secondary btn-sm" onclick="copyResult()" data-i18n="common.copy">📋 Copy</button>
+        <button class="btn btn-emerald btn-sm" onclick="convert()" data-i18n="common.calculate">↻ Calculate</button>
       </div>
     </div>
 
     <div style="display:flex;gap:0.75rem;margin-top:1.25rem;">
-      <button class="btn btn-primary" style="flex:1;" onclick="convert()">Convert ↵</button>
+      <button class="btn btn-primary" style="flex:1;" onclick="convert()" data-i18n="common.calculate">Convert ↵</button>
       <button class="btn btn-secondary" onclick="clearAll()">✕ Clear</button>
     </div>
 
     <div id="error-msg" style="color:#f87171;font-size:0.85rem;margin-top:0.75rem;text-align:center;display:none;"></div>
   </div>
 
-  <!-- Info table -->
-  <div style="max-width:680px;margin:2.5rem auto 0;">
-    <div class="card">
-      <div class="card-title"><span class="icon">ℹ️</span> About the calendars</div>
-      <table style="width:100%;border-collapse:collapse;font-size:0.88rem;">
-        <thead><tr>
-          <th style="text-align:left;padding:0.5rem 0.75rem;color:var(--muted2);border-bottom:1px solid var(--card-border);">Property</th>
-          <th style="text-align:left;padding:0.5rem 0.75rem;color:var(--accent);border-bottom:1px solid var(--card-border);">Jalali (Shamsi)</th>
-          <th style="text-align:left;padding:0.5rem 0.75rem;color:var(--emerald);border-bottom:1px solid var(--card-border);">Gregorian</th>
-        </tr></thead>
-        <tbody id="cal-table">
-          <tr><td style="padding:0.5rem 0.75rem;color:var(--muted2);">Origin</td><td style="padding:0.5rem 0.75rem;">Solar Hijri</td><td style="padding:0.5rem 0.75rem;">Roman</td></tr>
-          <tr><td style="padding:0.5rem 0.75rem;color:var(--muted2);">Used in</td><td style="padding:0.5rem 0.75rem;">Iran, Afghanistan</td><td style="padding:0.5rem 0.75rem;">Most of the world</td></tr>
-          <tr><td style="padding:0.5rem 0.75rem;color:var(--muted2);">New Year</td><td style="padding:0.5rem 0.75rem;">Nowruz (Mar 20/21)</td><td style="padding:0.5rem 0.75rem;">January 1</td></tr>
-          <tr><td style="padding:0.5rem 0.75rem;color:var(--muted2);">Year (2024)</td><td style="padding:0.5rem 0.75rem;">1402–1403</td><td style="padding:0.5rem 0.75rem;">2024</td></tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
+  <div id="toast" class="toast" data-i18n="common.copied">✓ Copied to clipboard!</div>
 </div>
 
 <footer>
-  Powered by <a href="https://www.npmjs.com/package/persian-date-native">persian-date-native</a> —
-  <a href="https://github.com/muhamadzolfaghari/persian-date-native">GitHub</a>
+  <p>Built with <a href="https://github.com/muhamadzolfaghari/persian-date-native" target="_blank">persian-date-native</a> • Zero dependencies • 89M+ ops/sec</p>
 </footer>
-<div class="toast" id="toast">✓ Copied!</div>
 
 <script type="module">
-  import { PersianDate, persianToGregorian, gregorianToPersian } from 'https://cdn.jsdelivr.net/npm/persian-date-native/dist/bundle.min.esm.js';
-  window._PD = { PersianDate, persianToGregorian, gregorianToPersian };
+  import { PersianDate, toGregorian, toPersian, isLeapPersianYear } from 'https://cdn.jsdelivr.net/npm/persian-date-native/dist/bundle.min.esm.js';
+  window._PD = { PersianDate, toGregorian, toPersian, isLeapPersianYear };
 
-  let mode = 'jalali'; // jalali->gregorian or gregorian->jalali
+  let currentMode = 'jalali'; // 'jalali' or 'gregorian'
 
-  window.setMode = function(m) {
-    mode = m;
-    document.getElementById('btn-jalali-to-greg').classList.toggle('active', m === 'jalali');
-    document.getElementById('btn-greg-to-jalali').classList.toggle('active', m === 'gregorian');
-    document.getElementById('label-year').textContent = m === 'jalali' ? 'Year (Jalali) / سال' : 'Year (Gregorian)';
-    document.getElementById('label-month').textContent = 'Month / ماه';
-    document.getElementById('label-day').textContent = 'Day / روز';
+  window.setMode = function(mode) {
+    currentMode = mode;
+    document.getElementById('btn-jalali-to-greg').classList.toggle('active', mode === 'jalali');
+    document.getElementById('btn-greg-to-jalali').classList.toggle('active', mode === 'gregorian');
     clearResult();
   };
 
   window.swapMode = function() {
-    setMode(mode === 'jalali' ? 'gregorian' : 'jalali');
+    setMode(currentMode === 'jalali' ? 'gregorian' : 'jalali');
   };
 
   window.setToday = function() {
-    const d = new window._PD.PersianDate();
-    if (mode === 'jalali') {
-      document.getElementById('inp-year').value = d.getFullYear();
-      document.getElementById('inp-month').value = d.getMonth() + 1;
-      document.getElementById('inp-day').value = d.getDate();
+    const now = new Date();
+    if (currentMode === 'jalali') {
+      const p = window._PD.toPersian ? window._PD.toPersian(now.getFullYear(), now.getMonth() + 1, now.getDate()) : { year: 1403, month: 6, day: 27 };
+      const [y, m, d] = Array.isArray(p) ? p : [p.year, p.month, p.day];
+      document.getElementById('inp-year').value = y;
+      document.getElementById('inp-month').value = m;
+      document.getElementById('inp-day').value = d;
     } else {
-      const now = new Date();
       document.getElementById('inp-year').value = now.getFullYear();
       document.getElementById('inp-month').value = now.getMonth() + 1;
       document.getElementById('inp-day').value = now.getDate();
@@ -156,7 +138,13 @@
     convert();
   };
 
-  window.setNowruz = function() { setCustom(1404, 1, 1); };
+  window.setNowruz = function() {
+    setMode('jalali');
+    document.getElementById('inp-year').value = 1404;
+    document.getElementById('inp-month').value = 1;
+    document.getElementById('inp-day').value = 1;
+    convert();
+  };
 
   window.setCustom = function(y, m, d) {
     setMode('jalali');
@@ -167,36 +155,45 @@
   };
 
   window.convert = function() {
-    const y = parseInt(document.getElementById('inp-year').value);
-    const m = parseInt(document.getElementById('inp-month').value);
-    const d = parseInt(document.getElementById('inp-day').value);
-    const errEl = document.getElementById('error-msg');
-    errEl.style.display = 'none';
+    clearResult();
+    const y = parseInt(document.getElementById('inp-year').value, 10);
+    const m = parseInt(document.getElementById('inp-month').value, 10);
+    const d = parseInt(document.getElementById('inp-day').value, 10);
 
-    if (!y || !m || !d) { showError('Please fill in all fields.'); return; }
+    if (isNaN(y) || isNaN(m) || isNaN(d)) {
+      showError('Please enter valid numeric values for year, month, and day.');
+      return;
+    }
 
     try {
       let results = [];
-      if (mode === 'jalali') {
-        const greg = window._PD.persianToGregorian(y, m, d);
-        const jsDate = new Date(greg.year, greg.month - 1, greg.day);
+      const isFa = getLang() === 'fa';
+      if (currentMode === 'jalali') {
+        const greg = window._PD.toGregorian(y, m, d);
+        const [gy, gm, gd] = Array.isArray(greg) ? greg : [greg.year, greg.month, greg.day];
+        const gDate = new Date(gy, gm - 1, gd);
+        const isLeap = window._PD.isLeapPersianYear(y);
+
+        const pDate = new window._PD.PersianDate(gDate);
+        const formattedFa = pDate.formatFa ? pDate.formatFa('dddd D MMMM YYYY') : `${y}/${m}/${d}`;
+
         results = [
-          { label: 'Gregorian Date', value: `${greg.year}/${String(greg.month).padStart(2,'0')}/${String(greg.day).padStart(2,'0')}`, color: 'green' },
-          { label: 'ISO 8601', value: jsDate.toISOString().slice(0,10) },
-          { label: 'Unix Timestamp', value: Math.floor(jsDate.getTime()/1000) },
-          { label: 'Day of Week', value: jsDate.toLocaleDateString('en-US',{weekday:'long'}) },
-          { label: 'Jalali Input', value: `${y}/${String(m).padStart(2,'0')}/${String(d).padStart(2,'0')}` },
-          { label: 'Long Format', value: jsDate.toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'}) },
+          { label: t('converter.greg_result'), value: `${gy}-${String(gm).padStart(2,'0')}-${String(gd).padStart(2,'0')}`, color: 'green' },
+          { label: t('converter.persian_digits'), value: isFa ? formattedFa : pDate.format('dddd, D MMMM YYYY') },
+          { label: t('converter.day_of_week'), value: isFa ? pDate.formatFa('dddd') : gDate.toLocaleDateString('en-US', { weekday: 'long' }) },
+          { label: t('converter.leap_status'), value: isLeap ? t('converter.is_leap') : t('converter.not_leap') }
         ];
       } else {
-        const persian = window._PD.gregorianToPersian(y, m, d);
+        const persian = window._PD.toPersian(y, m, d);
+        const [py, pm, pd] = Array.isArray(persian) ? persian : [persian.year, persian.month, persian.day];
+        const gDate = new Date(y, m - 1, d);
+        const pDate = new window._PD.PersianDate(gDate);
+
         results = [
-          { label: 'Jalali Date', value: `${persian.year}/${String(persian.month).padStart(2,'0')}/${String(persian.day).padStart(2,'0')}`, color: 'green' },
-          { label: 'Jalali Long', value: `${persian.year}/${persian.month}/${persian.day}` },
-          { label: 'Gregorian Input', value: `${y}/${String(m).padStart(2,'0')}/${String(d).padStart(2,'0')}` },
-          { label: 'Unix Timestamp', value: Math.floor(new Date(y,m-1,d).getTime()/1000) },
-          { label: 'ISO 8601', value: new Date(y,m-1,d).toISOString().slice(0,10) },
-          { label: 'Day of Week', value: new Date(y,m-1,d).toLocaleDateString('en-US',{weekday:'long'}) },
+          { label: t('converter.jalali_result'), value: `${py}/${String(pm).padStart(2,'0')}/${String(pd).padStart(2,'0')}`, color: 'green' },
+          { label: t('converter.persian_digits'), value: isFa ? pDate.formatFa('dddd D MMMM YYYY') : pDate.format('dddd, D MMMM YYYY') },
+          { label: t('converter.day_of_week'), value: isFa ? pDate.formatFa('dddd') : gDate.toLocaleDateString('en-US', { weekday: 'long' }) },
+          { label: t('converter.leap_status'), value: window._PD.isLeapPersianYear(py) ? t('converter.is_leap') : t('converter.not_leap') }
         ];
       }
 
@@ -233,11 +230,15 @@
   window.copyResult = function() {
     if (window._lastResult) {
       navigator.clipboard.writeText(window._lastResult);
-      const t = document.getElementById('toast');
-      t.classList.add('show');
-      setTimeout(() => t.classList.remove('show'), 2000);
+      const tEl = document.getElementById('toast');
+      tEl.classList.add('show');
+      setTimeout(() => tEl.classList.remove('show'), 2000);
     }
   };
+
+  window.addEventListener('pdate:langchange', () => {
+    if (document.getElementById('inp-year').value) convert();
+  });
 
   // Enter key support
   ['inp-year','inp-month','inp-day'].forEach(id => {
@@ -245,7 +246,7 @@
   });
 
   // Init with today
-  setToday();
+  setTimeout(() => { if (window._PD) setToday(); }, 100);
 </script>
 </body>
 </html>

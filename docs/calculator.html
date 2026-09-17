@@ -6,6 +6,7 @@
   <title>Date Calculator — persian-date-native</title>
   <meta name="description" content="Persian date calculator: diff between dates, add/subtract days, relative time (fromNow), and leap year checker." />
   <link rel="stylesheet" href="shared.css" />
+  <script src="i18n.js"></script>
   <style>
     .tabs { display:flex; gap:0.5rem; margin-bottom:1.5rem; flex-wrap:wrap; }
     .tab-btn { padding:0.55rem 1.1rem; border-radius:var(--radius-sm); border:1px solid var(--card-border); background:transparent; color:var(--muted2); font-family:inherit; font-size:0.88rem; font-weight:600; cursor:pointer; transition:var(--transition); }
@@ -19,42 +20,45 @@
     .leap-result { text-align:center; padding:2rem; font-size:1.5rem; font-weight:700; }
     .leap-yes { color:var(--emerald); }
     .leap-no { color:var(--muted2); }
-    .from-now-result { font-size:1.8rem; font-weight:800; color:var(--accent); text-align:center; padding:1.5rem; font-family:'Vazirmatn',sans-serif; }
+    .from-now-result { font-size:1.8rem; font-weight:800; color:var(--accent); text-align:center; padding:1.5rem; font-family:'Vazirmatn','JetBrains Mono',sans-serif; }
   </style>
 </head>
 <body>
 <nav>
   <a href="index.html" class="nav-logo">🗓 <span>persian-date-native</span></a>
   <ul class="nav-links">
-    <li><a href="index.html">Home</a></li>
-    <li><a href="converter.html">🔄 Converter</a></li>
-    <li><a href="calendar.html">📅 Calendar</a></li>
-    <li><a href="formatter.html">🎨 Formatter</a></li>
-    <li><a href="calculator.html" class="active">⏱ Calculator</a></li>
+    <li><a href="index.html" data-i18n="nav.home">Home</a></li>
+    <li><a href="converter.html" data-i18n="nav.converter">🔄 Converter</a></li>
+    <li><a href="calendar.html" data-i18n="nav.calendar">📅 Calendar</a></li>
+    <li><a href="formatter.html" data-i18n="nav.formatter">🎨 Formatter</a></li>
+    <li><a href="calculator.html" class="active" data-i18n="nav.calculator">⏱ Calculator</a></li>
   </ul>
-  <a href="https://github.com/muhamadzolfaghari/persian-date-native" class="nav-github" target="_blank">⭐ GitHub</a>
+  <div class="nav-actions">
+    <button class="lang-switcher-btn" onclick="toggleLanguage()">🇮🇷 فارسی</button>
+    <a href="https://github.com/muhamadzolfaghari/persian-date-native" class="nav-github" target="_blank" data-i18n="nav.github">⭐ GitHub</a>
+  </div>
 </nav>
 
 <div class="container">
   <div class="page-header fade-up">
-    <h1>⏱ Date Calculator</h1>
-    <p>Diff dates, add/subtract time, relative time, and leap year checker</p>
+    <h1 data-i18n="calculator.title">⏱ Date Calculator</h1>
+    <p data-i18n="calculator.subtitle">Diff dates, add/subtract time, relative time, and leap year checker</p>
   </div>
 
   <div style="max-width:700px;margin:0 auto;" class="fade-up">
     <div class="tabs">
-      <button class="tab-btn active" onclick="showTab('diff')">📏 Diff</button>
-      <button class="tab-btn" onclick="showTab('addsub')">➕ Add / Subtract</button>
-      <button class="tab-btn" onclick="showTab('fromnow')">🕐 From Now</button>
-      <button class="tab-btn" onclick="showTab('leap')">🌀 Leap Year</button>
+      <button class="tab-btn active" onclick="showTab('diff')" data-i18n="calculator.tab_diff">📏 Diff</button>
+      <button class="tab-btn" onclick="showTab('addsub')" data-i18n="calculator.tab_add">➕ Add / Subtract</button>
+      <button class="tab-btn" onclick="showTab('fromnow')" data-i18n="calculator.tab_fromnow">🕐 From Now</button>
+      <button class="tab-btn" onclick="showTab('leap')" data-i18n="calculator.tab_leap">🌀 Leap Year</button>
     </div>
 
     <!-- DIFF -->
     <div class="tab-panel active card" id="tab-diff">
-      <div class="card-title"><span class="icon">📏</span> Date Difference</div>
+      <div class="card-title"><span class="icon">📏</span> <span data-i18n="calculator.tab_diff">Date Difference</span></div>
       <div class="grid-2" style="margin-bottom:1rem;">
         <div class="form-group">
-          <label>From Date (Jalali)</label>
+          <label data-i18n="calculator.diff_start">From Date (Jalali)</label>
           <div style="display:grid;grid-template-columns:2fr 1fr 1fr;gap:0.5rem;">
             <input type="number" id="diff-y1" placeholder="1400" />
             <input type="number" id="diff-m1" placeholder="1" min="1" max="12" />
@@ -62,7 +66,7 @@
           </div>
         </div>
         <div class="form-group">
-          <label>To Date (Jalali)</label>
+          <label data-i18n="calculator.diff_end">To Date (Jalali)</label>
           <div style="display:grid;grid-template-columns:2fr 1fr 1fr;gap:0.5rem;">
             <input type="number" id="diff-y2" placeholder="1403" />
             <input type="number" id="diff-m2" placeholder="6" min="1" max="12" />
@@ -70,7 +74,7 @@
           </div>
         </div>
       </div>
-      <button class="btn btn-primary" style="width:100%;" onclick="calcDiff()">Calculate Difference</button>
+      <button class="btn btn-primary" style="width:100%;" onclick="calcDiff()" data-i18n="common.calculate">Calculate Difference</button>
       <div id="diff-result" style="margin-top:1.25rem;display:none;">
         <div class="big-result" id="diff-days">—</div>
         <div class="result-chips" id="diff-chips"></div>
@@ -79,9 +83,9 @@
 
     <!-- ADD/SUBTRACT -->
     <div class="tab-panel card" id="tab-addsub">
-      <div class="card-title"><span class="icon">➕</span> Add / Subtract</div>
+      <div class="card-title"><span class="icon">➕</span> <span data-i18n="calculator.tab_add">Add / Subtract</span></div>
       <div class="form-group" style="margin-bottom:1rem;">
-        <label>Base Date (Jalali)</label>
+        <label data-i18n="calculator.add_base">Base Date (Jalali)</label>
         <div style="display:grid;grid-template-columns:2fr 1fr 1fr;gap:0.5rem;">
           <input type="number" id="as-y" placeholder="1403" />
           <input type="number" id="as-m" placeholder="1" min="1" max="12" />
@@ -90,181 +94,174 @@
       </div>
       <div class="grid-2" style="margin-bottom:1rem;">
         <div class="form-group">
-          <label>Amount</label>
+          <label data-i18n="calculator.add_amount">Amount</label>
           <input type="number" id="as-amount" placeholder="30" />
         </div>
         <div class="form-group">
-          <label>Unit</label>
+          <label data-i18n="calculator.add_unit">Unit</label>
           <select id="as-unit">
-            <option value="day">Days</option>
-            <option value="month">Months</option>
-            <option value="year">Years</option>
+            <option value="day">روزها / Days</option>
+            <option value="month">ماه‌ها / Months</option>
+            <option value="year">سال‌ها / Years</option>
           </select>
         </div>
       </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;">
-        <button class="btn btn-primary" onclick="calcAdd(1)">➕ Add</button>
-        <button class="btn btn-secondary" onclick="calcAdd(-1)">➖ Subtract</button>
+      <div style="display:flex;gap:0.75rem;">
+        <button class="btn btn-emerald" style="flex:1;" onclick="calcAddSub(1)" data-i18n="calculator.action_add">➕ Add</button>
+        <button class="btn btn-secondary" style="flex:1;" onclick="calcAddSub(-1)" data-i18n="calculator.action_sub">➖ Subtract</button>
       </div>
       <div id="as-result" style="margin-top:1.25rem;display:none;">
-        <div class="result-item" style="background:var(--code-bg);border:1px solid var(--card-border);border-radius:var(--radius-sm);padding:1rem;">
-          <div class="label" style="font-size:0.72rem;color:var(--muted);font-weight:600;text-transform:uppercase;">Result (Jalali)</div>
-          <div id="as-jalali" style="font-family:'JetBrains Mono',monospace;font-size:1.5rem;color:var(--accent);font-weight:700;margin-top:0.35rem;"></div>
-          <div id="as-greg" style="font-size:0.82rem;color:var(--muted2);margin-top:0.25rem;"></div>
-        </div>
+        <div class="big-result" id="as-out" style="color:var(--emerald);">—</div>
       </div>
     </div>
 
     <!-- FROM NOW -->
     <div class="tab-panel card" id="tab-fromnow">
-      <div class="card-title"><span class="icon">🕐</span> Relative Time (fromNow)</div>
+      <div class="card-title"><span class="icon">🕐</span> <span data-i18n="calculator.tab_fromnow">Relative Time (fromNow)</span></div>
       <div class="form-group" style="margin-bottom:1rem;">
-        <label>Jalali Date</label>
+        <label data-i18n="calculator.fromnow_target">Target Jalali Date</label>
         <div style="display:grid;grid-template-columns:2fr 1fr 1fr;gap:0.5rem;">
-          <input type="number" id="fn-y" placeholder="1403" />
-          <input type="number" id="fn-m" placeholder="6" min="1" max="12" />
+          <input type="number" id="fn-y" placeholder="1400" />
+          <input type="number" id="fn-m" placeholder="1" min="1" max="12" />
           <input type="number" id="fn-d" placeholder="1" min="1" max="31" />
         </div>
       </div>
-      <button class="btn btn-primary" style="width:100%;" onclick="calcFromNow()">Get Relative Time</button>
-      <div id="fn-result" style="display:none;">
-        <div class="from-now-result" id="fn-text">—</div>
-        <p style="text-align:center;color:var(--muted);font-size:0.85rem;" id="fn-sub"></p>
+      <button class="btn btn-primary" style="width:100%;" onclick="calcFromNow()" data-i18n="common.calculate">Calculate fromNow()</button>
+      <div id="fn-result" style="margin-top:1.25rem;display:none;">
+        <div class="from-now-result" id="fn-fa">—</div>
+        <div style="text-align:center;color:var(--muted2);font-family:'JetBrains Mono',monospace;" id="fn-en">—</div>
       </div>
     </div>
 
-    <!-- LEAP -->
+    <!-- LEAP YEAR -->
     <div class="tab-panel card" id="tab-leap">
-      <div class="card-title"><span class="icon">🌀</span> Leap Year Checker</div>
+      <div class="card-title"><span class="icon">🌀</span> <span data-i18n="calculator.tab_leap">Leap Year Checker</span></div>
       <div class="form-group" style="margin-bottom:1rem;">
-        <label>Jalali Year</label>
-        <input type="number" id="leap-year" placeholder="1403" style="font-size:1.2rem;" />
+        <label data-i18n="calculator.leap_check_year">Jalali Year to Test</label>
+        <input type="number" id="leap-year" placeholder="1403" style="font-size:1.1rem;" />
       </div>
-      <button class="btn btn-primary" style="width:100%;" onclick="checkLeap()">Check</button>
-      <div id="leap-result" style="display:none;">
-        <div class="leap-result" id="leap-text">—</div>
-        <div style="text-align:center;color:var(--muted);font-size:0.85rem;" id="leap-sub"></div>
+      <button class="btn btn-primary" style="width:100%;" onclick="checkLeap()" data-i18n="calculator.leap_check_btn">Check Leap Year</button>
+      <div id="leap-result-box" style="display:none;margin-top:1.25rem;">
+        <div class="leap-result" id="leap-out">—</div>
       </div>
     </div>
   </div>
 </div>
 
 <footer>
-  Powered by <a href="https://www.npmjs.com/package/persian-date-native">persian-date-native</a> —
-  <a href="https://github.com/muhamadzolfaghari/persian-date-native">GitHub</a>
+  <p>Powered by <a href="https://www.npmjs.com/package/persian-date-native">persian-date-native</a> —
+  <a href="https://github.com/muhamadzolfaghari/persian-date-native">GitHub</a></p>
 </footer>
 
 <script type="module">
-import { PersianDate, persianToGregorian, gregorianToPersian } from 'https://cdn.jsdelivr.net/npm/persian-date-native/dist/bundle.min.esm.js';
+import { PersianDate, toGregorian, isLeapPersianYear } from 'https://cdn.jsdelivr.net/npm/persian-date-native/dist/bundle.min.esm.js';
+window._PD = { PersianDate, toGregorian, isLeapPersianYear };
 
 window.showTab = function(id) {
-  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-  document.getElementById('tab-'+id).classList.add('active');
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById(`tab-${id}`).classList.add('active');
   event.target.classList.add('active');
 };
 
-function persianToJsDate(y,m,d) {
-  const g = persianToGregorian(y,m,d);
-  return new Date(g.year, g.month-1, g.day);
-}
-
 window.calcDiff = function() {
-  const y1=+document.getElementById('diff-y1').value, m1=+document.getElementById('diff-m1').value, d1=+document.getElementById('diff-d1').value;
-  const y2=+document.getElementById('diff-y2').value, m2=+document.getElementById('diff-m2').value, d2=+document.getElementById('diff-d2').value;
-  if(!y1||!m1||!d1||!y2||!m2||!d2) return;
-  try {
-    const js1 = persianToJsDate(y1,m1,d1);
-    const js2 = persianToJsDate(y2,m2,d2);
-    const msPerDay = 86400000;
-    const diffMs = js2 - js1;
-    const days = Math.round(diffMs / msPerDay);
-    const absDays = Math.abs(days);
-    const sign = days >= 0 ? '' : '-';
+  const y1 = parseInt(document.getElementById('diff-y1').value, 10);
+  const m1 = parseInt(document.getElementById('diff-m1').value, 10);
+  const d1 = parseInt(document.getElementById('diff-d1').value, 10);
+  const y2 = parseInt(document.getElementById('diff-y2').value, 10);
+  const m2 = parseInt(document.getElementById('diff-m2').value, 10);
+  const d2 = parseInt(document.getElementById('diff-d2').value, 10);
 
-    document.getElementById('diff-days').textContent = `${sign}${absDays} days`;
-    document.getElementById('diff-chips').innerHTML = [
-      { label:'Weeks', val: (absDays/7).toFixed(1) },
-      { label:'Months (approx)', val: (absDays/30.44).toFixed(1) },
-      { label:'Years (approx)', val: (absDays/365.25).toFixed(2) },
-      { label:'Hours', val: (absDays*24).toLocaleString() },
-    ].map(c => `<div class="chip">${c.label}: <span>${c.val}</span></div>`).join('');
-    document.getElementById('diff-result').style.display = 'block';
-  } catch(e) { alert('Invalid dates'); }
+  const g1 = window._PD.toGregorian(y1, m1, d1);
+  const g2 = window._PD.toGregorian(y2, m2, d2);
+  const [gy1, gm1, gd1] = Array.isArray(g1) ? g1 : [g1.year, g1.month, g1.day];
+  const [gy2, gm2, gd2] = Array.isArray(g2) ? g2 : [g2.year, g2.month, g2.day];
+
+  const date1 = new Date(gy1, gm1 - 1, gd1);
+  const date2 = new Date(gy2, gm2 - 1, gd2);
+
+  const diffMs = Math.abs(date2 - date1);
+  const diffDays = Math.round(diffMs / 86400000);
+  const diffMonths = (diffDays / 30.4375).toFixed(1);
+  const diffYears = (diffDays / 365.25).toFixed(2);
+
+  const isFa = getLang() === 'fa';
+  document.getElementById('diff-days').textContent = `${isFa ? toPersianDigits(diffDays) : diffDays} ${isFa ? 'روز' : 'days'}`;
+  document.getElementById('diff-chips').innerHTML = `
+    <div class="chip">${t('calculator.diff_months')}: <span>${isFa ? toPersianDigits(diffMonths) : diffMonths}</span></div>
+    <div class="chip">${t('calculator.diff_years')}: <span>${isFa ? toPersianDigits(diffYears) : diffYears}</span></div>
+    <div class="chip">Weeks: <span>${isFa ? toPersianDigits((diffDays/7).toFixed(1)) : (diffDays/7).toFixed(1)}</span></div>
+  `;
+  document.getElementById('diff-result').style.display = 'block';
 };
 
-window.calcAdd = function(sign) {
-  const y=+document.getElementById('as-y').value, m=+document.getElementById('as-m').value, d=+document.getElementById('as-d').value;
-  const amount=+document.getElementById('as-amount').value * sign;
-  const unit=document.getElementById('as-unit').value;
-  if(!y||!m||!d||!amount) return;
-  try {
-    let jsDate = persianToJsDate(y,m,d);
-    if(unit==='day') jsDate = new Date(jsDate.getTime() + amount*86400000);
-    else if(unit==='month') jsDate = new Date(jsDate.getFullYear(), jsDate.getMonth()+amount, jsDate.getDate());
-    else jsDate = new Date(jsDate.getFullYear()+amount, jsDate.getMonth(), jsDate.getDate());
-    const p = gregorianToPersian(jsDate.getFullYear(), jsDate.getMonth()+1, jsDate.getDate());
-    document.getElementById('as-jalali').textContent = `${p.year}/${String(p.month).padStart(2,'0')}/${String(p.day).padStart(2,'0')}`;
-    document.getElementById('as-greg').textContent = `Gregorian: ${jsDate.toISOString().slice(0,10)}`;
-    document.getElementById('as-result').style.display = 'block';
-  } catch(e) { alert('Invalid input'); }
+window.calcAddSub = function(sign) {
+  const y = parseInt(document.getElementById('as-y').value, 10);
+  const m = parseInt(document.getElementById('as-m').value, 10);
+  const d = parseInt(document.getElementById('as-d').value, 10);
+  const amt = parseInt(document.getElementById('as-amount').value, 10) * sign;
+  const unit = document.getElementById('as-unit').value;
+
+  const g = window._PD.toGregorian(y, m, d);
+  const [gy, gm, gd] = Array.isArray(g) ? g : [g.year, g.month, g.day];
+  const dt = new window._PD.PersianDate(new Date(gy, gm - 1, gd));
+
+  let res;
+  if (unit === 'day') res = dt.add(amt, 'day');
+  else if (unit === 'month') res = dt.add(amt, 'month');
+  else res = dt.add(amt, 'year');
+
+  const isFa = getLang() === 'fa';
+  document.getElementById('as-out').textContent = isFa ? (res.formatFa ? res.formatFa('dddd D MMMM YYYY') : res.format('YYYY/MM/DD')) : res.format('dddd, D MMMM YYYY');
+  document.getElementById('as-result').style.display = 'block';
 };
 
 window.calcFromNow = function() {
-  const y=+document.getElementById('fn-y').value, m=+document.getElementById('fn-m').value, d=+document.getElementById('fn-d').value;
-  if(!y||!m||!d) return;
-  try {
-    const jsDate = persianToJsDate(y,m,d);
-    const now = new Date();
-    const diffMs = jsDate - now;
-    const absDays = Math.abs(Math.round(diffMs/86400000));
-    let text, isFuture = diffMs > 0;
+  const y = parseInt(document.getElementById('fn-y').value, 10);
+  const m = parseInt(document.getElementById('fn-m').value, 10);
+  const d = parseInt(document.getElementById('fn-d').value, 10);
 
-    if(absDays === 0) text = 'امروز';
-    else if(absDays === 1) text = isFuture ? 'فردا' : 'دیروز';
-    else if(absDays < 7) text = isFuture ? `${absDays} روز دیگر` : `${absDays} روز پیش`;
-    else if(absDays < 30) text = isFuture ? `${Math.round(absDays/7)} هفته دیگر` : `${Math.round(absDays/7)} هفته پیش`;
-    else if(absDays < 365) text = isFuture ? `${Math.round(absDays/30)} ماه دیگر` : `${Math.round(absDays/30)} ماه پیش`;
-    else text = isFuture ? `${(absDays/365).toFixed(1)} سال دیگر` : `${(absDays/365).toFixed(1)} سال پیش`;
+  const g = window._PD.toGregorian(y, m, d);
+  const [gy, gm, gd] = Array.isArray(g) ? g : [g.year, g.month, g.day];
+  const dt = new window._PD.PersianDate(new Date(gy, gm - 1, gd));
 
-    document.getElementById('fn-text').textContent = text;
-    document.getElementById('fn-sub').textContent = `${absDays} days ${isFuture ? 'from now' : 'ago'} — ${jsDate.toDateString()}`;
-    document.getElementById('fn-result').style.display = 'block';
-  } catch(e) { alert('Invalid date'); }
+  document.getElementById('fn-fa').textContent = dt.fromNowFa ? dt.fromNowFa() : dt.fromNow();
+  document.getElementById('fn-en').textContent = dt.fromNow();
+  document.getElementById('fn-result').style.display = 'block';
 };
 
 window.checkLeap = function() {
-  const y = +document.getElementById('leap-year').value;
-  if(!y) return;
-  // Persian leap year: mod 2820 cycle
-  const isLeap = new PersianDate(y, 12, 29) && (() => {
-    try { persianToGregorian(y,12,30); return true; } catch(e) { return false; }
-  })();
-  const el = document.getElementById('leap-text');
-  el.className = 'leap-result ' + (isLeap ? 'leap-yes' : 'leap-no');
-  el.textContent = isLeap ? `✅ ${y} is a leap year` : `❌ ${y} is not a leap year`;
-  document.getElementById('leap-sub').textContent = isLeap
-    ? `Esfand has 30 days in ${y}`
-    : `Esfand has 29 days in ${y}`;
-  document.getElementById('leap-result').style.display = 'block';
+  const y = parseInt(document.getElementById('leap-year').value, 10);
+  const isLeap = window._PD.isLeapPersianYear(y);
+  const isFa = getLang() === 'fa';
+  const out = document.getElementById('leap-out');
+  const yDisp = isFa ? toPersianDigits(y) : y;
+
+  if (isLeap) {
+    out.className = 'leap-result leap-yes';
+    out.textContent = isFa ? `✅ سال ${yDisp} یک سال کبیسه است (۳۶۶ روز)` : `✅ Year ${y} IS a leap year (366 days — Esfand has 30 days)`;
+  } else {
+    out.className = 'leap-result leap-no';
+    out.textContent = isFa ? `❌ سال ${yDisp} سال عادی است (۳۶۵ روز)` : `❌ Year ${y} is a normal year (365 days — Esfand has 29 days)`;
+  }
+  document.getElementById('leap-result-box').style.display = 'block';
 };
 
-// Init with today's Jalali
-const today = new PersianDate();
-const ty = today.getFullYear(), tm = today.getMonth()+1, td = today.getDate();
-document.getElementById('diff-y1').value = ty;
-document.getElementById('diff-m1').value = tm;
-document.getElementById('diff-d1').value = 1;
-document.getElementById('diff-y2').value = ty;
-document.getElementById('diff-m2').value = tm;
-document.getElementById('diff-d2').value = td;
-document.getElementById('as-y').value = ty;
-document.getElementById('as-m').value = tm;
-document.getElementById('as-d').value = td;
-document.getElementById('fn-y').value = ty;
-document.getElementById('fn-m').value = tm;
-document.getElementById('fn-d').value = td;
-document.getElementById('leap-year').value = ty;
+window.addEventListener('pdate:langchange', () => {
+  // Re-run any visible results
+  if (document.getElementById('diff-result').style.display === 'block') calcDiff();
+  if (document.getElementById('as-result').style.display === 'block') calcAddSub(1);
+  if (document.getElementById('fn-result').style.display === 'block') calcFromNow();
+  if (document.getElementById('leap-result-box').style.display === 'block') checkLeap();
+});
+
+// Init default values
+document.getElementById('diff-y1').value = 1400; document.getElementById('diff-m1').value = 1; document.getElementById('diff-d1').value = 1;
+document.getElementById('diff-y2').value = 1403; document.getElementById('diff-m2').value = 6; document.getElementById('diff-d2').value = 15;
+document.getElementById('as-y').value = 1403; document.getElementById('as-m').value = 1; document.getElementById('as-d').value = 1;
+document.getElementById('as-amount').value = 30;
+document.getElementById('fn-y').value = 1400; document.getElementById('fn-m').value = 1; document.getElementById('fn-d').value = 1;
+document.getElementById('leap-year').value = 1403;
 </script>
 </body>
 </html>

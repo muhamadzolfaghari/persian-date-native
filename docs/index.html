@@ -13,6 +13,7 @@
 
   <!-- Shared styles -->
   <link rel="stylesheet" href="shared.css" />
+  <script src="i18n.js"></script>
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -508,21 +509,24 @@
 <nav>
   <a href="index.html" class="nav-logo">🗓 <span>persian-date-native</span></a>
   <ul class="nav-links">
-    <li><a href="index.html" class="active">Home</a></li>
-    <li><a href="converter.html">🔄 Converter</a></li>
-    <li><a href="calendar.html">📅 Calendar</a></li>
-    <li><a href="formatter.html">🎨 Formatter</a></li>
-    <li><a href="calculator.html">⏱ Calculator</a></li>
+    <li><a href="index.html" class="active" data-i18n="nav.home">Home</a></li>
+    <li><a href="converter.html" data-i18n="nav.converter">🔄 Converter</a></li>
+    <li><a href="calendar.html" data-i18n="nav.calendar">📅 Calendar</a></li>
+    <li><a href="formatter.html" data-i18n="nav.formatter">🎨 Formatter</a></li>
+    <li><a href="calculator.html" data-i18n="nav.calculator">⏱ Calculator</a></li>
   </ul>
-  <a href="https://github.com/muhamadzolfaghari/persian-date-native" class="nav-github" target="_blank">⭐ GitHub</a>
+  <div class="nav-actions">
+    <button class="lang-switcher-btn" onclick="toggleLanguage()">🇮🇷 فارسی</button>
+    <a href="https://github.com/muhamadzolfaghari/persian-date-native" class="nav-github" target="_blank" data-i18n="nav.github">⭐ GitHub</a>
+  </div>
 </nav>
 <div style="background:linear-gradient(135deg,rgba(56,189,248,0.06),rgba(99,102,241,0.06));border-bottom:1px solid rgba(255,255,255,0.06);padding:1.1rem 2rem;">
   <div style="max-width:1100px;margin:0 auto;display:flex;align-items:center;gap:1rem;flex-wrap:wrap;">
-    <span style="font-size:0.78rem;color:#64748b;text-transform:uppercase;letter-spacing:0.06em;font-weight:700;">⚡ Tools:</span>
-    <a href="converter.html" style="padding:0.45rem 1rem;background:rgba(56,189,248,0.1);border:1px solid rgba(56,189,248,0.25);border-radius:8px;text-decoration:none;color:#38bdf8;font-size:0.85rem;font-weight:700;">🔄 Converter</a>
-    <a href="calendar.html" style="padding:0.45rem 1rem;background:rgba(99,102,241,0.1);border:1px solid rgba(99,102,241,0.25);border-radius:8px;text-decoration:none;color:#818cf8;font-size:0.85rem;font-weight:700;">📅 Calendar</a>
-    <a href="formatter.html" style="padding:0.45rem 1rem;background:rgba(245,158,11,0.1);border:1px solid rgba(245,158,11,0.25);border-radius:8px;text-decoration:none;color:#f59e0b;font-size:0.85rem;font-weight:700;">🎨 Formatter</a>
-    <a href="calculator.html" style="padding:0.45rem 1rem;background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.25);border-radius:8px;text-decoration:none;color:#10b981;font-size:0.85rem;font-weight:700;">⏱ Calculator</a>
+    <span style="font-size:0.78rem;color:#64748b;text-transform:uppercase;letter-spacing:0.06em;font-weight:700;" data-i18n="home.tools_title">⚡ Tools:</span>
+    <a href="converter.html" style="padding:0.45rem 1rem;background:rgba(56,189,248,0.1);border:1px solid rgba(56,189,248,0.25);border-radius:8px;text-decoration:none;color:#38bdf8;font-size:0.85rem;font-weight:700;" data-i18n="nav.converter">🔄 Converter</a>
+    <a href="calendar.html" style="padding:0.45rem 1rem;background:rgba(99,102,241,0.1);border:1px solid rgba(99,102,241,0.25);border-radius:8px;text-decoration:none;color:#818cf8;font-size:0.85rem;font-weight:700;" data-i18n="nav.calendar">📅 Calendar</a>
+    <a href="formatter.html" style="padding:0.45rem 1rem;background:rgba(245,158,11,0.1);border:1px solid rgba(245,158,11,0.25);border-radius:8px;text-decoration:none;color:#f59e0b;font-size:0.85rem;font-weight:700;" data-i18n="nav.formatter">🎨 Formatter</a>
+    <a href="calculator.html" style="padding:0.45rem 1rem;background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.25);border-radius:8px;text-decoration:none;color:#10b981;font-size:0.85rem;font-weight:700;" data-i18n="nav.calculator">⏱ Calculator</a>
   </div>
 </div>
 
@@ -531,7 +535,7 @@
     <!-- Header -->
     <header>
       <div class="badge-bar">
-        <span class="badge badge-accent">⚡ 100M+ Ops/Sec</span>
+        <span class="badge badge-accent">⚡ 89M+ Ops/Sec</span>
         <span class="badge badge-emerald">📦 0 Dependencies</span>
         <span class="badge">🛡️ Strict TypeScript</span>
         <span class="badge">🎯 100% Test Coverage</span>
@@ -539,12 +543,12 @@
       </div>
 
       <h1>persian-date-native</h1>
-      <p class="subtitle">
+      <p class="subtitle" data-i18n="home.hero_sub">
         موتور فوق‌سریع، سبک و بدون وابستگی تاریخ شمسی و جلالی برای جاوااسکریپت و تایپ‌اسکریپت با پشتیبانی کامل از افزونه Day.js و توابع تبدیل آنی.
       </p>
 
       <div class="hero-actions">
-        <a href="https://github.com/mu-utils/persian-date" target="_blank" class="btn btn-primary">
+        <a href="https://github.com/muhamadzolfaghari/persian-date-native" target="_blank" class="btn btn-primary" data-i18n="nav.github">
           ⭐ مشاهده در گیت‌هاب
         </a>
         <a href="https://www.npmjs.com/package/persian-date-native" target="_blank" class="btn btn-outline">
@@ -552,7 +556,7 @@
         </a>
         <div class="install-box">
           <span>npm i persian-date-native</span>
-          <button class="copy-btn" onclick="copyInstallCmd(this)">Copy</button>
+          <button class="copy-btn" onclick="copyInstallCmd(this)" data-i18n="common.copy">Copy</button>
         </div>
       </div>
     </header>

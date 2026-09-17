@@ -100,6 +100,31 @@ nav {
   background: rgba(255,255,255,0.06);
 }
 .nav-links a.active { color: var(--accent); }
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.lang-switcher-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.45rem 0.85rem;
+  border-radius: var(--radius-sm);
+  background: rgba(56, 189, 248, 0.08);
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  color: var(--accent);
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: inherit;
+}
+.lang-switcher-btn:hover {
+  background: rgba(56, 189, 248, 0.18);
+  border-color: var(--accent);
+  transform: translateY(-1px);
+}
 .nav-github {
   display: flex;
   align-items: center;
@@ -334,3 +359,29 @@ footer a:hover { text-decoration: underline; }
 @media (max-width: 480px) {
   .page-header { padding: 2rem 1rem 1.5rem; }
 }
+
+/* ---- RTL Support ---- */
+[dir="rtl"] {
+  font-family: 'Vazirmatn', 'Plus Jakarta Sans', system-ui, sans-serif;
+}
+[dir="rtl"] .nav-logo {
+  direction: ltr;
+}
+[dir="rtl"] code,
+[dir="rtl"] pre,
+[dir="rtl"] .font-mono {
+  direction: ltr;
+  text-align: left;
+}
+[dir="rtl"] .copy-btn {
+  left: 0.6rem;
+  right: auto;
+}
+[dir="rtl"] .toast {
+  left: 1.5rem;
+  right: auto;
+}
+[dir="rtl"] .tag {
+  letter-spacing: normal;
+}
+
