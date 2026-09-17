@@ -74,7 +74,7 @@ Experience all features directly in your browser with our **Multilingual (Englis
 - 🔢 **Native Persian Digits (`۰-۹`)**: Convert digits with `.formatFa()` or `{ digits: "fa" }` without regex hacks.
 - ⏱️ **Relative Time Humanizer (`fromNow`, `toNow`)**: Built-in Persian phrases ("۳ روز پیش", "یک ساعت بعد", "چند ثانیه پیش").
 - 📅 **Calendar Helpers for Real UI Development**: `getDayOfWeek()` (Saturday = 0 .. Friday = 6), `isWeekend()`, `quarter()`, `daysInMonth()`, `startOf("week")`, `endOf("week")`.
-- 🗓️ **Accurate Leap Year Handling**: Birashk 33-year solar cycle algorithm (correctly identifies **1403 as a 30-day leap year** and 1404 as 29 days).
+- 🗓️ **33-Year Jalali Leap Cycle**: Birashk 33-year solar cycle implementation (including verified handling of **1403 as a 30-day leap year** and 1404 as 29 days).
 
 ---
 
@@ -91,19 +91,20 @@ However, `shamsi` has critical architectural limitations:
 4. **No relative time** (`fromNow` / `toNow`).
 5. **No leap year or boundary utilities**.
 
-`persian-date-native` is a **complete, high-performance superset**: it provides the exact same tuple unpacking speed while giving you a full Day.js-style fluent API, native `Date` inheritance, 100% test coverage, and Day.js plugin support.
+`persian-date-native` provides **comparable pure tuple-conversion performance** while giving you a full Day.js-style fluent API, native `Date` inheritance, 100% test coverage, and Day.js plugin support.
 
 ### Comprehensive Benchmark Table
 
-> **Benchmark Environment**: Node.js v20.x, Apple Silicon (M-series) / V8 JIT, 10,000 warmup iterations, 500,000 measured sample cycles.
+> **Benchmark Environment**: Node.js v20.x–v23.x, Apple Silicon / V8 JIT, 10,000 warmup iterations, 500,000 measured sample cycles.  
+> **Reproduce Locally**: Clone repo and run `npm run benchmark`.
 
 | Feature / Metric | `persian-date-native` | `shamsi` | `dayjs + jalaliday` | `moment-jalaali` | `date-fns-jalali` |
 | :--- | :---: | :---: | :---: | :---: | :---: |
 | **Dependencies** | **0 (Zero)** 🏆 | **0 (Zero)** | 2 (Dayjs + Plugin) | `moment` (~70 KB) | Multiple packages |
-| **Pure Conversion (G→P)** | **89.1M ops/sec** ⚡ | 80–100M ops/sec | N/A | ~1.2M ops/sec | Functional only |
-| **Pure Conversion (P→G)** | **48.0M ops/sec** ⚡ | 40–80M ops/sec | N/A | ~1.1M ops/sec | Functional only |
+| **Pure Conversion (G→P)** | **89M–137M ops/sec** ⚡ | 80M–200M ops/sec | N/A | ~1.2M ops/sec | Functional only |
+| **Pure Conversion (P→G)** | **48M–71M ops/sec** ⚡ | 40M–82M ops/sec | N/A | ~1.1M ops/sec | Functional only |
 | **Round-Trip Conversion** | **32.5M ops/sec** 🏆 | N/A | N/A | ~500k ops/sec | Functional only |
-| **Instantiation Speed** | **4.1M ops/sec (2.1x)** 🏆 | N/A (no wrapper) | 1.9M ops/sec | ~250k ops/sec | N/A |
+| **Instantiation Speed** | **4.1M–6.3M ops/sec** 🏆 | N/A (no wrapper) | 1.9M ops/sec | ~250k ops/sec | N/A |
 | **Extends Native `Date`** | **✅ `instanceof Date`** 🏆 | ❌ No | ❌ No (`.toDate()`) | ❌ No (`.toDate()`) | ❌ No |
 | **Tuple Unpack `[y, m, d]`** | **✅ Built-in** 🏆 | **✅ Built-in** | ❌ No | ❌ No | ❌ No |
 | **Object Unpack `{y, m, d}`** | **✅ Built-in** 🏆 | ❌ No | ❌ No | ❌ No | ❌ No |
@@ -123,8 +124,8 @@ However, `shamsi` has critical architectural limitations:
    Because `PersianDate` inherits from native `Date`, it seamlessly passes `instanceof Date` validations in React, Vue, Ant Design, Material UI, Shadcn UI, and native `JSON.stringify()`.
 3. **Dual Unpacking Ergonomics**:  
    Supports both array destructuring `[y, m, d]` and object destructuring `{ year, month, date }`.
-4. **Fixing the Infamous 1403 Leap Year Bug**:  
-   Correctly validates 1403 as a leap year (30 days in Esfand) and 1404 as a standard year.
+4. **33-Year Jalali Cycle Implementation**:  
+   Accurately handles 1403 as a 30-day leap year and 1404 as standard.
 
 ---
 
