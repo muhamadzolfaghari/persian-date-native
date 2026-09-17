@@ -63,6 +63,9 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Install CI runtime tools
+        run: npm install --no-save ts-node
+
       - name: Build and verify distribution artifacts
         run: |
           npm run build
