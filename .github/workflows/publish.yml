@@ -30,14 +30,16 @@ jobs:
       - name: Ensure CI runtime tools exist
         run: npm install --no-save ts-node
 
-      - name: Run unit and E2E tests
+      - name: Run unit and documentation E2E tests
         run: |
           npm test -- --runInBand
           npm run test:e2e
-          npm run check:examples
 
       - name: Build package
         run: npm run build
+
+      - name: Validate framework examples
+        run: npm run check:examples
 
       - name: Verify build & bundle budgets
         run: npm run verify:build
