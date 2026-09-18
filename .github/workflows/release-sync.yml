@@ -1,0 +1,119 @@
+name: Release Sync
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release-sync
+  cancel-in-progress: false
+
+jobs:
+  sync-release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: "24"
+          package-manager-cache: false
+
+      - name: Resolve release version
+        id: version
+        shell: bash
+        run: |
+          VERSION=$(node -p "require('./package.json').version")
+          TAG="v${VERSION}"
+          echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
+          echo "tag=${TAG}" >> "$GITHUB_OUTPUT"
+          echo "Release candidate: ${TAG}"
+
+      - name: Check release state
+        id: state
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ steps.version.outputs.tag }}
+        run: |
+          git fetch --tags --force
+
+          if git rev-parse -q --verify "refs/tags/${TAG}" >/dev/null; then
+            TAG_SHA=$(git rev-list -n 1 "${TAG}")
+            echo "tag_exists=true" >> "$GITHUB_OUTPUT"
+            echo "tag_sha=${TAG_SHA}" >> "$GITHUB_OUTPUT"
+          else
+            echo "tag_exists=false" >> "$GITHUB_OUTPUT"
+          fi
+
+          if gh release view "${TAG}" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            echo "release_exists=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "release_exists=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Stop if existing tag points somewhere else
+        if: steps.state.outputs.tag_exists == 'true' && steps.state.outputs.tag_sha != github.sha
+        shell: bash
+        env:
+          TAG: ${{ steps.version.outputs.tag }}
+          TAG_SHA: ${{ steps.state.outputs.tag_sha }}
+        run: |
+          echo "::error::${TAG} already exists at ${TAG_SHA}, but main is ${GITHUB_SHA}. Bump package.json before releasing a new commit."
+          exit 1
+
+      - name: Install dependencies
+        if: steps.state.outputs.tag_exists != 'true'
+        run: npm ci
+
+      - name: Ensure CI runtime tools exist
+        if: steps.state.outputs.tag_exists != 'true'
+        run: npm install --no-save ts-node
+
+      - name: Validate release candidate
+        if: steps.state.outputs.tag_exists != 'true'
+        run: |
+          npm test -- --runInBand --coverage
+          npm run test:e2e
+          npm run check:examples
+          npm run build
+          npm run verify:build
+          npm pack --dry-run
+
+      - name: Create and push version tag
+        if: steps.state.outputs.tag_exists != 'true'
+        shell: bash
+        env:
+          TAG: ${{ steps.version.outputs.tag }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git tag -a "${TAG}" -m "Release ${TAG}" "${GITHUB_SHA}"
+          git push origin "${TAG}"
+
+      - name: Create GitHub Release
+        if: steps.state.outputs.release_exists != 'true'
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ steps.version.outputs.tag }}
+        run: |
+          gh release create "${TAG}"             --repo "$GITHUB_REPOSITORY"             --title "${TAG}"             --generate-notes
+
+      - name: Attempt repository topic synchronization
+        continue-on-error: true
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh api --method PUT             -H "Accept: application/vnd.github+json"             "repos/$GITHUB_REPOSITORY/topics"             -f 'names[]=javascript'             -f 'names[]=typescript'             -f 'names[]=jalali'             -f 'names[]=persian-calendar'             -f 'names[]=shamsi'             -f 'names[]=iranian-calendar'             -f 'names[]=date-library'             -f 'names[]=react'             -f 'names[]=nextjs'             -f 'names[]=vue'             -f 'names[]=angular'             -f 'names[]=svelte'             -f 'names[]=npm-package'
