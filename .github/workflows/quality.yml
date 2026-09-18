@@ -1,0 +1,53 @@
+name: Source Quality
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: source-quality-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: "22"
+          package-manager-cache: false
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Ensure CI runtime tools exist
+        run: npm install --no-save ts-node
+
+      - name: Run unit tests with coverage
+        run: npm test -- --runInBand --coverage
+
+      - name: Run documentation E2E checks
+        run: npm run test:e2e
+
+      - name: Validate framework examples
+        run: npm run check:examples
+
+      - name: Build package
+        run: npm run build
+
+      - name: Verify build and bundle budgets
+        run: npm run verify:build
+
+      - name: Verify package contents
+        run: npm pack --dry-run
