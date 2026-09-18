@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.3.2] - 2026-09-18
+
+### ✨ Showcase & Release Quality
+- **Professional README positioning**: Curated the first screen around installation, live demo, verified compatibility, engineering differentiators, and reproducible evidence.
+- **Evidence-backed quality badge**: Added a dedicated source-quality GitHub Actions workflow covering unit tests with coverage, documentation E2E, framework-example health, build verification, and package dry-run validation.
+- **Release synchronization**: Added an idempotent release workflow that validates a version bump, creates the matching Git tag and GitHub Release, and then relies on tag-triggered npm and GitHub Packages publishing.
+- **Release pipeline fix**: Ensured `ts-node` is available before script-based E2E/example checks in the npm publish workflow, fixing the failure that blocked v1.3.1 publication.
+- **Documentation hygiene**: Removed keyword-stuffing from the public README, softened non-reproducible marketing language, and documented benchmark variability more clearly.
+
+---
+
 ## [1.3.1] - 2026-09-18
 
 ### 📚 Documentation & Ecosystem Guides
