@@ -1,6 +1,6 @@
 {
   "name": "persian-date-native",
-  "version": "1.3.1",
+  "version": "1.3.2",
   "description": "Fast zero-dependency Persian (Jalali / Shamsi) date engine for JavaScript and TypeScript with browser script tags, CDN, React, Next.js, Vue, Angular, Svelte, jQuery, Laravel, WordPress, and Day.js plugin support.",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
