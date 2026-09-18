@@ -40,11 +40,11 @@ jobs:
       - name: Run documentation E2E checks
         run: npm run test:e2e
 
-      - name: Validate framework examples
-        run: npm run check:examples
-
       - name: Build package
         run: npm run build
+
+      - name: Validate framework examples
+        run: npm run check:examples
 
       - name: Verify build and bundle budgets
         run: npm run verify:build
