@@ -61,21 +61,53 @@ jobs:
         run: npm publish --provenance --access public
 
       - name: Post-Publish Registry & CDN Validation Smoke Test
+        shell: bash
         run: |
+          set -euo pipefail
           NAME=$(node -p "require('./package.json').name")
           VERSION=$(node -p "require('./package.json').version")
-          echo "Verifying $NAME@$VERSION on npm registry..."
-          npm view "${NAME}@${VERSION}" version --registry=https://registry.npmjs.org
-          
-          echo "Waiting 15s for CDN edge synchronization..."
-          sleep 15
-          
-          echo "Verifying unpkg distribution..."
-          curl -sSfL "https://unpkg.com/${NAME}@${VERSION}/dist/index.global.min.js" > unpkg_test.js
-          node -e "require('./unpkg_test.js'); if (!global.PersianDateNative) throw new Error('unpkg bundle missing global'); console.log('✅ unpkg verified');"
-          
-          echo "Verifying jsDelivr distribution..."
-          curl -sSfL "https://cdn.jsdelivr.net/npm/${NAME}@${VERSION}/dist/index.global.min.js" > jsdelivr_test.js
-          node -e "require('./jsdelivr_test.js'); if (!global.PersianDateNative) throw new Error('jsdelivr bundle missing global'); console.log('✅ jsdelivr verified');"
-          
-          echo "🎉 Post-publish registry & CDN validation passed 100%!"
+
+          echo "Waiting for $NAME@$VERSION to become visible on npm..."
+          registry_ready=false
+          for attempt in {1..12}; do
+            if npm view "${NAME}@${VERSION}" version --registry=https://registry.npmjs.org >/dev/null 2>&1; then
+              registry_ready=true
+              echo "✅ npm registry verified"
+              break
+            fi
+            echo "Registry not ready yet (attempt ${attempt}/12)"
+            sleep 5
+          done
+          if [ "${registry_ready}" != "true" ]; then
+            echo "::error::${NAME}@${VERSION} did not become visible on npm within the validation window"
+            exit 1
+          fi
+
+          verify_cdn() {
+            local label="$1"
+            local url="$2"
+            local output="$3"
+            local ready=false
+
+            for attempt in {1..12}; do
+              if curl -sSfL "${url}" > "${output}"; then
+                ready=true
+                break
+              fi
+              echo "${label} not ready yet (attempt ${attempt}/12)"
+              sleep 5
+            done
+
+            if [ "${ready}" != "true" ]; then
+              echo "::error::${label} did not become available within the validation window"
+              exit 1
+            fi
+
+            node -e "require('./${output}'); if (!global.PersianDateNative) throw new Error('${label} bundle missing global');"
+            echo "✅ ${label} verified"
+          }
+
+          verify_cdn "unpkg" "https://unpkg.com/${NAME}@${VERSION}/dist/index.global.min.js" "unpkg_test.js"
+          verify_cdn "jsDelivr" "https://cdn.jsdelivr.net/npm/${NAME}@${VERSION}/dist/index.global.min.js" "jsdelivr_test.js"
+
+          echo "🎉 Post-publish registry & CDN validation passed"
