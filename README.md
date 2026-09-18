@@ -2,14 +2,37 @@
 
 [![npm version](https://img.shields.io/npm/v/persian-date-native.svg?style=flat-square&color=38bdf8)](https://www.npmjs.com/package/persian-date-native)
 [![npm downloads](https://img.shields.io/npm/dt/persian-date-native.svg?style=flat-square&color=6366f1)](https://www.npmjs.com/package/persian-date-native)
-[![coverage: 100%](https://img.shields.io/badge/coverage-100%25-brightgreen.svg?style=flat-square)](https://github.com/muhamadzolfaghari/persian-date-native)
-[![TypeScript](https://img.shields.io/badge/TypeScript-Strict%20100%25-blue.svg?style=flat-square)](https://www.typescriptlang.org/)
-[![Zero Dependencies](https://img.shields.io/badge/dependencies-0%20required-success.svg?style=flat-square)](package.json)
+[![Quality](https://github.com/muhamadzolfaghari/persian-date-native/actions/workflows/quality.yml/badge.svg)](https://github.com/muhamadzolfaghari/persian-date-native/actions/workflows/quality.yml)
+[![Release](https://img.shields.io/github/v/release/muhamadzolfaghari/persian-date-native?style=flat-square&color=0ea5e9)](https://github.com/muhamadzolfaghari/persian-date-native/releases)
+[![Zero Dependencies](https://img.shields.io/badge/runtime_dependencies-0-success.svg?style=flat-square)](package.json)
 [![License: ISC](https://img.shields.io/badge/License-ISC-yellow.svg?style=flat-square)](LICENSE)
-[![GitHub Pages](https://img.shields.io/badge/Online%20Tools-Live%20Demo-38bdf8?style=flat-square&logo=github)](https://muhamadzolfaghari.github.io/persian-date-native/)
+[![Live Demo](https://img.shields.io/badge/live_demo-GitHub%20Pages-38bdf8?style=flat-square&logo=github)](https://muhamadzolfaghari.github.io/persian-date-native/)
 
-> ⚡ **A high-performance Persian (Shamsi / Jalali) date engine for JavaScript & TypeScript.**  
-> Features sub-microsecond pure integer conversions (89M+ ops/sec benchmarked on Node.js/V8), true native `Date` inheritance (`instanceof Date === true`), Day.js-style API + Day.js plugin support, zero required runtime dependencies, and comprehensive formatting, relative time, and calendar UI helpers.
+> **A high-performance Persian (Jalali / Shamsi) date engine for JavaScript and TypeScript.**  
+> Native `Date` interoperability, zero required runtime dependencies, strict TypeScript, ESM/CJS/browser builds, Persian formatting and relative time, calendar helpers, and optional Day.js integration.
+
+**[Live demo](https://muhamadzolfaghari.github.io/persian-date-native/)** · **[npm](https://www.npmjs.com/package/persian-date-native)** · **[Documentation](docs/)** · **[Examples](examples/)** · **[Changelog](CHANGELOG.md)**
+
+### Why this package?
+
+- **Native JavaScript integration** — `PersianDate` extends `Date`, so `instanceof Date === true`.
+- **Zero required runtime dependencies** — Day.js is optional and used only for the plugin integration.
+- **Multiple consumption targets** — ESM, CommonJS, browser global, CDN, and TypeScript declarations.
+- **Verified compatibility** — registry installs are exercised across Linux, macOS, and Windows on Node.js 18, 20, 22, and 24.
+- **Reproducible engineering evidence** — unit coverage, documentation E2E checks, framework-example health checks, bundle budgets, package dry-runs, and benchmarks are all automated or runnable from the repository.
+
+```bash
+npm install persian-date-native
+```
+
+```ts
+import { persianDate, gregorianToPersian } from "persian-date-native";
+
+const [year, month, day] = gregorianToPersian(2024, 9, 2);
+console.log(year, month, day); // 1403 6 12
+
+console.log(persianDate().formatFa("YYYY/MM/DD"));
+```
 
 ---
 
@@ -17,7 +40,7 @@
 
 - [🌟 Live Interactive Demo & Online Tools Suite](#-live-interactive-demo--online-tools-suite)
 - [✨ Key Features](#-key-features)
-- [⚔️ Ecosystem Benchmark & Comparison](#️-ecosystem-benchmark--comparison)
+- [📊 Benchmarks & Ecosystem Comparison](#-benchmarks--ecosystem-comparison)
   - [Why is `shamsi` Popular & How We Compare?](#why-is-shamsi-popular--how-we-compare)
   - [Comprehensive Benchmark Table](#comprehensive-benchmark-table)
   - [Architectural Advantages](#architectural-advantages)
@@ -41,8 +64,7 @@
 - [📚 Complete API Reference](#-complete-api-reference)
   - [Universal Enterprise Aliases (`jalaliDate`, `shamsiDate`)](#universal-enterprise-aliases)
 - [🔬 Leap Year Accuracy: 1403 vs 1404](#-leap-year-accuracy-1403-vs-1404)
-- [🧪 Testing & Benchmarking](#-testing--benchmarking)
-- [🔍 SEO & Search Keywords](#-seo--search-keywords)
+- [🧪 Testing, Build Verification & Benchmarks](#-testing-build-verification--benchmarks)
 - [📄 License](#-license)
 
 ---
@@ -78,43 +100,36 @@ Experience all features directly in your browser with our **Multilingual (Englis
 
 ---
 
-## ⚔️ Ecosystem Benchmark & Comparison
+## 📊 Benchmarks & Ecosystem Comparison
 
-### Why is `shamsi` Popular & How We Compare?
+### Comparison with common alternatives
 
-The npm package `shamsi` gained popularity primarily because **"shamsi"** is the exact generic search term Iranian developers type on npm (`npm i shamsi`), and it provided a minimal 2-function script returning array tuples (`[jy, jm, jd]`).
+`persian-date-native` overlaps with smaller conversion libraries and larger date-toolkit ecosystems, but it is designed around a different trade-off: keep the core dependency-free while providing native `Date` interoperability, formatting, arithmetic, relative time, calendar helpers, and an optional Day.js plugin.
 
-However, `shamsi` has critical architectural limitations:
-1. **Zero formatting capabilities** (requires installing separate packages like `shamsi-formatter`).
-2. **No `Date` object integration** (cannot accept standard JS `Date` objects or ISO strings without `shamsi-date-converter`).
-3. **No date arithmetic** (no `add`, `subtract`, `diff`, `startOf`, `endOf`).
-4. **No relative time** (`fromNow` / `toNow`).
-5. **No leap year or boundary utilities**.
+The table below is a **repository benchmark snapshot**, not a universal performance ranking. Results vary by Node/V8 version, hardware, warm-up behavior, and benchmark shape. Run `npm run benchmark` on your own target environment before making performance-sensitive decisions.
 
-`persian-date-native` provides **comparable pure tuple-conversion performance** while giving you a full Day.js-style fluent API, native `Date` inheritance, 100% test coverage, and Day.js plugin support.
+### Reproducible benchmark snapshot
 
-### Comprehensive Benchmark Table
-
-> **Benchmark Environment**: Node.js v20.x–v23.x, Apple Silicon / V8 JIT, 10,000 warmup iterations, 500,000 measured sample cycles.  
-> **Reproduce Locally**: Clone repo and run `npm run benchmark`.
+> **Recorded environment**: Node.js v20.x–v23.x on Apple Silicon / V8 JIT, 10,000 warm-up iterations, 500,000 measured sample cycles.  
+> **Reproduce locally**: clone the repository and run `npm run benchmark`. Treat the numbers as environment-specific measurements, not guarantees.
 
 | Feature / Metric | `persian-date-native` | `shamsi` | `dayjs + jalaliday` | `moment-jalaali` | `date-fns-jalali` |
 | :--- | :---: | :---: | :---: | :---: | :---: |
-| **Dependencies** | **0 (Zero)** 🏆 | **0 (Zero)** | 2 (Dayjs + Plugin) | `moment` (~70 KB) | Multiple packages |
+| **Dependencies** | **0 (Zero)** | **0 (Zero)** | 2 (Dayjs + Plugin) | `moment` (~70 KB) | Multiple packages |
 | **Pure Conversion (G→P)** | **89M–137M ops/sec** ⚡ | 80M–200M ops/sec | N/A | ~1.2M ops/sec | Functional only |
 | **Pure Conversion (P→G)** | **48M–71M ops/sec** ⚡ | 40M–82M ops/sec | N/A | ~1.1M ops/sec | Functional only |
-| **Round-Trip Conversion** | **32.5M ops/sec** 🏆 | N/A | N/A | ~500k ops/sec | Functional only |
-| **Instantiation Speed** | **4.1M–6.3M ops/sec** 🏆 | N/A (no wrapper) | 1.9M ops/sec | ~250k ops/sec | N/A |
-| **Extends Native `Date`** | **✅ `instanceof Date`** 🏆 | ❌ No | ❌ No (`.toDate()`) | ❌ No (`.toDate()`) | ❌ No |
-| **Tuple Unpack `[y, m, d]`** | **✅ Built-in** 🏆 | **✅ Built-in** | ❌ No | ❌ No | ❌ No |
-| **Object Unpack `{y, m, d}`** | **✅ Built-in** 🏆 | ❌ No | ❌ No | ❌ No | ❌ No |
-| **Date Arithmetic (`add`/`sub`)**| **✅ Fluent & Fast** 🏆 | ❌ No | ✅ Available | ✅ Available | ⚠️ Function chaining |
-| **Boundaries (`startOf`/`endOf`)**| **✅ Built-in** 🏆 | ❌ No | ✅ Available | ✅ Available | ⚠️ Separate imports |
-| **Persian Digits (`۰-۹`)** | **✅ Built-in (`formatFa`)** 🏆 | ❌ Extra package | ❌ Regex hack | ⚠️ Incomplete | ❌ No |
-| **Relative Time (`fromNow`)** | **✅ Built-in (fa)** 🏆 | ❌ No | ❌ Extra plugin | ⚠️ Legacy | ❌ Separate import |
-| **1403 Leap Year Accuracy** | **✅ Exact (30 Esfand)** 🏆 | ✅ Exact | ⚠️ Inconsistent | ⚠️ Inconsistent | ⚠️ Inconsistent |
-| **TypeScript Strictness** | **✅ 100% Strict** 🏆 | ⚠️ Minimal `.d.ts` | ⚠️ Augmentation | ⚠️ Deprecated | ✅ Typed |
-| **Test Coverage** | **🎯 100% (142 unit tests)** 🏆 | No test suite | Test suite included | Test suite included | Test suite included |
+| **Round-Trip Conversion** | **32.5M ops/sec** | N/A | N/A | ~500k ops/sec | Functional only |
+| **Instantiation Speed** | **4.1M–6.3M ops/sec** | N/A (no wrapper) | 1.9M ops/sec | ~250k ops/sec | N/A |
+| **Extends Native `Date`** | **✅ `instanceof Date`** | ❌ No | ❌ No (`.toDate()`) | ❌ No (`.toDate()`) | ❌ No |
+| **Tuple Unpack `[y, m, d]`** | **✅ Built-in** | **✅ Built-in** | ❌ No | ❌ No | ❌ No |
+| **Object Unpack `{y, m, d}`** | **✅ Built-in** | ❌ No | ❌ No | ❌ No | ❌ No |
+| **Date Arithmetic (`add`/`sub`)**| **✅ Fluent & Fast** | ❌ No | ✅ Available | ✅ Available | ⚠️ Function chaining |
+| **Boundaries (`startOf`/`endOf`)**| **✅ Built-in** | ❌ No | ✅ Available | ✅ Available | ⚠️ Separate imports |
+| **Persian Digits (`۰-۹`)** | **✅ Built-in (`formatFa`)** | ❌ Extra package | ❌ Regex hack | ⚠️ Incomplete | ❌ No |
+| **Relative Time (`fromNow`)** | **✅ Built-in (fa)** | ❌ No | ❌ Extra plugin | ⚠️ Legacy | ❌ Separate import |
+| **1403 Leap Year Accuracy** | **✅ Exact (30 Esfand)** | ✅ Exact | ⚠️ Inconsistent | ⚠️ Inconsistent | ⚠️ Inconsistent |
+| **TypeScript Strictness** | **✅ 100% Strict** | ⚠️ Minimal `.d.ts` | ⚠️ Augmentation | ⚠️ Deprecated | ✅ Typed |
+| **Test Coverage** | **🎯 100% (142 unit tests)** | No test suite | Test suite included | Test suite included | Test suite included |
 
 ### Architectural Advantages
 
@@ -550,19 +565,30 @@ persianDate(1404, 12, 1).daysInMonth();  // 29
 
 ## 🧪 Testing, Build Verification & Benchmarks
 
+The repository has two complementary quality layers:
+
+- **Source quality**: unit tests with coverage, documentation E2E, example health checks, production build verification, bundle budgets, and `npm pack --dry-run`.
+- **Consumer compatibility**: clean registry installs on Linux, macOS, and Windows across Node.js 18, 20, 22, and 24, plus live unpkg/jsDelivr checks.
+
 ```bash
-# Run all 17 test suites with 100% code coverage across all metrics
+# Unit tests + coverage
 npm test -- --coverage
 
-# Run automated production build & bundle optimization verification
+# Documentation/browser-page E2E checks
+npm run test:e2e
+
+# Framework example health
+npm run check:examples
+
+# Production bundles and bundle-budget validation
+npm run build
 npm run verify:build
 
-# Run reproducible micro-benchmark runner (500,000 iterations against competitors)
+# Reproduce the benchmark snapshot
 npm run benchmark
-
-# Build production bundles (CJS + ESM + Type Definitions)
-npm run build
 ```
+
+See [the production-readiness report](docs/final-readiness-report.md) for the current release evidence.
 
 ---
 
@@ -590,6 +616,8 @@ Dedicated, comprehensive guides with runnable examples and copy-paste recipes fo
 
 See [CHANGELOG.md](CHANGELOG.md) for full historical release notes.
 
+- **[v1.3.2]**: Showcase-ready README, evidence-backed quality workflow, release synchronization, and npm release-pipeline repair.
+- **[v1.3.1]**: Framework integration matrix and production-readiness documentation refresh.
 - **[v1.3.0]**: Enterprise modular static documentation assets (`docs/assets/`), zero-dependency single-pass syntax highlighter (`highlighter.js`), interactive framework playground (`docs/examples.html`), automated E2E testing (`npm run test:e2e`), examples health check suite (`npm run check:examples`), and post-publish CI/CD CDN smoke tests.
 - **[v1.2.3]**: Universal runtime architecture (`Symbol.for('nodejs.util.inspect.custom')`), 3-pass Terser bundle optimization (< 5.7 KB Gzip), `sideEffects: false` tree-shaking, automated `verify:build` suite, and OIDC CI/CD publish automation.
 - **[v1.2.2]**: Pure integer conversion micro-benchmarks (38.8M ops/sec), bidirectional conversion guides, ISO serialization patterns.
@@ -597,13 +625,6 @@ See [CHANGELOG.md](CHANGELOG.md) for full historical release notes.
 - **[v1.2.0]**: Zero-dependency pure integer math converters, Persian/English numeral converters, relative time (`fromNow`), and calendar boundary methods (`startOf`, `endOf`, `daysInMonth`).
 - **[v1.1.0]**: Day.js plugin architecture (`jalaliPlugin`), Iranian 33-year solar cycle leap year accuracy (1403 leap fix), and 100% test coverage suite.
 - **[v1.0.0]**: Initial release of zero-dependency native `Date`-extending Persian date engine.
-
----
-
-## 🔍 SEO & Search Keywords
-
-- **Persian**: تاریخ شمسی، تقویم شمسی، تبدیل تاریخ شمسی به میلادی، تبدیل تاریخ میلادی به شمسی، تاریخ جلالی، تبدیل تاریخ خورشیدی، پکیج تاریخ شمسی npm، اعداد فارسی، سال کبیسه ۱۴۰۳، تقویم فارسی جاوااسکریپت.
-- **English**: `persian-date-native`, `shamsi`, `shamsi-date`, `shamsi converter`, `jalali date`, `jalali calendar`, `persian date`, `persian-calendar-js`, `dayjs-jalali`, `jalaliday`, `moment-jalaali alternative`, `date-fns-jalali alternative`, `convert shamsi to gregorian`, `convert gregorian to jalali`, `zero dependency persian date`.
 
 ---
 
