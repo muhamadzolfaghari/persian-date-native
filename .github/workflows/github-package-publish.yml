@@ -66,7 +66,7 @@ jobs:
           cp package.json README.md LICENSE* github-package/ 2>/dev/null || true
           cp -r dist github-package/
           cd github-package
-          node -e "const fs=require('fs');const p=require('./package.json');p.name='@muhamadzolfaghari/persian-date-native';delete p.publishConfig;fs.writeFileSync('package.json',JSON.stringify(p,null,2)+'\n')"
+          node -e "const fs=require('fs');const p=require('./package.json');p.name='@muhamadzolfaghari/persian-date-native';delete p.publishConfig;if(p.scripts){delete p.scripts.prepublishOnly;delete p.scripts.prepare;}fs.writeFileSync('package.json',JSON.stringify(p,null,2)+'\n')"
 
       - name: Publish GitHub Package
         if: steps.package-state.outputs.exists != 'true'
