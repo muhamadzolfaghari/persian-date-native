@@ -2,8 +2,12 @@ name: Publish to npm
 
 on:
   push:
+    branches:
+      - main
     tags:
       - 'v*.*.*'
+    paths:
+      - '.github/workflows/publish.yml'
   workflow_dispatch:
 
 jobs:
