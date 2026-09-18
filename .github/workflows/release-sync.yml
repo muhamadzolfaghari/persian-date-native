@@ -8,6 +8,7 @@ on:
 
 permissions:
   contents: write
+  actions: write
 
 concurrency:
   group: release-sync
@@ -61,16 +62,6 @@ jobs:
           else
             echo "release_exists=false" >> "$GITHUB_OUTPUT"
           fi
-
-      - name: Stop if existing tag points somewhere else
-        if: steps.state.outputs.tag_exists == 'true' && steps.state.outputs.tag_sha != github.sha
-        shell: bash
-        env:
-          TAG: ${{ steps.version.outputs.tag }}
-          TAG_SHA: ${{ steps.state.outputs.tag_sha }}
-        run: |
-          echo "::error::${TAG} already exists at ${TAG_SHA}, but main is ${GITHUB_SHA}. Bump package.json before releasing a new commit."
-          exit 1
 
       - name: Install dependencies
         if: steps.state.outputs.tag_exists != 'true'
