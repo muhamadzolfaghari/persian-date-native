@@ -42,7 +42,7 @@
     "check:examples": "ts-node -O '{\"module\":\"commonjs\"}' ./scripts/verify-examples-health.ts",
     "benchmark": "ts-node -O '{\"module\":\"commonjs\"}' ./scripts/benchmark.ts",
     "verify:build": "ts-node -O '{\"module\":\"commonjs\"}' ./scripts/verify-build.ts",
-    "build": "rollup -c",
+    "build": "tsc --emitDeclarationOnly --declaration --outDir dist && rollup -c",
     "watch": "rollup -c -w",
     "demo": "ts-node demo/index.ts",
     "prepublishOnly": "npm run build"
