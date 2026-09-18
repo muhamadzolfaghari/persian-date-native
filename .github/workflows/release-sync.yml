@@ -8,6 +8,7 @@ on:
 
 permissions:
   contents: write
+  actions: write
 
 concurrency:
   group: release-sync
@@ -62,16 +63,6 @@ jobs:
             echo "release_exists=false" >> "$GITHUB_OUTPUT"
           fi
 
-      - name: Stop if existing tag points somewhere else
-        if: steps.state.outputs.tag_exists == 'true' && steps.state.outputs.tag_sha != github.sha
-        shell: bash
-        env:
-          TAG: ${{ steps.version.outputs.tag }}
-          TAG_SHA: ${{ steps.state.outputs.tag_sha }}
-        run: |
-          echo "::error::${TAG} already exists at ${TAG_SHA}, but main is ${GITHUB_SHA}. Bump package.json before releasing a new commit."
-          exit 1
-
       - name: Install dependencies
         if: steps.state.outputs.tag_exists != 'true'
         run: npm ci
@@ -108,12 +99,29 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           TAG: ${{ steps.version.outputs.tag }}
         run: |
-          gh release create "${TAG}"             --repo "$GITHUB_REPOSITORY"             --title "${TAG}"             --generate-notes
+          gh release create "${TAG}" \
+            --repo "$GITHUB_REPOSITORY" \
+            --title "${TAG}" \
+            --generate-notes
 
-      - name: Attempt repository topic synchronization
-        continue-on-error: true
+      - name: Check npm publication
+        id: npm
+        shell: bash
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          if npm view "persian-date-native@${VERSION}" version --registry=https://registry.npmjs.org >/dev/null 2>&1; then
+            echo "published=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "published=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Dispatch package publication workflows
+        if: steps.state.outputs.tag_exists != 'true' || steps.npm.outputs.published != 'true'
         shell: bash
         env:
           GH_TOKEN: ${{ github.token }}
+          TAG: ${{ steps.version.outputs.tag }}
         run: |
-          gh api --method PUT             -H "Accept: application/vnd.github+json"             "repos/$GITHUB_REPOSITORY/topics"             -f 'names[]=javascript'             -f 'names[]=typescript'             -f 'names[]=jalali'             -f 'names[]=persian-calendar'             -f 'names[]=shamsi'             -f 'names[]=iranian-calendar'             -f 'names[]=date-library'             -f 'names[]=react'             -f 'names[]=nextjs'             -f 'names[]=vue'             -f 'names[]=angular'             -f 'names[]=svelte'             -f 'names[]=npm-package'
+          gh workflow run publish.yml --repo "$GITHUB_REPOSITORY" --ref "${TAG}"
+          gh workflow run github-package-publish.yml --repo "$GITHUB_REPOSITORY" --ref "${TAG}"
