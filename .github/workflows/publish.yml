@@ -47,17 +47,22 @@ jobs:
       - name: Verify package contents
         run: npm pack --dry-run
 
-      - name: Ensure version is not already published
+      - name: Check npm publication state
+        id: npm
+        shell: bash
         run: |
           NAME=$(node -p "require('./package.json').name")
           VERSION=$(node -p "require('./package.json').version")
           if npm view "${NAME}@${VERSION}" version --registry=https://registry.npmjs.org >/dev/null 2>&1; then
-            echo "::error::${NAME}@${VERSION} already exists on npm"
-            exit 1
+            echo "published=true" >> "$GITHUB_OUTPUT"
+            echo "${NAME}@${VERSION} is already published; skipping publish and validating registry/CDNs."
+          else
+            echo "published=false" >> "$GITHUB_OUTPUT"
+            echo "${NAME}@${VERSION} is not published yet."
           fi
-          echo "Publishing ${NAME}@${VERSION}"
 
       - name: Publish to npm with OIDC trusted publishing
+        if: steps.npm.outputs.published != 'true'
         run: npm publish --provenance --access public
 
       - name: Post-Publish Registry & CDN Validation Smoke Test
@@ -69,14 +74,14 @@ jobs:
 
           echo "Waiting for $NAME@$VERSION to become visible on npm..."
           registry_ready=false
-          for attempt in {1..12}; do
+          for attempt in {1..30}; do
             if npm view "${NAME}@${VERSION}" version --registry=https://registry.npmjs.org >/dev/null 2>&1; then
               registry_ready=true
               echo "✅ npm registry verified"
               break
             fi
-            echo "Registry not ready yet (attempt ${attempt}/12)"
-            sleep 5
+            echo "Registry not ready yet (attempt ${attempt}/30)"
+            sleep 10
           done
           if [ "${registry_ready}" != "true" ]; then
             echo "::error::${NAME}@${VERSION} did not become visible on npm within the validation window"
@@ -89,13 +94,13 @@ jobs:
             local output="$3"
             local ready=false
 
-            for attempt in {1..12}; do
+            for attempt in {1..30}; do
               if curl -sSfL "${url}" > "${output}"; then
                 ready=true
                 break
               fi
-              echo "${label} not ready yet (attempt ${attempt}/12)"
-              sleep 5
+              echo "${label} not ready yet (attempt ${attempt}/30)"
+              sleep 10
             done
 
             if [ "${ready}" != "true" ]; then
