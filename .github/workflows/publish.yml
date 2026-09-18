@@ -112,7 +112,7 @@ jobs:
               exit 1
             fi
 
-            node -e "require('./${output}'); if (!global.PersianDateNative) throw new Error('${label} bundle missing global');"
+            node -e "const fs=require('fs'),vm=require('vm'); const context={}; vm.createContext(context); vm.runInContext(fs.readFileSync('./${output}','utf8'),context); const api=context.PersianDateNative; if (!api || typeof api.gregorianToPersian !== 'function') throw new Error('${label} bundle missing PersianDateNative API'); const result=api.gregorianToPersian(2024,9,2); if (!Array.isArray(result) || result.join('/') !== '1403/6/12') throw new Error('${label} bundle execution check failed: '+JSON.stringify(result));"
             echo "✅ ${label} verified"
           }
 
