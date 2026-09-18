@@ -85,8 +85,8 @@ jobs:
         run: |
           npm test -- --runInBand --coverage
           npm run test:e2e
-          npm run check:examples
           npm run build
+          npm run check:examples
           npm run verify:build
           npm pack --dry-run
 
