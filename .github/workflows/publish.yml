@@ -27,6 +27,9 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Ensure CI runtime tools exist
+        run: npm install --no-save ts-node
+
       - name: Run unit and E2E tests
         run: |
           npm test -- --runInBand
