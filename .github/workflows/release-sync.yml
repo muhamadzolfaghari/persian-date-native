@@ -9,6 +9,7 @@ on:
 permissions:
   contents: write
   actions: write
+  packages: read
 
 concurrency:
   group: release-sync
@@ -116,12 +117,30 @@ jobs:
             echo "published=false" >> "$GITHUB_OUTPUT"
           fi
 
-      - name: Dispatch package publication workflows
-        if: steps.state.outputs.tag_exists != 'true' || steps.npm.outputs.published != 'true'
+      - name: Check GitHub Packages publication
+        id: github-package
+        shell: bash
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+          NODE_AUTH_TOKEN: ${{ github.token }}
+        run: |
+          if npm view "@muhamadzolfaghari/persian-date-native@${VERSION}" version --registry=https://npm.pkg.github.com >/dev/null 2>&1; then
+            echo "published=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "published=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Dispatch npm publication workflow
+        if: steps.npm.outputs.published != 'true'
         shell: bash
         env:
           GH_TOKEN: ${{ github.token }}
           TAG: ${{ steps.version.outputs.tag }}
-        run: |
-          gh workflow run publish.yml --repo "$GITHUB_REPOSITORY" --ref "${TAG}"
-          gh workflow run github-package-publish.yml --repo "$GITHUB_REPOSITORY" --ref "${TAG}"
+        run: gh workflow run publish.yml --repo "$GITHUB_REPOSITORY" --ref "${TAG}"
+
+      - name: Dispatch GitHub Packages publication workflow
+        if: steps.github-package.outputs.published != 'true'
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run github-package-publish.yml --repo "$GITHUB_REPOSITORY" --ref main
