@@ -23,22 +23,44 @@ jobs:
           node-version: '24'
           registry-url: 'https://npm.pkg.github.com'
 
+      - name: Check whether version already exists
+        id: package-state
+        shell: bash
+        env:
+          NODE_AUTH_TOKEN: ${{ github.token }}
+        run: |
+          VERSION=$(node -p "require('./package.json').version")
+          if npm view "@muhamadzolfaghari/persian-date-native@${VERSION}" version --registry=https://npm.pkg.github.com >/dev/null 2>&1; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+            echo "GitHub Package ${VERSION} already exists; publication is a no-op."
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Install dependencies
+        if: steps.package-state.outputs.exists != 'true'
         run: npm ci
 
       - name: Ensure CI runtime tools exist
+        if: steps.package-state.outputs.exists != 'true'
         run: npm install --no-save ts-node
 
-      - name: Run tests
+      - name: Run unit and documentation E2E tests
+        if: steps.package-state.outputs.exists != 'true'
         run: |
           npm test -- --runInBand
           npm run test:e2e
-          npm run check:examples
 
       - name: Build package
+        if: steps.package-state.outputs.exists != 'true'
         run: npm run build
 
+      - name: Validate framework examples
+        if: steps.package-state.outputs.exists != 'true'
+        run: npm run check:examples
+
       - name: Prepare GitHub Packages artifact
+        if: steps.package-state.outputs.exists != 'true'
         run: |
           mkdir -p github-package
           cp package.json README.md LICENSE* github-package/ 2>/dev/null || true
@@ -47,7 +69,19 @@ jobs:
           node -e "const fs=require('fs');const p=require('./package.json');p.name='@muhamadzolfaghari/persian-date-native';delete p.publishConfig;fs.writeFileSync('package.json',JSON.stringify(p,null,2)+'\n')"
 
       - name: Publish GitHub Package
+        if: steps.package-state.outputs.exists != 'true'
         working-directory: github-package
-        run: npm publish --registry=https://npm.pkg.github.com
+        shell: bash
         env:
           NODE_AUTH_TOKEN: ${{ github.token }}
+        run: |
+          if npm publish --registry=https://npm.pkg.github.com; then
+            echo "✅ GitHub Package published"
+          else
+            VERSION=$(node -p "require('./package.json').version")
+            if npm view "@muhamadzolfaghari/persian-date-native@${VERSION}" version --registry=https://npm.pkg.github.com >/dev/null 2>&1; then
+              echo "Package became visible during publication; treating as synchronized."
+            else
+              exit 1
+            fi
+          fi
