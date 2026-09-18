@@ -2,8 +2,8 @@
 
 **Date**: September 18, 2026  
 **Repository**: `muhamadzolfaghari/persian-date-native`  
-**Target Package**: `persian-date-native` v1.2.3  
-**Readiness Score**: **99 / 100** (Ready for General Availability)
+**Target Package**: `persian-date-native` v1.3.2  
+**Readiness Score**: **99 / 100** (Showcase-ready / General Availability)
 
 ---
 
@@ -19,7 +19,7 @@
 | **Phase 4** | Dedicated SEO Documentation | ✅ PASS | 11 tailored search-intent markdown guides with problem/solution/migration. |
 | **Phase 5** | Framework Examples Health | ✅ PASS | 9/9 framework examples verified with automated sandbox testing (`npm run check:examples`). |
 | **Phase 6** | CDN Distribution & Globals | ✅ PASS | `dist/index.global.min.js` exposes `window.PersianDateNative` cleanly. |
-| **Phase 7** | GitHub Metadata & README | ✅ PASS | Full framework quickstart table, live badges, and topics list. |
+| **Phase 7** | GitHub Metadata & README | ✅ PASS | Curated first-screen README, live CI/release badges, framework quickstarts, demo links, and repository topic targets. |
 | **Phase 8** | Schema.org & OpenGraph | ✅ PASS | JSON-LD `SoftwareSourceCode` and `WebApplication` structured data across all pages. |
 | **Phase 9** | CI/CD Quality Pipeline | ✅ PASS | Automated multi-stage GitHub Actions with post-publish CDN smoke tests. |
 | **Phase 10** | Release Quality Gates | ✅ PASS | 142/142 unit tests, 98/98 E2E assertions, 8/8 bundle targets under 6 KB gzip. |
@@ -76,7 +76,7 @@ Automated verification via `npm run check:examples`:
 - Global namespace: `window.PersianDateNative` exports `{ PersianDate, persianDate, gregorianToPersian, persianToGregorian, isLeapPersianYear, toPersianDigits }`.
 
 ### Phase 7: GitHub Optimization
-- **Topics to set**: `javascript, typescript, jalali, persian-calendar, shamsi, iranian-calendar, date-library, react, nextjs, vue, angular, svelte, jquery, wordpress, laravel, npm-package`.
+- **Repository topics target**: `javascript, typescript, jalali, persian-calendar, shamsi, iranian-calendar, date-library, react, nextjs, vue, angular, svelte, jquery, wordpress, laravel, npm-package`. The release-sync workflow attempts to apply these automatically when permissions allow.
 - **README**: Rich badges, one-line positioning, framework table, interactive demo link, CDN quickstart.
 
 ### Phase 8: Schema & Metadata
@@ -92,3 +92,11 @@ Automated verification via `npm run check:examples`:
 - **`npm run test:e2e`**: 98/98 assertions passing across 6 documentation HTML pages.
 - **`npm run check:examples`**: 9/9 framework examples healthy.
 - **`npm run verify:build`**: 100% pass across all 8 bundle targets.
+
+
+---
+
+### Showcase & Release Synchronization
+- **Source quality workflow**: `.github/workflows/quality.yml` validates unit coverage, documentation E2E, framework examples, build budgets, and package contents on pushes and pull requests.
+- **Release synchronization workflow**: `.github/workflows/release-sync.yml` validates the release candidate, creates the version tag and GitHub Release when the package version advances, and lets the tag-triggered npm/GitHub Packages workflows publish the same commit.
+- **Release invariant**: `package.json`, lockfile, changelog, Git tag, GitHub Release, npm, and GitHub Packages are expected to share the same version.
