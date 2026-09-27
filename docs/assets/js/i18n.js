@@ -183,7 +183,21 @@ const translations = {
     'th.math_ops': 'Math Ops (add, subtract, startOf)',
     'th.fa_digits': 'Persian Digits (formatFa)',
     'th.from_now': 'Relative Time (fromNow)',
-    'th.dayjs_plugin': 'Official Day.js Plugin'
+    'th.dayjs_plugin': 'Official Day.js Plugin',
+
+    // FAQ Section
+    'faq.title': 'Frequently Asked Questions (FAQ)',
+    'faq.subtitle': 'Common questions about Jalali (Shamsi) & Gregorian date conversion in JavaScript & TypeScript',
+    'faq.q1': 'How do I convert Gregorian to Persian (Jalali) date in JavaScript?',
+    'faq.a1': 'Call gregorianToPersian(year, month, day) to get the [year, month, day] tuple in sub-microseconds without any runtime dependencies.',
+    'faq.q2': 'Why migrate from moment-jalaali to persian-date-native?',
+    'faq.a2': 'moment-jalaali is over 70KB, unmaintained, and slow. persian-date-native is zero-dependency, under 3KB, over 70x faster (~89M ops/sec), and works natively with Date instances.',
+    'faq.q3': 'Does persian-date-native support React and Next.js?',
+    'faq.a3': 'Yes! It has 100% SSR/SSG compatibility without hydration mismatches in Next.js App Router, Pages Router, Remix, and standard React 18/19.',
+    'faq.q4': 'How do I use it with Day.js?',
+    'faq.a4': 'Import dayjsPlugin from persian-date-native and run dayjs.extend(dayjsPlugin). All dayjs methods seamlessly support Jalali dates.',
+    'faq.q5': 'Is date conversion completely offline and private?',
+    'faq.a5': 'Yes. All calendar algorithms execute locally and deterministically inside the browser or Node.js runtime. Zero network telemetry.'
   },
 
   fa: {
@@ -365,7 +379,21 @@ const translations = {
     'th.math_ops': 'عملیات ریاضی (add, subtract)',
     'th.fa_digits': 'ارقام فارسی (formatFa)',
     'th.from_now': 'زمان نسبی (fromNow)',
-    'th.dayjs_plugin': 'پلاگین Day.js رسمی'
+    'th.dayjs_plugin': 'پلاگین Day.js رسمی',
+
+    // FAQ Section
+    'faq.title': 'سوالات متداول (FAQ)',
+    'faq.subtitle': 'پاسخ به پرتکرارترین پرسش‌های توسعه‌دهندگان درباره تبدیل تاریخ شمسی و میلادی',
+    'faq.q1': 'چگونه تاریخ میلادی را به شمسی در جاوااسکریپت تبدیل کنیم؟',
+    'faq.a1': 'با متد gregorianToPersian(year, month, day) خروجی [year, month, day] شمسی را در کسری از میکروثانیه بدون نیاز به هیچ وابستگی خارجی دریافت کنید.',
+    'faq.q2': 'چرا باید از persian-date-native به جای moment-jalaali استفاده کنیم؟',
+    'faq.a2': 'پکیج moment-jalaali حجمی بیش از ۷۰ کیلوبایت دارد و سنگین است. در مقابل persian-date-native کمتر از ۳ کیلوبایت حجم دارد، ۷۰ برابر سریع‌تر است و صفر وابستگی خارجی دارد.',
+    'faq.q3': 'آیا با React و Next.js سازگار است؟',
+    'faq.a3': 'بله، سازگاری کامل با SSR و CSR بدون ایجاد خطای Hydration در Next.js 13/14/15 و React 18/19.',
+    'faq.q4': 'نحوه استفاده از پلاگین Day.js چگونه است؟',
+    'faq.a4': 'با فراخوانی dayjs.extend(dayjsPlugin) تمامی متدهای فرمت، دستکاری و محاسبات تاریخ مستقیماً در تقویم شمسی فعال می‌شوند.',
+    'faq.q5': 'آیا برای کارکرد نیازی به اینترنت یا سرور دارد؟',
+    'faq.a5': 'خیر، الگوریتم‌ها ۱۰۰٪ آفلاین، کلاینت‌ساید و ریاضی هستند و با حداکثر پرفورمنس در مرورگر و نود اجرا می‌شوند.'
   }
 };
 

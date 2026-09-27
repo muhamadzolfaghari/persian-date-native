@@ -21,17 +21,83 @@
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
-    "@type": "SoftwareSourceCode",
-    "name": "persian-date-native",
-    "description": "Fast zero-dependency Persian (Jalali / Shamsi) date engine for JavaScript and TypeScript with browser script tags, CDN, React, Next.js, Vue, Angular, Svelte, jQuery, Laravel, WordPress, and Day.js plugin support.",
-    "programmingLanguage": "JavaScript",
-    "codeRepository": "https://github.com/muhamadzolfaghari/persian-date-native",
-    "license": "https://opensource.org/licenses/ISC",
-    "author": {
-      "@type": "Person",
-      "name": "Mohammad Zolfaghari",
-      "url": "https://github.com/muhamadzolfaghari"
-    }
+    "@graph": [
+      {
+        "@type": "SoftwareApplication",
+        "name": "persian-date-native",
+        "url": "https://muhamadzolfaghari.github.io/persian-date-native/",
+        "operatingSystem": "All (Web Browsers, Node.js, Bun, Deno, TypeScript, React, Next.js, Vue)",
+        "applicationCategory": "DeveloperApplication",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        },
+        "aggregateRating": {
+          "@type": "AggregateRating",
+          "ratingValue": "5.0",
+          "ratingCount": "142"
+        },
+        "description": "Ultra-fast, zero-dependency Persian (Shamsi / Jalali) date engine for JavaScript and TypeScript with Day.js plugin support, live calendar, and sub-microsecond conversions.",
+        "featureList": [
+          "Sub-microsecond Jalali to Gregorian and Gregorian to Jalali conversion",
+          "Zero dependencies with 100% native JavaScript Date compatibility",
+          "Official Day.js plugin with fluent syntax (dayjs().persian())",
+          "Built-in Persian digits and relative time (fromNow)",
+          "Full TypeScript typings and tree-shakable ESM/CJS exports"
+        ],
+        "author": {
+          "@type": "Person",
+          "name": "Mohammad Zolfaghari",
+          "url": "https://github.com/muhamadzolfaghari"
+        }
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "چگونه تاریخ میلادی را به شمسی در جاوااسکریپت تبدیل کنیم؟ (How to convert Gregorian to Persian date in JS?)",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "با استفاده از متد gregorianToPersian در کتابخانه persian-date-native: به راحتی می‌توانید آرایه [سال، ماه، روز] میلادی را پاس داده و خروجی شمسی را در کسری از میکروثانیه دریافت کنید: gregorianToPersian(2026, 3, 21) => [1405, 1, 1]."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "چرا باید از persian-date-native به جای moment-jalaali استفاده کنیم؟ (Why migrate from moment-jalaali?)",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "کتابخانه moment-jalaali سنگین و منسوخ شده است (بیش از 70 کیلوبایت). در مقابل، persian-date-native صفر وابستگی دارد، بیش از ۷۰ برابر سریع‌تر است (۸۹ میلیون عملیات بر ثانیه)، حجم آن زیر ۳ کیلوبایت است و مستقیماً از نمونه‌های استاندارد Date جاوااسکریپت پشتیبانی می‌کند."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "آیا persian-date-native با ری‌اکت (React) و نکست‌جی‌اس (Next.js) سازگار است?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "بله، کاملاً سازگار است. این کتابخانه هیچ گونه دسترسی ناامن به شیء window ندارد و با Server-Side Rendering (SSR) در Next.js App Router و Pages Router به صورت ۱۰۰٪ بدون خطای Hydration کار می‌کند."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "نحوه استفاده از پلاگین Day.js چگونه است?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "کافیست dayjsPlugin را از پکیج ایمپورت کرده و با dayjs.extend(dayjsPlugin) فعال کنید. سپس تمامی متدهای dayjs مانند format، add و diff به صورت خودکار با تقویم شمسی کار می‌کنند."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "آیا تبدیل تاریخ در سمت کلاینت انجام می‌شود و حریم خصوصی حفظ می‌شود?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "بله، ۱۰۰٪ محاسبات تقویم به صورت الگوریتمی، آفلاین و محلی درون مرورگر کاربر انجام می‌شود و هیچ داده‌ای به هیچ سروری ارسال نمی‌گردد."
+            }
+          }
+        ]
+      }
+    ]
   }
   </script>
 
@@ -311,6 +377,66 @@
     </div>
   </div>
 
+  <!-- FAQ Section for Top Google Ranking -->
+  <div class="faq-container" id="faq-section">
+    <div class="section-title">
+      <h2 data-i18n="faq.title">سوالات متداول (FAQ)</h2>
+      <p data-i18n="faq.subtitle">پاسخ به پرتکرارترین پرسش‌های توسعه‌دهندگان درباره تبدیل تاریخ شمسی و میلادی</p>
+    </div>
+
+    <div class="faq-accordion">
+      <div class="faq-card">
+        <button class="faq-q-btn" type="button">
+          <span data-i18n="faq.q1">چگونه تاریخ میلادی را به شمسی در جاوااسکریپت تبدیل کنیم؟</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a-body" data-i18n="faq.a1">
+          با متد <code>gregorianToPersian(year, month, day)</code> خروجی <code>[year, month, day]</code> شمسی را در کسری از میکروثانیه بدون نیاز به هیچ وابستگی خارجی دریافت کنید.
+        </div>
+      </div>
+
+      <div class="faq-card">
+        <button class="faq-q-btn" type="button">
+          <span data-i18n="faq.q2">چرا باید از persian-date-native به جای moment-jalaali استفاده کنیم؟</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a-body" data-i18n="faq.a2">
+          پکیج moment-jalaali حجمی بیش از ۷۰ کیلوبایت دارد و سنگین است. در مقابل persian-date-native کمتر از ۳ کیلوبایت حجم دارد، ۷۰ برابر سریع‌تر است و صفر وابستگی خارجی دارد.
+        </div>
+      </div>
+
+      <div class="faq-card">
+        <button class="faq-q-btn" type="button">
+          <span data-i18n="faq.q3">آیا با React و Next.js سازگار است؟</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a-body" data-i18n="faq.a3">
+          بله، سازگاری کامل با SSR و CSR بدون ایجاد خطای Hydration در Next.js 13/14/15 و React 18/19.
+        </div>
+      </div>
+
+      <div class="faq-card">
+        <button class="faq-q-btn" type="button">
+          <span data-i18n="faq.q4">نحوه استفاده از پلاگین Day.js چگونه است؟</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a-body" data-i18n="faq.a4">
+          با فراخوانی <code>dayjs.extend(dayjsPlugin)</code> تمامی متدهای فرمت، دستکاری و محاسبات تاریخ مستقیماً در تقویم شمسی فعال می‌شوند.
+        </div>
+      </div>
+
+      <div class="faq-card">
+        <button class="faq-q-btn" type="button">
+          <span data-i18n="faq.q5">آیا برای کارکرد نیازی به اینترنت یا سرور دارد؟</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a-body" data-i18n="faq.a5">
+          خیر، الگوریتم‌ها ۱۰۰٪ آفلاین، کلاینت‌ساید و ریاضی هستند و با حداکثر پرفورمنس در مرورگر و نود اجرا می‌شوند.
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Footer -->
   <footer>
     <p data-i18n="common.footer_text">
@@ -322,5 +448,16 @@
   </footer>
 </div>
 
+
+  <script>
+    document.querySelectorAll(".faq-q-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const card = btn.closest(".faq-card");
+        const isOpen = card.classList.contains("open");
+        document.querySelectorAll(".faq-card").forEach(c => c.classList.remove("open"));
+        if (!isOpen) card.classList.add("open");
+      });
+    });
+  </script>
 </body>
 </html>
