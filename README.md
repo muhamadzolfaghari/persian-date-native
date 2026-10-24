@@ -6,7 +6,7 @@
 [![Release](https://img.shields.io/github/v/release/muhamadzolfaghari/persian-date-native?style=flat-square&color=0ea5e9)](https://github.com/muhamadzolfaghari/persian-date-native/releases)
 [![Zero Dependencies](https://img.shields.io/badge/runtime_dependencies-0-success.svg?style=flat-square)](package.json)
 [![License: ISC](https://img.shields.io/badge/License-ISC-yellow.svg?style=flat-square)](LICENSE)
-[![Live Demo](https://img.shields.io/badge/live_demo-GitHub%20Pages-38bdf8?style=flat-square&logo=github)](https://muhamadzolfaghari.github.io/persian-date-native/)\n[![Socket score](https://badge.socket.dev/npm/package/persian-date-native/1.3.2)](https://socket.dev/npm/package/persian-date-native)
+[![Live Demo](https://img.shields.io/badge/live_demo-GitHub%20Pages-38bdf8?style=flat-square&logo=github)](https://muhamadzolfaghari.github.io/persian-date-native/)\n[![Socket score](https://badge.socket.dev/npm/package/persian-date-native/1.4.0)](https://socket.dev/npm/package/persian-date-native)
 
 > **A high-performance Persian (Jalali / Shamsi) date engine for JavaScript and TypeScript.**  
 > Native `Date` interoperability, zero required runtime dependencies, strict TypeScript, ESM/CJS/browser builds, Persian formatting and relative time, calendar helpers, and optional Day.js integration.
@@ -638,6 +638,7 @@ Dedicated, comprehensive guides with runnable examples and copy-paste recipes fo
 
 See [CHANGELOG.md](CHANGELOG.md) for full historical release notes.
 
+- **[v1.4.0]**: Asia/Tehran default time zone honored everywhere (no instant shifting), signed `diff` with whole calendar months/years, `isValid()`, strict date validation, Persian/Arabic-Indic digit parsing, and faster instantiation.
 - **[v1.3.2]**: Showcase-ready README, evidence-backed quality workflow, release synchronization, and npm release-pipeline repair.
 - **[v1.3.1]**: Framework integration matrix and production-readiness documentation refresh.
 - **[v1.3.0]**: Enterprise modular static documentation assets (`docs/assets/`), zero-dependency single-pass syntax highlighter (`highlighter.js`), interactive framework playground (`docs/examples.html`), automated E2E testing (`npm run test:e2e`), examples health check suite (`npm run check:examples`), and post-publish CI/CD CDN smoke tests.

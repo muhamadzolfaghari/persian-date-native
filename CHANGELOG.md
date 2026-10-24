@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-## [Unreleased]
+## [1.4.0] - 2026-10-24
 
 ### 🐛 Fixed
 - **Default time zone**: Dates are now read and formatted in `Asia/Tehran` unless `timeZone` is set, as documented. Previously the machine's own time zone was used, so a UTC server printed different Persian dates than a browser in Tehran.
