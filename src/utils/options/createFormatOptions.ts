@@ -9,7 +9,7 @@ const createFormatOptions = ({
   calendar,
   timeZone,
 }: PersianDateOptions | undefined = {}): FormatOptions => ({
-  timeZone,
+  timeZone: timeZone ?? DEFAULT_TIME_ZONE,
   calendar: calendar === "gregorian" ? undefined : DEFAULT_CALENDAR,
   numberingSystem: "latn",
 });

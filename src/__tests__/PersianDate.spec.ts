@@ -30,7 +30,7 @@ describe("PersianDate", () => {
     });
 
     it("should support constructor with Date instance", () => {
-      const jsDate = new Date(2024, 8, 3); // 2024-09-03 -> 1403-06-13
+      const jsDate = new Date(Date.UTC(2024, 8, 2, 20, 30)); // 1403-06-13 00:00 in Asia/Tehran
       const persianDate = new PersianDate(jsDate);
       expect(persianDate.getFullYear()).toBe(1403);
       expect(persianDate.getMonth()).toBe(6);
@@ -38,7 +38,7 @@ describe("PersianDate", () => {
     });
 
     it("should support constructor with numeric timestamp", () => {
-      const timestamp = new Date(2024, 8, 3).getTime();
+      const timestamp = Date.UTC(2024, 8, 2, 20, 30); // 1403-06-13 00:00 in Asia/Tehran
       const persianDate = new PersianDate(timestamp);
       expect(persianDate.getFullYear()).toBe(1403);
       expect(persianDate.getMonth()).toBe(6);
@@ -82,22 +82,43 @@ describe("PersianDate", () => {
       expect(date1.diff(date2)).toBe(0);
     });
 
-    it("should return the same result regardless of the order of dates", () => {
-      const date1 = new PersianDate(1400, 1, 1);
-      const date2 = new PersianDate(1400, 1, 5);
-      expect(date1.diff(date2)).toBe(date2.diff(date1));
+    it("should return a signed result: positive when this date is later", () => {
+      const date1 = new PersianDate(1403, 5, 1);
+      const date2 = new PersianDate(1403, 5, 5);
+      expect(date2.diff(date1)).toBe(4);
+      expect(date1.diff(date2)).toBe(-4);
     });
 
     it("should return the correct difference in hours", () => {
       const date1 = new PersianDate(1400, 1, 5, 4);
       const date2 = new PersianDate(1400, 1, 5, 5);
-      expect(date1.diff(date2, "hours")).toBe(1);
+      expect(date2.diff(date1, "hours")).toBe(1);
+      expect(date1.diff(date2, "hours")).toBe(-1);
     });
 
     it("should return the correct difference in months", () => {
       const date1 = new PersianDate(1400, 1, 5);
       const date2 = new PersianDate(1400, 2, 5);
-      expect(date1.diff(date2, "months")).toBe(1);
+      expect(date2.diff(date1, "months")).toBe(1);
+      expect(date1.diff(date2, "months")).toBe(-1);
+    });
+
+    it("should count completed Persian months with the same day clamping as add", () => {
+      expect(new PersianDate(1403, 7, 30).diff(new PersianDate(1403, 6, 31), "months")).toBe(1);
+      expect(new PersianDate(1403, 7, 29).diff(new PersianDate(1403, 6, 30), "months")).toBe(0);
+    });
+
+    it("should count completed years, so a birthday is a whole year", () => {
+      const birth = new PersianDate(1385, 5, 12);
+      expect(new PersianDate(1403, 5, 12).diff(birth, "years")).toBe(18);
+      expect(new PersianDate(1403, 5, 11).diff(birth, "years")).toBe(17);
+      expect(birth.diff(new PersianDate(1403, 5, 12), "years")).toBe(-18);
+    });
+
+    it("should treat 29 Esfand as the anniversary of 30 Esfand in non-leap years", () => {
+      const leapDay = new PersianDate(1403, 12, 30);
+      expect(new PersianDate(1404, 12, 29).diff(leapDay, "years")).toBe(1);
+      expect(new PersianDate(1404, 12, 28).diff(leapDay, "years")).toBe(0);
     });
   });
 

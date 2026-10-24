@@ -7,6 +7,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [Unreleased]
+
+### 🐛 Fixed
+- **Default time zone**: Dates are now read and formatted in `Asia/Tehran` unless `timeZone` is set, as documented. Previously the machine's own time zone was used, so a UTC server printed different Persian dates than a browser in Tehran.
+- **`timeZone` option no longer shifts instants**: `persianDate(instant, { timeZone })` keeps the exact moment and only changes how it is read. Previously the instant itself moved (for example, 21:00 UTC printed as 17:30 with `timeZone: "UTC"` on a Tehran machine).
+- **Wall-clock input and calendar operations follow the time zone**: Date strings without an offset, numeric parts, getters, setters, `startOf`/`endOf`, `add`/`subtract`, `getDay`, `getDayOfWeek`, and `daysInMonth` now use the instance's time zone, including historical daylight saving time, instead of the machine's zone.
+- **`diff` is signed**: It returns a negative value when this date is earlier, so callers can tell past from future.
+- **`diff` months and years count completed calendar periods**: A birthday is now a whole year (previously `17.9986` on an 18th birthday); month steps use the same day clamping as `add`.
+- **Strict validation**: Impossible dates such as `"2024-02-30"` and times such as `"24:00"` are invalid instead of rolling over, and `invalidDateSeverity: "error"` now throws for unparsable text and invalid instants too.
+
+### ⚡ Performance
+- **Faster instantiation**: `PersianDate` computes its Persian date on first use, and time-zone offsets are cached per day (days with a daylight saving change are never cached), so named zones no longer need an `Intl` call per date.
+
+### ✨ Added
+- **`isValid()`** on `PersianDate`.
+- **Persian and Arabic-Indic digits in date strings**: `persianDate("۱۴۰۳/۰۵/۱۲")` parses; `replacePersianNumbers` also converts Arabic-Indic digits (`٠-٩`).
+- **Any IANA time zone in the `TimeZone` type**, keeping `"Asia/Tehran"`, `"UTC"`, and `"America/New_York"` as editor suggestions.
+
+### 📚 Documentation
+- Added a Time Zones section, documented `isValid()` and the signed `diff`, corrected the `MMM` and `ddd` examples (Persian has no short month or weekday forms), and replaced claims of an immutable API: `add`, `subtract`, `startOf`, and `endOf` change the instance.
+
+---
+
 ## [1.3.2] - 2026-09-18
 
 ### ✨ Showcase & Release Quality

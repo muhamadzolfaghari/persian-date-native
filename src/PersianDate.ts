@@ -14,12 +14,19 @@ import getTime from "./utils/common/getTime";
 import isLeapYear from "./utils/common/isLeapYear";
 import modifyTime from "./utils/common/modifyTime";
 import normalizeArguments from "./utils/common/normalizeArguments";
-import toGregorianDate from "./utils/gregorian/toGregorianDate";
+import persianToGregorian from "./utils/gregorian/persianToGregorian";
 import createFormatters from "./utils/formatters/createFormatters";
 import formatTime, { FormatOptionsConfig } from "./utils/formatters/formatTime";
 import overrideDisplayDateInstance from "./utils/formatters/overrideDisplayDateInstance";
 import relativeTime, { RelativeTimeOptions } from "./utils/common/fromNow";
 import { toPersianDate } from "./utils/persian/toPersianDate";
+import {
+  fromWallClock,
+  getGregorianMonthLength,
+  getGregorianWeekday,
+  toWallClock,
+  WallClock,
+} from "./utils/common/zonedTime";
 
 /**
  * Represents a Persian date and time, extending the native JavaScript Date object.
@@ -38,7 +45,7 @@ export default class PersianDate extends Date {
   private options: Options;
   private formatters?: Formatters;
   private formatOptions: FormatOptions;
-  private persianDate!: DateType;
+  private persianDateCache?: DateType;
 
   /**
    * Multiple constructor overloads to support various input types
@@ -106,7 +113,15 @@ export default class PersianDate extends Date {
    */
   private update() {
     this.formatters = undefined;
-    this.persianDate = toPersianDate(this.getTime(), this.formatOptions);
+    this.persianDateCache = undefined;
+  }
+
+  /** Persian year, month, and day in the instance's time zone, computed on first use. */
+  private get persianDate(): DateType {
+    if (!this.persianDateCache) {
+      this.persianDateCache = toPersianDate(this.getTime(), this.formatOptions);
+    }
+    return this.persianDateCache;
   }
 
   private getFormatters(): Formatters {
@@ -114,6 +129,35 @@ export default class PersianDate extends Date {
       this.formatters = createFormatters(this.formatOptions);
     }
     return this.formatters;
+  }
+
+  /** The Gregorian wall clock of this instant in the instance's time zone. */
+  private getWallClock(): WallClock {
+    return toWallClock(this.getTime(), this.formatOptions.timeZone);
+  }
+
+  /** Moves this instance to a wall-clock reading in its time zone. */
+  private setWallClock(wallClock: WallClock): number {
+    return this.setTime(fromWallClock(wallClock, this.formatOptions.timeZone));
+  }
+
+  /** Moves this instance to one millisecond before a wall-clock reading. */
+  private setBefore(wallClock: WallClock): number {
+    return this.setTime(fromWallClock(wallClock, this.formatOptions.timeZone) - 1);
+  }
+
+  /** The Gregorian date of a Persian date at midnight, as a wall clock. */
+  private persianMidnight(year: number, month: number, day: number): WallClock {
+    const [gYear, gMonth, gDay] = persianToGregorian(year, month, day);
+    return { year: gYear, month: gMonth, day: gDay, hours: 0, minutes: 0, seconds: 0, milliseconds: 0 };
+  }
+
+  /**
+   * Returns `false` when the instance holds an invalid date, such as one
+   * created from an impossible date like 1404/12/30 or unparsable text.
+   */
+  isValid(): boolean {
+    return !isNaN(this.getTime());
   }
 
   /**
@@ -235,14 +279,22 @@ export default class PersianDate extends Date {
   }
 
   /**
-   * Calculates the difference between the current PersianDate instance and the provided date value.
+   * Calculates the signed difference between this instance and the provided date value:
+   * positive when this instance is later. Seconds through weeks are exact (fractional);
+   * months and years are completed calendar periods in the instance's calendar and time zone.
    *
    * @param {DateValue} value - The date value to compare against.
-   * @param {DateUint} [unit] - The time unit for the difference (e.g., "days", "months", "years").
-   * @returns {number} The difference in the specified time unit or in milliseconds if no unit is provided.
+   * @param {DateUint} [unit="days"] - The time unit for the difference (e.g., "days", "months", "years").
+   * @returns {number} The difference in the specified time unit (days when no unit is provided).
    */
   diff(value: DateValue, unit?: DateUint): number {
-    return dffDates(this.getTime(), getTime(value), unit);
+    return dffDates(
+      this.getTime(),
+      getTime(value),
+      unit,
+      this.options.calendar,
+      this.formatOptions.timeZone
+    );
   }
 
   /**
@@ -281,6 +333,7 @@ export default class PersianDate extends Date {
     }
     const other = new PersianDate(value as any, {
       calendar: this.options.calendar,
+      timeZone: this.formatOptions.timeZone,
     });
     const u = unit.endsWith("s") ? unit.slice(0, -1) : unit;
     switch (u) {
@@ -317,7 +370,9 @@ export default class PersianDate extends Date {
   add(arg1: number | DateUint, arg2: DateUint | number): PersianDate {
     const value = typeof arg1 === "number" ? arg1 : (arg2 as number);
     const unit = typeof arg1 === "string" ? arg1 : (arg2 as DateUint);
-    this.setTime(modifyTime(this.getTime(), value, unit, this.options.calendar));
+    this.setTime(
+      modifyTime(this.getTime(), value, unit, this.options.calendar, this.formatOptions.timeZone)
+    );
     return this;
   }
 
@@ -333,7 +388,9 @@ export default class PersianDate extends Date {
   subtract(arg1: number | DateUint, arg2: DateUint | number): PersianDate {
     const value = typeof arg1 === "number" ? arg1 : (arg2 as number);
     const unit = typeof arg1 === "string" ? arg1 : (arg2 as DateUint);
-    this.setTime(modifyTime(this.getTime(), -value, unit, this.options.calendar));
+    this.setTime(
+      modifyTime(this.getTime(), -value, unit, this.options.calendar, this.formatOptions.timeZone)
+    );
     return this;
   }
 
@@ -346,7 +403,7 @@ export default class PersianDate extends Date {
    */
   override getFullYear(): number {
     if (this.options.calendar === "gregorian") {
-      return super.getFullYear();
+      return this.getWallClock().year;
     }
 
     return this.persianDate.year;
@@ -360,7 +417,7 @@ export default class PersianDate extends Date {
    */
   override getDate(): number {
     if (this.options.calendar === "gregorian") {
-      return super.getDate();
+      return this.getWallClock().day;
     }
 
     return this.persianDate.day;
@@ -374,7 +431,7 @@ export default class PersianDate extends Date {
    */
   override getMonth(): number {
     if (this.options.calendar === "gregorian") {
-      return super.getMonth() + 1;
+      return this.getWallClock().month;
     }
 
     return this.persianDate.month;
@@ -396,26 +453,32 @@ export default class PersianDate extends Date {
    * Sets the full year of the PersianDate instance.
    */
   override setFullYear(year: number, month?: number, date?: number): number {
+    const wallClock = this.getWallClock();
     if (this.options.calendar === "gregorian") {
-      const result = super.setFullYear(
+      return this.setWallClock({
+        ...wallClock,
         year,
-        ...(month !== undefined ? [month - 1] : []),
-        ...(date !== undefined ? [date] : [])
-      );
-      this.update();
-      return result;
+        month: month ?? wallClock.month,
+        day: date ?? wallClock.day,
+      });
     }
 
-    const m = month !== undefined ? month : this.persianDate.month;
-    const d = date !== undefined ? date : this.persianDate.day;
-    const newDate = toGregorianDate(year, m, d);
-    newDate.setHours(
-      this.getHours(),
-      this.getMinutes(),
-      this.getSeconds(),
-      this.getMilliseconds()
+    return this.setPersianDate(
+      year,
+      month ?? this.persianDate.month,
+      date ?? this.persianDate.day
     );
-    return this.setTime(newDate.getTime());
+  }
+
+  /** Moves to a Persian date in the instance's time zone, keeping the wall-clock time. */
+  private setPersianDate(year: number, month: number, day: number): number {
+    const [gYear, gMonth, gDay] = persianToGregorian(year, month, day);
+    return this.setWallClock({
+      ...this.getWallClock(),
+      year: gYear,
+      month: gMonth,
+      day: gDay,
+    });
   }
 
   /**
@@ -423,24 +486,15 @@ export default class PersianDate extends Date {
    */
   override setMonth(month: number, date?: number): number {
     if (this.options.calendar === "gregorian") {
-      const result = super.setMonth(
-        month - 1,
-        ...(date !== undefined ? [date] : [])
-      );
-      this.update();
-      return result;
+      const wallClock = this.getWallClock();
+      return this.setWallClock({ ...wallClock, month, day: date ?? wallClock.day });
     }
 
-    const y = this.persianDate.year;
-    const d = date !== undefined ? date : this.persianDate.day;
-    const newDate = toGregorianDate(y, month, d);
-    newDate.setHours(
-      this.getHours(),
-      this.getMinutes(),
-      this.getSeconds(),
-      this.getMilliseconds()
+    return this.setPersianDate(
+      this.persianDate.year,
+      month,
+      date ?? this.persianDate.day
     );
-    return this.setTime(newDate.getTime());
   }
 
   /**
@@ -448,54 +502,65 @@ export default class PersianDate extends Date {
    */
   override setDate(date: number): number {
     if (this.options.calendar === "gregorian") {
-      const result = super.setDate(date);
-      this.update();
-      return result;
+      return this.setWallClock({ ...this.getWallClock(), day: date });
     }
 
-    const y = this.persianDate.year;
-    const m = this.persianDate.month;
-    const newDate = toGregorianDate(y, m, date);
-    newDate.setHours(
-      this.getHours(),
-      this.getMinutes(),
-      this.getSeconds(),
-      this.getMilliseconds()
-    );
-    return this.setTime(newDate.getTime());
+    return this.setPersianDate(this.persianDate.year, this.persianDate.month, date);
+  }
+
+  /** Hours (0-23) of the wall clock in the instance's time zone. */
+  override getHours(): number {
+    return this.getWallClock().hours;
+  }
+
+  /** Minutes of the wall clock in the instance's time zone. */
+  override getMinutes(): number {
+    return this.getWallClock().minutes;
+  }
+
+  /** Seconds of the wall clock in the instance's time zone. */
+  override getSeconds(): number {
+    return this.getWallClock().seconds;
+  }
+
+  /** Day of week (0 = Sunday … 6 = Saturday) in the instance's time zone, like `Date#getDay`. */
+  override getDay(): number {
+    const { year, month, day } = this.getWallClock();
+    return getGregorianWeekday(year, month, day);
   }
 
   override setHours(hours: number, min?: number, sec?: number, ms?: number): number {
-    const result = super.setHours(
+    const wallClock = this.getWallClock();
+    return this.setWallClock({
+      ...wallClock,
       hours,
-      ...(min !== undefined ? [min] : []),
-      ...(sec !== undefined ? [sec] : []),
-      ...(ms !== undefined ? [ms] : [])
-    );
-    this.update();
-    return result;
+      minutes: min ?? wallClock.minutes,
+      seconds: sec ?? wallClock.seconds,
+      milliseconds: ms ?? wallClock.milliseconds,
+    });
   }
 
   override setMinutes(min: number, sec?: number, ms?: number): number {
-    const result = super.setMinutes(
-      min,
-      ...(sec !== undefined ? [sec] : []),
-      ...(ms !== undefined ? [ms] : [])
-    );
-    this.update();
-    return result;
+    const wallClock = this.getWallClock();
+    return this.setWallClock({
+      ...wallClock,
+      minutes: min,
+      seconds: sec ?? wallClock.seconds,
+      milliseconds: ms ?? wallClock.milliseconds,
+    });
   }
 
   override setSeconds(sec: number, ms?: number): number {
-    const result = super.setSeconds(sec, ...(ms !== undefined ? [ms] : []));
-    this.update();
-    return result;
+    const wallClock = this.getWallClock();
+    return this.setWallClock({
+      ...wallClock,
+      seconds: sec,
+      milliseconds: ms ?? wallClock.milliseconds,
+    });
   }
 
   override setMilliseconds(ms: number): number {
-    const result = super.setMilliseconds(ms);
-    this.update();
-    return result;
+    return this.setWallClock({ ...this.getWallClock(), milliseconds: ms });
   }
 
   /**
@@ -523,7 +588,8 @@ export default class PersianDate extends Date {
    */
   daysInMonth(): number {
     if (this.options.calendar === "gregorian") {
-      return new Date(super.getFullYear(), super.getMonth() + 1, 0).getDate();
+      const { year, month } = this.getWallClock();
+      return getGregorianMonthLength(year, month);
     }
     const month = this.getMonth();
     if (month <= 6) return 31;
@@ -554,7 +620,7 @@ export default class PersianDate extends Date {
    * @returns {number} The Persian day of week (0-6).
    */
   getDayOfWeek(): number {
-    return (super.getDay() + 1) % 7;
+    return (this.getDay() + 1) % 7;
   }
 
   /**
@@ -583,32 +649,38 @@ export default class PersianDate extends Date {
     unit: "year" | "month" | "week" | "day" | "hour" | "minute" | "second" | DateUint
   ): this {
     const u = unit.endsWith("s") ? unit.slice(0, -1) : unit;
+    const wallClock = this.getWallClock();
+    const midnight = { ...wallClock, hours: 0, minutes: 0, seconds: 0, milliseconds: 0 };
+    const isPersian = this.options.calendar === "persian";
     switch (u) {
       case "year":
-        this.setMonth(1, 1);
-        this.setHours(0, 0, 0, 0);
+        this.setWallClock(
+          isPersian
+            ? this.persianMidnight(this.persianDate.year, 1, 1)
+            : { ...midnight, month: 1, day: 1 }
+        );
         break;
       case "month":
-        this.setDate(1);
-        this.setHours(0, 0, 0, 0);
+        this.setWallClock(
+          isPersian
+            ? this.persianMidnight(this.persianDate.year, this.persianDate.month, 1)
+            : { ...midnight, day: 1 }
+        );
         break;
-      case "week": {
-        const dow = this.getDayOfWeek();
-        this.subtract(dow, "days");
-        this.setHours(0, 0, 0, 0);
+      case "week":
+        this.setWallClock({ ...midnight, day: wallClock.day - this.getDayOfWeek() });
         break;
-      }
       case "day":
-        this.setHours(0, 0, 0, 0);
+        this.setWallClock(midnight);
         break;
       case "hour":
-        this.setMinutes(0, 0, 0);
+        this.setWallClock({ ...wallClock, minutes: 0, seconds: 0, milliseconds: 0 });
         break;
       case "minute":
-        this.setSeconds(0, 0);
+        this.setWallClock({ ...wallClock, seconds: 0, milliseconds: 0 });
         break;
       case "second":
-        this.setMilliseconds(0);
+        this.setWallClock({ ...wallClock, milliseconds: 0 });
         break;
     }
     return this;
@@ -621,39 +693,39 @@ export default class PersianDate extends Date {
     unit: "year" | "month" | "week" | "day" | "hour" | "minute" | "second" | DateUint
   ): this {
     const u = unit.endsWith("s") ? unit.slice(0, -1) : unit;
+    const wallClock = this.getWallClock();
+    const midnight = { ...wallClock, hours: 0, minutes: 0, seconds: 0, milliseconds: 0 };
+    const isPersian = this.options.calendar === "persian";
+    const { year, month } = this.persianDate;
     switch (u) {
       case "year":
-        this.setMonth(
-          12,
-          this.options.calendar === "persian"
-            ? this.isLeapYear()
-              ? 30
-              : 29
-            : 31
+        this.setBefore(
+          isPersian
+            ? this.persianMidnight(year + 1, 1, 1)
+            : { ...midnight, year: wallClock.year + 1, month: 1, day: 1 }
         );
-        this.setHours(23, 59, 59, 999);
         break;
       case "month":
-        this.setDate(this.daysInMonth());
-        this.setHours(23, 59, 59, 999);
+        this.setBefore(
+          isPersian
+            ? this.persianMidnight(month === 12 ? year + 1 : year, (month % 12) + 1, 1)
+            : { ...midnight, month: wallClock.month + 1, day: 1 }
+        );
         break;
-      case "week": {
-        const dow = this.getDayOfWeek();
-        this.add(6 - dow, "days");
-        this.setHours(23, 59, 59, 999);
+      case "week":
+        this.setBefore({ ...midnight, day: wallClock.day - this.getDayOfWeek() + 7 });
         break;
-      }
       case "day":
-        this.setHours(23, 59, 59, 999);
+        this.setBefore({ ...midnight, day: wallClock.day + 1 });
         break;
       case "hour":
-        this.setMinutes(59, 59, 999);
+        this.setWallClock({ ...wallClock, minutes: 59, seconds: 59, milliseconds: 999 });
         break;
       case "minute":
-        this.setSeconds(59, 999);
+        this.setWallClock({ ...wallClock, seconds: 59, milliseconds: 999 });
         break;
       case "second":
-        this.setMilliseconds(999);
+        this.setWallClock({ ...wallClock, milliseconds: 999 });
         break;
     }
     return this;

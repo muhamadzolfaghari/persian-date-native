@@ -459,13 +459,13 @@ persianDate.format("[امروز:] dddd DD MMMM YYYY [ساعت] HH:mm");
 | `YYYY` / `jYYYY` | `1403` | 4-digit Persian year |
 | `YY` / `jYY` | `03` | 2-digit Persian year |
 | `MMMM` / `jMMMM` | `شهریور` | Full Persian month name |
-| `MMM` / `jMMM` | `Shahrivar` / `فرو` | Short / transliterated month name |
+| `MMM` / `jMMM` | `شهریور` / `Sept` | Short month name; Persian has no short form, so it matches `MMMM`. Gregorian calendar: `Sept` |
 | `MM` / `jMM` | `06` | 2-digit month (01–12) |
 | `M` / `jM` | `6` | 1-digit month (1–12) |
 | `DD` / `jDD` | `12` | 2-digit day of month (01–31) |
 | `D` / `jD` | `12` | 1-digit day of month (1–31) |
 | `dddd` | `دوشنبه` | Full day of week (شنبه, یکشنبه, ...) |
-| `ddd` | `د` | Short day of week |
+| `ddd` | `دوشنبه` / `Mon` | Short day of week; Persian has no short form, so it matches `dddd`. Gregorian calendar: `Mon` |
 | `HH` | `14` | 24-hour padded (00–23) |
 | `H` | `14` / `9` | 24-hour single-digit (0–23) |
 | `hh` | `02` | 12-hour padded (01–12) |
@@ -481,6 +481,25 @@ persianDate.format("[امروز:] dddd DD MMMM YYYY [ساعت] HH:mm");
 
 ---
 
+## 🌍 Time Zones
+
+Calendar values are computed in **`Asia/Tehran` by default**, or in the `timeZone` you pass (any IANA zone, such as `"UTC"` or `"Europe/Istanbul"`). The result does not depend on the machine's own time zone, so a server rendering in UTC prints the same Persian date as a browser in Tehran.
+
+```typescript
+const instant = persianDate("2024-08-01T21:00:00Z");
+instant.format("YYYY/MM/DD HH:mm"); // "1403/05/12 00:30" on any machine
+
+persianDate("2024-08-01T21:00:00Z", { timeZone: "UTC" }).format("HH:mm"); // "21:00"
+persianDate("1403/05/12").toISOString(); // "2024-08-01T20:30:00.000Z" (Tehran midnight)
+```
+
+- **Instants are never shifted.** `Date` objects, timestamps, and ISO strings with `Z` or an offset keep their exact moment; `timeZone` only changes how that moment is read and formatted.
+- **Wall-clock input is read in the time zone.** Date strings without an offset and numeric parts such as `persianDate(1403, 5, 12, 14, 30)` mean that clock time in the instance's zone.
+- **Getters, setters, and boundaries follow the time zone.** `getFullYear`, `getMonth`, `getDate`, `getHours`, `getMinutes`, `getSeconds`, `getDay`, their setters, `startOf`/`endOf`, and `add` use the instance's zone, including historical daylight saving time. Use the `getUTC*` methods for UTC values.
+- `setTimeZone(zone)` changes the zone of an existing instance.
+
+---
+
 ## 📚 Complete API Reference
 
 ### Standalone Functions
@@ -491,7 +510,7 @@ persianDate.format("[امروز:] dddd DD MMMM YYYY [ساعت] HH:mm");
 - **`toPersianDate(dateOrTimestamp): { year, month, date, ... }`**: Object unpacking helper.
 - **`toGregorianDate(jy, jm, jd): Date`**: Converts Persian components to native `Date`.
 - **`toPersianDigits(input: string | number): string`**: Converts English digits (`0-9`) to Persian (`۰-۹`).
-- **`replacePersianNumbers(input: string): string`**: Converts Persian digits (`۰-۹`) to English (`0-9`).
+- **`replacePersianNumbers(input: string): string`**: Converts Persian (`۰-۹`) and Arabic-Indic (`٠-٩`) digits to English (`0-9`).
 - **`isPersianLeapYear(year: number): boolean`**: Accurate 33-year solar cycle leap year checker.
 - **`relativeTime(fromTime, toTime, options?): string`**: Persian relative time generator.
 
@@ -519,6 +538,7 @@ import {
 - **`formatFa(template?: string): string`**: Formats directly with Persian digits.
 - **`toArray(): [year, month, day, hour, min, sec, ms]`**: Returns 7-element date component array.
 - **`clone(): PersianDate`**: Creates an exact copy of the instance.
+- **`isValid(): boolean`**: Returns `false` for invalid dates, such as `"1404/12/30"` (Esfand 1404 has 29 days), `"2024-02-30"`, or unparsable text. Date strings may use Persian or Arabic-Indic digits.
 
 #### Calendar Helpers
 - **`getDayOfWeek(): number`**: Persian weekday (0 = Saturday, 1 = Sunday, ..., 6 = Friday).
@@ -534,6 +554,8 @@ import {
 - **`to(date, withoutSuffix?, options?): string`**: Relative time to another target date.
 
 #### Arithmetic & Boundaries
+`add`, `subtract`, `startOf`, and `endOf` change the instance and return it for chaining. Call `clone()` first to keep the original. Day, week, month, and year steps keep the wall-clock time in the instance's time zone; hour, minute, and second steps move by exact milliseconds.
+
 - **`add(value, unit)` / `add(unit, value)`**: Adds time. Units: `"year" | "month" | "week" | "day" | "hour" | "minute" | "second"` (singular or plural).
 - **`subtract(value, unit)` / `subtract(unit, value)`**: Subtracts time.
 - **`startOf(unit)`**: Sets to the beginning of `"year" | "month" | "week" | "day" | "hour" | "minute" | "second"`.
@@ -543,7 +565,7 @@ import {
 - **`isBefore(otherDate)`**: Returns `true` if date is before `otherDate`.
 - **`isAfter(otherDate)`**: Returns `true` if date is after `otherDate`.
 - **`isSame(otherDate, unit?)`**: Checks equality (optionally within unit: `"year"`, `"month"`, `"day"`).
-- **`diff(otherDate, unit?)`**: Calculates numeric difference in the specified unit.
+- **`diff(otherDate, unit?)`**: Signed difference, positive when this date is later (`unit` defaults to days). Seconds through weeks are exact amounts; months and years count completed calendar periods, so a birthday is a whole year (`persianDate(1403, 5, 12).diff(persianDate(1385, 5, 12), "years")` is `18`).
 
 ---
 
@@ -607,7 +629,7 @@ Dedicated, comprehensive guides with runnable examples and copy-paste recipes fo
 | 🔷 **WordPress** | [WordPress Persian Date Guide](docs/wordpress-persian-date.md) | `wp_enqueue_script`, theme functions, zero impact on Core Web Vitals. |
 | 🔴 **Laravel Blade** | [Laravel Blade Persian Date Guide](docs/laravel-jalali-date.md) | Blade templates, ISO 8601 parsing, Alpine.js / Livewire ready. |
 | 🌐 **Vanilla HTML & CDN** | [Vanilla JS & CDN Guide](docs/vanilla-javascript-persian-date.md) | Drop-in `<script>` tag, zero build step required. |
-| 🔄 **Moment.js Migration** | [Migrate from `moment-jalaali`](docs/moment-jalaali-migration.md) | 92% smaller bundle, zero dependencies, immutable API. |
+| 🔄 **Moment.js Migration** | [Migrate from `moment-jalaali`](docs/moment-jalaali-migration.md) | 92% smaller bundle, zero dependencies, chainable API. |
 | ⚡ **Day.js Migration** | [Migrate from Day.js Plugins](docs/dayjs-jalali-migration.md) | Standalone engine mode or optional `dayjsJalaliPlugin`. |
 
 ---
