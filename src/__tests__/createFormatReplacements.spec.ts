@@ -2,7 +2,8 @@ import createFormatters from "../utils/formatters/createFormatters";
 import createFormatReplacements from "../utils/formatters/createFormatReplacements";
 
 describe("createFormatReplacements", () => {
-  const date = new Date(2023, 3, 1);
+  // 2023-03-31 16:30 in New York (Friday, 11 Farvardin 1402), independent of the runtime zone.
+  const date = new Date(Date.UTC(2023, 2, 31, 20, 30));
   const formatters = createFormatters({
     timeZone: "America/New_York",
     calendar: "persian",
@@ -21,8 +22,15 @@ describe("createFormatReplacements", () => {
   });
 
   it("should expose hh (padded 12-hour) token", () => {
-    // date = new Date(2023, 3, 1) local time at midnight -> h12 = 12
     expect(replacements.hh).toMatch(/^\d{2}$/);
     expect(replacements.h).toBeDefined();
+  });
+
+  it("creates and reuses runtime-local formatters when no time zone is given", () => {
+    const local = createFormatters({ calendar: "persian" });
+    expect(createFormatters({ calendar: "persian" })).toBe(local);
+    expect(local[0].resolvedOptions().timeZone).toBe(
+      new Intl.DateTimeFormat().resolvedOptions().timeZone
+    );
   });
 });

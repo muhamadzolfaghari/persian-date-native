@@ -42,6 +42,6 @@ console.log(jy, jm, jd); // 1403, 6, 12
 | **Instantiate Now** | `moment()` | `persianDate()` |
 | **Specific Date** | `moment('1403/06/12', 'jYYYY/jMM/jDD')` | `new PersianDate(1403, 6, 12)` |
 | **Persian Format** | `m.format('jYYYY/jMM/jDD')` | `p.formatFa('YYYY/MM/DD')` |
-| **Add Time** | `m.add(7, 'days')` (mutates) | `p.add(7, 'days')` (immutable) |
+| **Add Time** | `m.add(7, 'days')` (mutates) | `p.add(7, 'days')` (mutates; use `p.clone().add(7, 'days')` to keep `p`) |
 | **From Now** | `m.fromNow()` | `p.fromNow()` |
 | **Leap Year** | `m.isLeapYear()` | `p.isLeapYear()` |
